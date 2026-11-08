@@ -1,0 +1,120 @@
+doc_id,company,sector,desk,doc_type,period
+3M_2015_10K,3M,Industrials,health_industrials,10k,2015
+3M_2016_10K,3M,Industrials,health_industrials,10k,2016
+3M_2017_10K,3M,Industrials,health_industrials,10k,2017
+3M_2018_10K,3M,Industrials,health_industrials,10k,2018
+3M_2019_10K,3M,Industrials,health_industrials,10k,2019
+3M_2020_10K,3M,Industrials,health_industrials,10k,2020
+3M_2021_10K,3M,Industrials,health_industrials,10k,2021
+3M_2022_10K,3M,Industrials,health_industrials,10k,2022
+3M_2023Q2_10Q,3M,Industrials,health_industrials,10q,2023
+AMD_2015_10K,AMD,Information Technology,tech_telecom,10k,2015
+AMD_2016_10K,AMD,Information Technology,tech_telecom,10k,2016
+AMD_2017_10K,AMD,Information Technology,tech_telecom,10k,2017
+AMD_2018_10K,AMD,Information Technology,tech_telecom,10k,2018
+AMD_2019_10K,AMD,Information Technology,tech_telecom,10k,2019
+AMD_2020_10K,AMD,Information Technology,tech_telecom,10k,2020
+AMD_2021_10K,AMD,Information Technology,tech_telecom,10k,2021
+AMD_2022_10K,AMD,Information Technology,tech_telecom,10k,2022
+AMD_2022_annualreport,AMD,Information Technology,tech_telecom,10k_annualreport,2022
+ADOBE_2015_10K,Adobe,Information Technology,tech_telecom,10k,2015
+ADOBE_2016_10K,Adobe,Information Technology,tech_telecom,10k,2016
+ADOBE_2017_10K,Adobe,Information Technology,tech_telecom,10k,2017
+ADOBE_2018_10K,Adobe,Information Technology,tech_telecom,10k,2018
+ADOBE_2019_10K,Adobe,Information Technology,tech_telecom,10k,2019
+ADOBE_2020_10K,Adobe,Information Technology,tech_telecom,10k,2020
+ADOBE_2021_10K,Adobe,Information Technology,tech_telecom,10k,2021
+ADOBE_2022_10K,Adobe,Information Technology,tech_telecom,10k,2022
+BESTBUY_2015_10K,Best Buy,Consumer Discretionary,consumer,10k,2015
+BESTBUY_2016_10K,Best Buy,Consumer Discretionary,consumer,10k,2016
+BESTBUY_2017_10K,Best Buy,Consumer Discretionary,consumer,10k,2017
+BESTBUY_2018_10K,Best Buy,Consumer Discretionary,consumer,10k,2018
+BESTBUY_2019_10K,Best Buy,Consumer Discretionary,consumer,10k,2019
+BESTBUY_2020_10K,Best Buy,Consumer Discretionary,consumer,10k,2020
+BESTBUY_2021_10K,Best Buy,Consumer Discretionary,consumer,10k,2021
+BESTBUY_2022_10K,Best Buy,Consumer Discretionary,consumer,10k,2022
+BESTBUY_2023Q4_EARNINGS,Best Buy,Consumer Discretionary,consumer,Earnings,2023
+BESTBUY_2023_10K,Best Buy,Consumer Discretionary,consumer,10k,2023
+BESTBUY_2023_8K_dated-2023-04-12,Best Buy,Consumer Discretionary,consumer,8k,2023
+BESTBUY_2023_8K_dated-2023-04-24,Best Buy,Consumer Discretionary,consumer,8k,2023
+BESTBUY_2024Q2_10Q,Best Buy,Consumer Discretionary,consumer,10q,2024
+BESTBUY_2024Q2_EARNINGS,Best Buy,Consumer Discretionary,consumer,Earnings,2024
+BOEING_2015_10K,Boeing,Industrials,health_industrials,10k,2015
+BOEING_2016_10K,Boeing,Industrials,health_industrials,10k,2016
+BOEING_2017_10K,Boeing,Industrials,health_industrials,10k,2017
+BOEING_2018_10K,Boeing,Industrials,health_industrials,10k,2018
+BOEING_2019_10K,Boeing,Industrials,health_industrials,10k,2019
+BOEING_2020_10K,Boeing,Industrials,health_industrials,10k,2020
+BOEING_2021_10K,Boeing,Industrials,health_industrials,10k,2021
+BOEING_2022_10K,Boeing,Industrials,health_industrials,10k,2022
+CORNING_2015_10K,Corning,Information Technology,tech_telecom,10k,2015
+CORNING_2016_10K,Corning,Information Technology,tech_telecom,10k,2016
+CORNING_2017_10K,Corning,Information Technology,tech_telecom,10k,2017
+CORNING_2018_10K,Corning,Information Technology,tech_telecom,10k,2018
+CORNING_2019_10K,Corning,Information Technology,tech_telecom,10k,2019
+CORNING_2020_10K,Corning,Information Technology,tech_telecom,10k,2020
+CORNING_2021_10K,Corning,Information Technology,tech_telecom,10k,2021
+CORNING_2022_10K,Corning,Information Technology,tech_telecom,10k,2022
+CORNING_2023Q2_10Q,Corning,Information Technology,tech_telecom,10q,2023
+JOHNSON_JOHNSON_2015_10K,Johnson & Johnson,Health Care,health_industrials,10k,2015
+JOHNSON_JOHNSON_2016_10K,Johnson & Johnson,Health Care,health_industrials,10k,2016
+JOHNSON_JOHNSON_2017_10K,Johnson & Johnson,Health Care,health_industrials,10k,2017
+JOHNSON_JOHNSON_2018_10K,Johnson & Johnson,Health Care,health_industrials,10k,2018
+JOHNSON_JOHNSON_2019_10K,Johnson & Johnson,Health Care,health_industrials,10k,2019
+JOHNSON_JOHNSON_2020_10K,Johnson & Johnson,Health Care,health_industrials,10k,2020
+JOHNSON_JOHNSON_2021_10K,Johnson & Johnson,Health Care,health_industrials,10k,2021
+JOHNSON_JOHNSON_2022Q4_EARNINGS,Johnson & Johnson,Health Care,health_industrials,Earnings,2022
+JOHNSON_JOHNSON_2022_10K,Johnson & Johnson,Health Care,health_industrials,10k,2022
+JOHNSON_JOHNSON_2023Q1_EARNINGS,Johnson & Johnson,Health Care,health_industrials,Earnings,2023
+JOHNSON_JOHNSON_2023Q2_EARNINGS,Johnson & Johnson,Health Care,health_industrials,Earnings,2023
+JOHNSON_JOHNSON_2023_8K_dated-2023-08-23,Johnson & Johnson,Health Care,health_industrials,8k,2023
+JOHNSON_JOHNSON_2023_8K_dated-2023-08-30,Johnson & Johnson,Health Care,health_industrials,8k,2023
+MGMRESORTS_2015_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2015
+MGMRESORTS_2016_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2016
+MGMRESORTS_2017_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2017
+MGMRESORTS_2018_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2018
+MGMRESORTS_2019_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2019
+MGMRESORTS_2020_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2020
+MGMRESORTS_2021_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2021
+MGMRESORTS_2022Q4_EARNINGS,MGM Resorts,Consumer Discretionary,consumer,Earnings,2022
+MGMRESORTS_2022_10K,MGM Resorts,Consumer Discretionary,consumer,10k,2022
+MGMRESORTS_2023Q2_10Q,MGM Resorts,Consumer Discretionary,consumer,10q,2023
+MGMRESORTS_2023_8K_dated-2023-03-01,MGM Resorts,Consumer Discretionary,consumer,8k,2023
+MGMRESORTS_2023_8K_dated-2023-09-12,MGM Resorts,Consumer Discretionary,consumer,8k,2023
+PEPSICO_2015_10K,PepsiCo,Consumer Staples,consumer,10k,2015
+PEPSICO_2016_10K,PepsiCo,Consumer Staples,consumer,10k,2016
+PEPSICO_2017_10K,PepsiCo,Consumer Staples,consumer,10k,2017
+PEPSICO_2018_10K,PepsiCo,Consumer Staples,consumer,10k,2018
+PEPSICO_2019_10K,PepsiCo,Consumer Staples,consumer,10k,2019
+PEPSICO_2020_10K,PepsiCo,Consumer Staples,consumer,10k,2020
+PEPSICO_2021_10K,PepsiCo,Consumer Staples,consumer,10k,2021
+PEPSICO_2022Q4_EARNINGS,PepsiCo,Consumer Staples,consumer,Earnings,2022
+PEPSICO_2022_10K,PepsiCo,Consumer Staples,consumer,10k,2022
+PEPSICO_2023Q1_EARNINGS,PepsiCo,Consumer Staples,consumer,Earnings,2023
+PEPSICO_2023Q2_EARNINGS,PepsiCo,Consumer Staples,consumer,Earnings,2023
+PEPSICO_2023_8K_dated-2023-05-05,PepsiCo,Consumer Staples,consumer,8k,2023
+PEPSICO_2023_8K_dated-2023-05-30,PepsiCo,Consumer Staples,consumer,8k,2023
+PFIZER_2015_10K,Pfizer,Health Care,health_industrials,10k,2015
+PFIZER_2016_10K,Pfizer,Health Care,health_industrials,10k,2016
+PFIZER_2017_10K,Pfizer,Health Care,health_industrials,10k,2017
+PFIZER_2018_10K,Pfizer,Health Care,health_industrials,10k,2018
+PFIZER_2019_10K,Pfizer,Health Care,health_industrials,10k,2019
+PFIZER_2020_10K,Pfizer,Health Care,health_industrials,10k,2020
+PFIZER_2021_10K,Pfizer,Health Care,health_industrials,10k,2021
+PFIZER_2022_10K,Pfizer,Health Care,health_industrials,10k,2022
+PFIZER_2023Q2_EARNINGS,Pfizer,Health Care,health_industrials,Earnings,2023
+Pfizer_2023Q2_10Q,Pfizer,Health Care,health_industrials,10q,2023
+ULTABEAUTY_2023Q4_EARNINGS,Ulta Beauty,Consumer Discretionary,consumer,Earnings,2023
+ULTABEAUTY_2023_10K,Ulta Beauty,Consumer Discretionary,consumer,10k,2023
+ULTABEAUTY_2023_8K_dated-2023-06-07,Ulta Beauty,Consumer Discretionary,consumer,8k,2023
+ULTABEAUTY_2023_8K_dated-2023-09-18,Ulta Beauty,Consumer Discretionary,consumer,8k,2023
+ULTABEAUTY_2024Q1_EARNINGS,Ulta Beauty,Consumer Discretionary,consumer,Earnings,2024
+ULTABEAUTY_2024Q2_EARNINGS,Ulta Beauty,Consumer Discretionary,consumer,Earnings,2024
+VERIZON_2015_10K,Verizon,Communication Services,tech_telecom,10k,2015
+VERIZON_2016_10K,Verizon,Communication Services,tech_telecom,10k,2016
+VERIZON_2017_10K,Verizon,Communication Services,tech_telecom,10k,2017
+VERIZON_2018_10K,Verizon,Communication Services,tech_telecom,10k,2018
+VERIZON_2019_10K,Verizon,Communication Services,tech_telecom,10k,2019
+VERIZON_2020_10K,Verizon,Communication Services,tech_telecom,10k,2020
+VERIZON_2021_10K,Verizon,Communication Services,tech_telecom,10k,2021
+VERIZON_2022_10K,Verizon,Communication Services,tech_telecom,10k,2022
