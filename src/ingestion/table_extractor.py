@@ -1,407 +1,345 @@
+import logging
 import re
 import sys
 from pathlib import Path
 
 import pdfplumber
 
-AMOUNT_RE = re.compile(r"^\$?\(?-?[\d,]+\)?%?$")
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
+
+MIDWORD_RE = re.compile(r"[A-Za-z] \| [a-z]")
+PROSE_RE = re.compile(
+    r"\b(the following|information related|presented in the|refer to the|"
+    r"table of contents|on an organic|sales in industrial totaled|"
+    r"see accompanying)\b",
+    re.I,
+)
 
 
-def _clean_cell(cell):
-    if cell is None:
-        return ""
-    return " ".join(str(cell).split())
+def _cells(row):
+    out = []
+    for c in row or []:
+        if c is None:
+            continue
+        text = re.sub(r"\.{2,}", " ", str(c).replace("\n", " "))
+        text = " ".join(text.split())
+        if text:
+            out.append(text)
+    return out
 
 
-def _pad_rows(rows):
-    width = max((len(row) for row in rows), default=0)
-    return [row + [""] * (width - len(row)) for row in rows]
+def explode_dashes(cells):
+    """Split a packed cell like '— — 25,290 — —' without touching normal '$ 4,869' cells."""
+    out = []
+    for cell in cells:
+        if len(re.findall(r"[—–]", cell)) >= 2:
+            out.extend(p for p in re.split(r"\s+", cell) if p)
+        else:
+            out.append(cell)
+    return out
 
 
-def drop_empty_rows_and_cols(rows):
-    rows = [row for row in rows if any(cell.strip() for cell in row)]
-    if not rows:
-        return rows
-
-    rows = _pad_rows(rows)
-    keep = [
-        col
-        for col in range(len(rows[0]))
-        if any(row[col].strip() for row in rows)
-    ]
-    return [[row[col] for col in keep] for row in rows]
+def real_amounts(cells):
+    return sum(
+        1
+        for c in cells
+        if is_amount(c) and c.replace(" ", "") not in {"$", "—", "–", "-"}
+    )
 
 
-def merge_dollar_columns(rows):
-    if not rows:
-        return rows
+def merge_units(cells):
+    out = []
+    i = 0
+    while i < len(cells):
+        cur, nxt = cells[i], cells[i + 1] if i + 1 < len(cells) else ""
+        if cur == "$" and nxt:
+            out.append("$ " + nxt)
+            i += 2
+            continue
+        if nxt == "%" and cur:
+            out.append(cur + "%")
+            i += 2
+            continue
+        out.append(cur)
+        i += 1
+    return out
 
-    rows = _pad_rows(rows)
-    cleaned_rows = []
 
-    for row in rows:
-        new_row = []
-        i = 0
+def is_amount(text):
+    t = text.replace(" ", "")
+    if t in {"$", "—", "–", "-"}:
+        return True
+    if re.fullmatch(r"\(\d{1,2}\)", t):
+        return False
+    return bool(re.fullmatch(r"\$?\(?-?[\d,]+(?:\.\d+)?\)?%?", t))
 
-        while i < len(row):
-            cell = row[i].strip()
 
-            if cell == "$" and i + 1 < len(row):
-                value = row[i + 1].strip()
-                new_row.append(f"$ {value}" if value else "$")
-                i += 2
-            else:
-                if cell:
-                    new_row.append(cell)
-                i += 1
+# thousands / $ / (123) / dashes — not dates like 30 or 2012
+PEEL_AMOUNT_RE = re.compile(
+    r"\$\s*\(?-?[\d,]+(?:\.\d+)?\)?"
+    r"|\(\s*-?[\d,]+(?:\.\d+)?\s*\)"
+    r"|-?[\d,]*\d,\d{3}(?:,\d{3})*(?:\.\d+)?"
+    r"|[—–]"
+)
 
-        cleaned_rows.append(new_row)
 
-    return cleaned_rows
+def peel_amounts(cells):
+    """Split a mixed label+numbers cell. Does not touch already-split '$ 4,869' rows."""
+    out = []
+    for cell in cells:
+        found = list(PEEL_AMOUNT_RE.finditer(cell))
+        if len(found) < 2 and not (
+            len(found) == 1 and found[0].start() > 0 and re.search(r"[A-Za-z]", cell)
+        ):
+            out.append(cell)
+            continue
+        prefix = cell[: found[0].start()].strip()
+        if prefix:
+            out.append(prefix)
+        out.extend(m.group().strip() for m in found)
+        rest = cell[found[-1].end() :].strip()
+        if rest:
+            out.append(rest)
+    return out
 
-    
-def clean_table(table):
-    rows = [[_clean_cell(cell) for cell in row] for row in table]
 
-    # Remove completely empty rows
-    rows = [row for row in rows if any(row)]
+def split_second_label(cells):
+    """Undo glued rows: '... (1,100,000) Equity awards assumed for acquisition'."""
+    seen_amount = False
+    for i, cell in enumerate(cells):
+        if is_amount(cell) or PEEL_AMOUNT_RE.fullmatch(cell.replace(" ", "")):
+            seen_amount = True
+            continue
+        if (
+            seen_amount
+            and i > 0
+            and re.match(r"^[A-Z][A-Za-z]", cell)
+            and len(cell.split()) >= 2
+        ):
+            return cells[:i], cells[i:]
+    return cells, None
 
-    if not rows:
+
+def is_shattered(cells):
+    if MIDWORD_RE.search(" | ".join(cells)):
+        return True
+    for i, cell in enumerate(cells[:-1]):
+        cur = cell.replace(" ", "")
+        nxt = cells[i + 1].replace(" ", "")
+        # '10,3' | '88'  or  '$1' | '0,399' / '017' — not '$61' | '3,038,665'
+        if re.fullmatch(r"\d{1,2},\d{1,2}", cur) and nxt[:1].isdigit():
+            return True
+        if re.fullmatch(r"\$\d{1,2}", cur) and (
+            nxt.startswith("0") or re.fullmatch(r"\d{3}", nxt)
+        ):
+            return True
+        if re.fullmatch(r"\d", cur) and re.fullmatch(r"\d{3}", nxt):
+            return True
+    # only 1-letter fragments (charg | e); do not treat 'of' / 'in' / 'for' as shatter
+    short = sum(1 for c in cells if re.fullmatch(r"[A-Za-z]", c))
+    return len(cells) >= 4 and short >= 2
+
+
+def is_prose(cells):
+    text = " ".join(cells)
+    if PROSE_RE.search(text):
+        return True
+    if real_amounts(cells) >= 2:
+        return False
+    if len(text) > 140:
+        return True
+    words = text.split()
+    if "." in text and len(words) > 8:
+        return True
+    return len(words) > 10
+
+
+def normalize(row):
+    return merge_units(peel_amounts(explode_dashes(_cells(row))))
+
+
+def keep_row(row):
+    cells = normalize(row)
+    if len(cells) < 2:
+        return None
+    if is_shattered(cells) or is_prose(cells):
+        return None
+    if real_amounts(cells) < 1:
+        return None
+    return cells
+
+
+def label_only(cells):
+    return " ".join(c for c in cells if not is_amount(c)).strip()
+
+
+def attach_pending(pending, cells):
+    if not pending or not cells:
+        return cells
+    first = cells[0]
+    if is_amount(first):
+        return [pending] + cells
+    if first[:1].islower():
+        return [pending + " " + first] + cells[1:]
+    return cells
+
+
+def emit_row(cells, pending, page_num):
+    cells = attach_pending(pending, cells)
+    kept = keep_row(cells)
+    if not kept:
+        return "", None
+    return "", " | ".join(kept) + f" [Page: {page_num}]"
+
+
+def serialize_rows(matrix, page_num):
+    out = []
+    pending = ""
+    for row in matrix or []:
+        cells = normalize(row)
+        if not cells:
+            continue
+        first, second = split_second_label(cells)
+        if real_amounts(first) < 1:
+            label = label_only(first)
+            if label and len(label) <= 90 and not label.endswith(":"):
+                pending = (pending + " " + label).strip()
+            cells = second or []
+            if not cells:
+                continue
+            first, second = cells, None
+        pending, line = emit_row(first, pending, page_num)
+        if line:
+            out.append(line)
+        if second and real_amounts(second) >= 1:
+            _, line = emit_row(second, "", page_num)
+            if line:
+                out.append(line)
+        elif second:
+            label = label_only(second)
+            if label:
+                pending = label
+    return out
+
+
+def layout_rows(page):
+    try:
+        text = page.extract_text(layout=True) or ""
+    except TypeError:
+        text = page.extract_text() or ""
+    matrix = []
+    for line in text.splitlines():
+        line = re.sub(r"\.{2,}", "  ", line)
+        parts = [p for p in re.split(r" {2,}", line.strip()) if p.strip()]
+        if parts:
+            matrix.append(parts)
+    return serialize_rows(matrix, page.page_number)
+
+
+def extract_method(page, settings):
+    try:
+        tables = page.extract_tables(table_settings=settings)
+    except Exception:
         return []
-
-    # Remove completely empty columns
-    rows = _pad_rows(rows)
-    keep = [
-        col for col in range(len(rows[0]))
-        if any(row[col] for row in rows)
-    ]
-    rows = [[row[col] for col in keep] for row in rows]
-
-    # Merge dollar signs with their corresponding values
-    rows = merge_dollar_columns(rows)
-
-    # Final cleanup
-    rows = drop_empty_rows_and_cols(rows)
-
+    rows = []
+    for table in tables or []:
+        rows.extend(serialize_rows(table, page.page_number))
     return rows
 
 
-def is_junk_table(rows):
-    if not rows:
-        return True
-    if len(rows) == 1 and len(rows[0]) <= 1:
-        return True
-    return False
+def row_key(line):
+    body = line.rsplit(" [Page:", 1)[0]
+    label = re.sub(r"[^a-z]+", "", body.split("|")[0].lower())[:32]
+    nums = tuple(re.findall(r"[\d,.]+", body))
+    return (label, nums)
 
 
-def page_tables_are_fragmented(tables):
-    """Default extract_tables() sometimes splits one statement into many tiny tables."""
-    if len(tables) < 4:
-        return False
-    avg_rows = sum(len(table) for table in tables) / len(tables)
-    return len(tables) >= 8 or avg_rows <= 3
+def row_quality(line):
+    body = line.rsplit(" [Page:", 1)[0]
+    cells = [c.strip() for c in body.split(" | ") if c.strip()]
+    mashed = sum(1 for c in cells if len(re.findall(r"[—–]", c)) >= 2)
+    return (real_amounts(cells), len(cells[0]) if cells else 0, -mashed)
 
 
-def page_text_as_table(page):
-    text = page.extract_text() or ""
-    lines = []
-    for line in text.splitlines():
-        if line.strip().lower() == "table of contents":
+def merge_unique(records):
+    best = {}
+    order = []
+    for row in records:
+        key = row_key(row)
+        if key not in best:
+            best[key] = row
+            order.append(key)
             continue
-        lines.append(line)
-    return "\n".join(lines).strip()
+        if row_quality(row) > row_quality(best[key]):
+            best[key] = row
+    return [best[k] for k in order]
 
 
-def is_amount_token(text):
-    text = text.strip().replace("\xa0", "")
-    if text in {"$", "—", "–", "-"}:
-        return True
-    return bool(AMOUNT_RE.match(text))
-
-
-def group_words_into_lines(words, y_tol=4):
-    words = sorted(words, key=lambda word: (word["top"], word["x0"]))
-    lines = []
-    for word in words:
-        if word["text"].strip().lower() == "table of contents":
-            continue
-        if lines and abs(word["top"] - lines[-1]["top"]) <= y_tol:
-            lines[-1]["words"].append(word)
-        else:
-            lines.append({"top": word["top"], "words": [word]})
-    return lines
-
-
-def merge_dollar_words(words):
-    words = sorted(words, key=lambda word: word["x0"])
-    merged = []
-    index = 0
-    while index < len(words):
-        word = words[index]
-        nxt = words[index + 1] if index + 1 < len(words) else None
-        nxt_text = nxt["text"].strip() if nxt else ""
-        if (
-            word["text"].strip() == "$"
-            and nxt is not None
-            and AMOUNT_RE.match(nxt_text.replace(" ", ""))
-        ):
-            # keep the amount's X so $1,798 and $1,897 land in different columns
-            merged.append({
-                "text": "$ " + nxt["text"],
-                "x0": nxt["x0"],
-                "top": nxt["top"],
-            })
-            index += 2
-        else:
-            merged.append(word)
-            index += 1
-    return merged
-
-
-def cluster_x_positions(xs, x_tol=25):
-    if not xs:
-        return []
-    xs = sorted(xs)
-    clusters = [[xs[0]]]
-    for x in xs[1:]:
-        if x - clusters[-1][-1] <= x_tol:
-            clusters[-1].append(x)
-        else:
-            clusters.append([x])
-    return [sum(cluster) / len(cluster) for cluster in clusters]
-
-
-def nearest_col(x, col_xs):
-    return min(range(len(col_xs)), key=lambda i: abs(x - col_xs[i]))
-
-
-def _compact_token(text):
-    return text.strip().replace("\xa0", "").replace(" ", "")
-
-
-def _column_value_kind(token):
-    compact = _compact_token(token)
-    if compact in {"—", "–", "-"}:
-        return "blank"
-    if compact == "$":
-        return None
-    # Note 14) / $91 in a label — not year-column amounts
-    if re.match(r"^\d{1,2}\)$", compact):
-        return None
-    if re.match(r"^\$\d{1,3}$", compact):
-        return None
-    if AMOUNT_RE.match(compact):
-        return "amount"
-    if compact.startswith("$") and AMOUNT_RE.match(compact[1:]):
-        return "amount"
-    return None
-
-
-def _right_column_pack(col_xs, min_gap=80):
-    """Keep the year columns on the right; drop leftover left clusters ($91, etc.)."""
-    col_xs = sorted(col_xs)
-    if len(col_xs) < 2:
-        return col_xs
-    split_at = 0
-    for i in range(1, len(col_xs)):
-        if col_xs[i] - col_xs[i - 1] > min_gap:
-            split_at = i
-    return col_xs[split_at:]
-
-
-def _is_header_or_footer_row(cells):
-    label = cells[0].strip().lower() if cells else ""
-    values = [cell.strip() for cell in cells[1:] if cell.strip()]
-    if label == "table of contents":
-        return True
-    if label.isdigit() and len(label) <= 3 and not values:
-        return True
-    return False
-
-
-def reconstruct_rows_from_words(page):
-    words = page.extract_words() or []
-    if not words:
-        return []
-
-    prepared_lines = []
-    amount_xs = []
-    snap = 30
-
-    for line in group_words_into_lines(words):
-        merged = merge_dollar_words(line["words"])
-        prepared_lines.append(merged)
-        for word in merged:
-            if _column_value_kind(word["text"]) == "amount":
-                amount_xs.append(word["x0"])
-
-    raw_cols = cluster_x_positions(amount_xs, x_tol=30)
-    scored = []
-    for col_x in raw_cols:
-        count = sum(1 for x in amount_xs if abs(x - col_x) <= snap)
-        if count >= 3:
-            scored.append(col_x)
-    col_xs = scored[-4:] if scored else raw_cols[-4:]
-    col_xs = _right_column_pack(col_xs)
-    if not col_xs:
-        return []
-
-    rows = []
-    for merged in prepared_lines:
-        cells = [""] * (1 + len(col_xs))
-        label_parts = []
-        for index, word in enumerate(merged):
-            token = word["text"].strip()
-            if not token:
-                continue
-            kind = _column_value_kind(token)
-            col = nearest_col(word["x0"], col_xs)
-            close_to_col = abs(word["x0"] - col_xs[col]) <= snap
-            nxt = None
-            for later in merged[index + 1:]:
-                if later["text"].strip():
-                    nxt = later["text"].strip()
-                    break
-            # "— net" is a label hyphen, not a missing 2015 value
-            if kind == "blank" and nxt and _column_value_kind(nxt) is None:
-                label_parts.append(token)
-                continue
-            if kind and close_to_col:
-                cells[col + 1] = (cells[col + 1] + " " + token).strip()
-            else:
-                label_parts.append(token)
-        cells[0] = " ".join(label_parts)
-        if any(cell.strip() for cell in cells) and not _is_header_or_footer_row(cells):
-            rows.append(cells)
-
-    return drop_empty_rows_and_cols(rows)
-
-
-def to_searchable_text(rows):
-    lines = []
-    for row in rows:
-        label = row[0] if row else ""
-        values = [cell for cell in row[1:] if cell]
-        if values:
-            lines.append(f"{label} | " + " | ".join(values))
-        elif label:
-            lines.append(label)
-    return "\n".join(lines)
+def process_page(page):
+    records = []
+    records.extend(
+        extract_method(
+            page,
+            {"vertical_strategy": "lines", "horizontal_strategy": "lines"},
+        )
+    )
+    records.extend(
+        extract_method(
+            page,
+            {
+                "vertical_strategy": "lines",
+                "horizontal_strategy": "text",
+                "snap_x_tolerance": 8,
+                "snap_y_tolerance": 6,
+            },
+        )
+    )
+    records.extend(layout_rows(page))
+    return merge_unique(records)
 
 
 def extract_tables(pdf_path, doc_id=None):
-    """Extract tables page by page. Page numbers are 1-based."""
     pdf_path = Path(pdf_path)
-
     if doc_id is None:
         doc_id = pdf_path.stem
-
     if not pdf_path.exists():
         raise FileNotFoundError(f"PDF not found: {pdf_path}")
 
-    try:
-        pdf = pdfplumber.open(pdf_path)
-    except Exception as exc:
-        raise RuntimeError(f"Could not open PDF {pdf_path}: {exc}") from exc
-
     extracted = []
-
-    try:
+    with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
-            page_number = page.page_number
-            extraction_status = "success"
-            try:
-                raw_tables = page.extract_tables() or []
-            except Exception as exc:
-                extraction_status = "failed"
-                print(
-                    f"tables failed on page {page_number} in {doc_id}: {exc}",
-                    file=sys.stderr,
-                )
-                extracted.append({
-                    "doc_id": doc_id,
-                    "page": page_number,
-                    "table_index": None,
-                    "content_type": "table",
-                    "table_title": "",
-                    "rows": [],
-                    "text": "",
-                    "extraction_status": extraction_status,
-                    "extraction_method": "pdfplumber",
-                })
+            rows = process_page(page)
+            if not rows:
                 continue
-
-            cleaned_tables = []
-            for table_index, table in enumerate(raw_tables, start=1):
-                if not table:
-                    continue
-                rows = clean_table(table)
-                if is_junk_table(rows):
-                    continue
-                cleaned_tables.append((table_index, rows))
-
-            if page_tables_are_fragmented([rows for _, rows in cleaned_tables]):
-                rows = reconstruct_rows_from_words(page)
-                page_text = page_text_as_table(page)
-                if rows:
-                    searchable = to_searchable_text(rows)
-                else:
-                    searchable = page_text
-                extracted.append({
+            extracted.append(
+                {
                     "doc_id": doc_id,
-                    "page": page_number,
+                    "page": page.page_number,
                     "table_index": 1,
                     "content_type": "table",
                     "table_title": "",
-                    "rows": rows,
-                    "text": searchable,
+                    "rows": [
+                        [c.strip() for c in r.rsplit(" [Page:", 1)[0].split(" | ")]
+                        for r in rows
+                    ],
+                    "text": "\n".join(rows),
                     "extraction_status": "success",
-                    "extraction_method": "word_coords",
-                })
-                continue
-
-            for table_index, rows in cleaned_tables:
-                extracted.append({
-                    "doc_id": doc_id,
-                    "page": page_number,
-                    "table_index": table_index,
-                    "content_type": "table",
-                    "table_title": "",
-                    "rows": rows,
-                    "text": to_searchable_text(rows),
-                    "extraction_status": "success",
-                    "extraction_method": "pdfplumber",
-                })
-    finally:
-        pdf.close()
-
+                    "extraction_method": "hybrid",
+                }
+            )
     return extracted
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python src/ingestion/table_extractor.py <pdf_path>")
+        print("Usage: python src/ingestion/table_extractor.py <pdf_path> [page]")
         sys.exit(1)
-
     tables = extract_tables(sys.argv[1])
-    failed = [t["page"] for t in tables if t["extraction_status"] == "failed"]
-    pages = sorted({t["page"] for t in tables})
-
+    if len(sys.argv) >= 3:
+        want = int(sys.argv[2])
+        tables = [t for t in tables if t["page"] == want]
     print(f"tables: {len(tables)}")
-    print(f"pages with tables: {pages}")
-    print(f"failed pages: {failed if failed else 0}")
-
-    sample_page = 3 if 3 in pages else (pages[0] if pages else None)
-    if sample_page is None:
-        print("no tables found")
-        sys.exit(0)
-
-    samples = [t for t in tables if t["page"] == sample_page]
-    print(f"\nsample page {sample_page}: {len(samples)} table(s)")
-    first = samples[0]
-    print(f"doc_id: {first['doc_id']}")
-    print(f"table_index: {first['table_index']}")
-    print(f"table_title: {first['table_title']}")
-    print(f"extraction_status: {first['extraction_status']}")
-    print(f"extraction_method: {first['extraction_method']}")
-    print(first["text"][:800])
+    print(f"pages with tables: {sorted({t['page'] for t in tables})}")
+    if tables:
+        print(f"sample page: {tables[0]['page']}")
+        print(tables[0]["text"])
