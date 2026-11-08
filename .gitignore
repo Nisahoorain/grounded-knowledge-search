@@ -1,1 +1,11 @@
 venv/
+.venv/
+__pycache__/
+*.pyc
+
+pdfs/
+.env
+
+pdf_inspection_output/
+data/extracted/
+data/chroma_db/
