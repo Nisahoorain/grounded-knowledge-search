@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -166,11 +167,24 @@ def save_document(records, out_dir=None):
     out_dir.mkdir(parents=True, exist_ok=True)
     doc = records_to_document(records)
     path = out_dir / f"{doc['doc_id']}.json"
-    with open(path, "w", encoding="utf-8") as file:
+    tmp = path.with_suffix(".json.tmp")
+    with open(tmp, "w", encoding="utf-8") as file:
         json.dump(doc, file, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
     if doc["extraction_status"] != "success":
         log_extraction_issue(doc["doc_id"], doc["extraction_status"])
     return path, doc
+
+
+def existing_json_names(out_dir):
+    try:
+        return {
+            name.lower()
+            for name in os.listdir(out_dir)
+            if name.lower().endswith(".json") and not name.startswith("_")
+        }
+    except FileNotFoundError:
+        return set()
 
 
 def ingest_one(pdf_path=None, doc_id=None, manifest=None, out_dir=None):
@@ -181,19 +195,35 @@ def ingest_one(pdf_path=None, doc_id=None, manifest=None, out_dir=None):
 def ingest_all(manifest=None, out_dir=None, force=False):
     manifest = manifest if manifest is not None else load_manifest()
     out_dir = Path(out_dir or EXTRACTED_DIR)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    done = set() if force else existing_json_names(out_dir)
+    total = len(manifest)
     saved = 0
     skipped = 0
-    for doc_id in manifest:
-        dest = out_dir / f"{doc_id}.json"
-        if dest.exists() and not force:
+    failed = 0
+    print(f"output: {out_dir.resolve()}  already={len(done)}/{total}", flush=True)
+    for i, doc_id in enumerate(manifest, start=1):
+        name = f"{doc_id}.json".lower()
+        if name in done:
             skipped += 1
+            print(f"[{i}/{total}] skip {doc_id}", flush=True)
             continue
+        print(f"[{i}/{total}] start {doc_id} ...", flush=True)
         try:
-            ingest_one(doc_id=doc_id, manifest=manifest, out_dir=out_dir)
+            _, doc = ingest_one(doc_id=doc_id, manifest=manifest, out_dir=out_dir)
             saved += 1
-            print(f"saved {doc_id} ({saved}/{len(manifest)})")
+            done.add(name)
+            print(
+                f"[{i}/{total}] saved {doc_id}  "
+                f"pages={doc['page_count']} tables={doc['table_count']}  "
+                f"status={doc['extraction_status']}  "
+                f"(saved={saved} skip={skipped} fail={failed})",
+                flush=True,
+            )
         except Exception as exc:
+            failed += 1
             log_extraction_issue(doc_id, str(exc), out_dir=out_dir)
+            print(f"[{i}/{total}] FAIL {doc_id}: {exc}", flush=True)
     return saved, skipped
 
 

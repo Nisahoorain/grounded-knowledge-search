@@ -154,8 +154,28 @@ def is_prose(cells):
     return len(words) > 10
 
 
+GLUED_DOLLAR_RE = re.compile(r"^\$\s+(.+?)\s+\$$")
+
+
+def split_glued_dollar(cells):
+    """Split a layout-glued '$ 9 $' + '9' into '$ 9', '$ 9'."""
+    out = []
+    i = 0
+    while i < len(cells):
+        nxt = cells[i + 1] if i + 1 < len(cells) else ""
+        match = GLUED_DOLLAR_RE.fullmatch(cells[i])
+        if match and nxt and is_amount(nxt) and not str(nxt).lstrip().startswith("$"):
+            out.append("$ " + match.group(1).strip())
+            out.append("$ " + nxt.strip())
+            i += 2
+            continue
+        out.append(cells[i])
+        i += 1
+    return out
+
+
 def normalize(row):
-    return merge_units(peel_amounts(explode_dashes(_cells(row))))
+    return split_glued_dollar(merge_units(peel_amounts(explode_dashes(_cells(row)))))
 
 
 def keep_row(row):
@@ -275,27 +295,43 @@ def merge_unique(records):
     return [best[k] for k in order]
 
 
+def merge_layout_first(layout, candidates):
+    """Keep layout order. Swap in a candidate only when row_key matches and quality is higher."""
+    best = {}
+    for row in layout:
+        key = row_key(row)
+        if key not in best or row_quality(row) > row_quality(best[key]):
+            best[key] = row
+    for row in candidates:
+        key = row_key(row)
+        if key not in best:
+            continue
+        if row_quality(row) > row_quality(best[key]):
+            best[key] = row
+    out = []
+    seen = set()
+    for row in layout:
+        key = row_key(row)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(best[key])
+    return out
+
+
 def process_page(page):
-    records = []
-    records.extend(
-        extract_method(
-            page,
-            {"vertical_strategy": "lines", "horizontal_strategy": "lines"},
-        )
-    )
-    records.extend(
-        extract_method(
-            page,
-            {
-                "vertical_strategy": "lines",
-                "horizontal_strategy": "text",
-                "snap_x_tolerance": 8,
-                "snap_y_tolerance": 6,
-            },
-        )
-    )
-    records.extend(layout_rows(page))
-    return merge_unique(records)
+    lines_settings = {"vertical_strategy": "lines", "horizontal_strategy": "lines"}
+    text_settings = {
+        "vertical_strategy": "lines",
+        "horizontal_strategy": "text",
+        "snap_x_tolerance": 8,
+        "snap_y_tolerance": 6,
+    }
+    layout = layout_rows(page)
+    candidates = extract_method(page, lines_settings) + extract_method(page, text_settings)
+    if not layout:
+        return merge_unique(candidates)
+    return merge_layout_first(layout, candidates)
 
 
 def extract_tables(pdf_path, doc_id=None):
@@ -334,12 +370,18 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python src/ingestion/table_extractor.py <pdf_path> [page]")
         sys.exit(1)
-    tables = extract_tables(sys.argv[1])
     if len(sys.argv) >= 3:
         want = int(sys.argv[2])
-        tables = [t for t in tables if t["page"] == want]
-    print(f"tables: {len(tables)}")
-    print(f"pages with tables: {sorted({t['page'] for t in tables})}")
-    if tables:
-        print(f"sample page: {tables[0]['page']}")
-        print(tables[0]["text"])
+        with pdfplumber.open(sys.argv[1]) as pdf:
+            page = pdf.pages[want - 1]
+            rows = process_page(page)
+        print(f"page: {page.page_number}")
+        print(f"rows: {len(rows)}")
+        print("\n".join(rows))
+    else:
+        tables = extract_tables(sys.argv[1])
+        print(f"tables: {len(tables)}")
+        print(f"pages with tables: {sorted({t['page'] for t in tables})}")
+        if tables:
+            print(f"sample page: {tables[0]['page']}")
+            print(tables[0]["text"])

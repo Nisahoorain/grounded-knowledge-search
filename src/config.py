@@ -36,7 +36,7 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama")
 LLM_MODEL = os.getenv("LLM_MODEL", "llama3.2")
 
 # chunking / retrieval
-CHUNK_SIZE = _int("CHUNK_SIZE", 1000)
-CHUNK_OVERLAP = _int("CHUNK_OVERLAP", 150)
+CHUNK_SIZE = _int("CHUNK_SIZE", 500)
+CHUNK_OVERLAP = _int("CHUNK_OVERLAP", 100)
 TOP_K = _int("TOP_K", 5)
 MAX_CONTEXT_SIZE = _int("MAX_CONTEXT_SIZE", 3500)
