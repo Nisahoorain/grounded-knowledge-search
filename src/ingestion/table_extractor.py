@@ -40,11 +40,16 @@ def explode_dashes(cells):
 
 
 def real_amounts(cells):
-    return sum(
+    plain = sum(
         1
         for c in cells
         if is_amount(c) and c.replace(" ", "") not in {"$", "—", "–", "-"}
     )
+    # (26) (33) (41) is a value row. A lone (1) stays a footnote.
+    parens = sum(1 for c in cells if re.fullmatch(r"\(\d{1,3}\)", c.replace(" ", "")))
+    if parens >= 2:
+        plain += parens
+    return plain
 
 
 def merge_units(cells):
@@ -67,7 +72,7 @@ def merge_units(cells):
 
 def is_amount(text):
     t = text.replace(" ", "")
-    if t in {"$", "—", "–", "-"}:
+    if t in {"$", "—", "–", "-", "$—", "$–", "$-"}:
         return True
     if re.fullmatch(r"\(\d{1,2}\)", t):
         return False
@@ -83,23 +88,134 @@ PEEL_AMOUNT_RE = re.compile(
 )
 
 
+# 625.6, not the 7.72 inside "$ 7.72"
+DECIMAL_RE = re.compile(r"(?<!\$\s)(?<!\$)\d+\.\d+")
+BARE_TAIL_RE = re.compile(
+    r"^(?P<label>.*[A-Za-z].*?)\s+(?P<nums>\d{1,3}(?:\s+\d{1,3}){1,})$"
+)
+
+
+def _column_spans(cell):
+    """Amount spans used as year columns. A dash inside a label is not a column."""
+    covered = []
+    spans = []
+    for match in PEEL_AMOUNT_RE.finditer(cell):
+        token = match.group().strip()
+        if token in {"—", "–", "-"}:
+            continue
+        # Working capital(2): a 1-2 digit marker glued to a word is a footnote.
+        if (
+            re.fullmatch(r"\(\d{1,2}\)", token)
+            and match.start() > 0
+            and cell[match.start() - 1].isalpha()
+        ):
+            continue
+        spans.append((match.start(), match.end(), token))
+        covered.append((match.start(), match.end()))
+    for match in DECIMAL_RE.finditer(cell):
+        if any(start <= match.start() and match.end() <= end for start, end in covered):
+            continue
+        spans.append((match.start(), match.end(), match.group()))
+    spans.sort()
+    return spans
+
+
+def _small_dollar(token):
+    return bool(re.fullmatch(r"\$\s*\d{1,3}(?:\.\d+)?", token.strip()))
+
+
+def _comma_figure(token):
+    return bool(re.search(r"\d,\d{3}", token))
+
+
+def _split_label_columns(cell):
+    """Keep allowance text in the label. Split the trailing year-column run."""
+    spans = _column_spans(cell)
+    if not spans:
+        return [cell]
+    if (
+        len(spans) == 1
+        and spans[0][0] > 0
+        and not cell[spans[0][1] :].strip()
+        and re.search(r"[A-Za-z]", cell[: spans[0][0]])
+    ):
+        columns = spans
+    else:
+        if len(spans) < 2:
+            return [cell]
+        start = len(spans) - 1
+        while start > 0:
+            gap = cell[spans[start - 1][1] : spans[start][0]]
+            if re.search(r"[A-Za-z]", gap):
+                break
+            start -= 1
+        columns = spans[start:]
+        if any(_comma_figure(token) for _, _, token in columns):
+            while len(columns) > 2 and _small_dollar(columns[0][2]):
+                columns = columns[1:]
+        if len(columns) < 2:
+            return [cell]
+    label = cell[: columns[0][0]].strip()
+    out = [label] if label else []
+    out.extend(token for _, _, token in columns)
+    rest = cell[columns[-1][1] :].strip()
+    if rest:
+        out.append(rest)
+    return out
+
+
+def reattach_trailing_dollar(cells):
+    """Move a stranded '$' onto the following number: '4.10 $' + '3.42' -> '$ 3.42'."""
+    cells = list(cells)
+    out = []
+    i = 0
+    while i < len(cells):
+        cell = cells[i]
+        nxt = cells[i + 1] if i + 1 < len(cells) else ""
+        match = re.fullmatch(r"(.*\S)\s+\$", cell)
+        if match and re.match(r"\d", nxt.lstrip()):
+            out.append(match.group(1).strip())
+            cells[i + 1] = "$ " + nxt.lstrip()
+            i += 1
+            continue
+        out.append(cell)
+        i += 1
+    return out
+
+
 def peel_amounts(cells):
-    """Split a mixed label+numbers cell. Does not touch already-split '$ 4,869' rows."""
+    """Split year columns off a label. Words between amounts stay in the label."""
     out = []
     for cell in cells:
-        found = list(PEEL_AMOUNT_RE.finditer(cell))
-        if len(found) < 2 and not (
-            len(found) == 1 and found[0].start() > 0 and re.search(r"[A-Za-z]", cell)
-        ):
+        out.extend(_split_label_columns(cell))
+    return out
+
+
+def split_bare_integers(cells):
+    """Split a glued tail like 'noncontrolling interest 8 42 62'."""
+    out = []
+    for cell in cells:
+        match = BARE_TAIL_RE.fullmatch(cell.strip())
+        if not match:
             out.append(cell)
             continue
-        prefix = cell[: found[0].start()].strip()
-        if prefix:
-            out.append(prefix)
-        out.extend(m.group().strip() for m in found)
-        rest = cell[found[-1].end() :].strip()
-        if rest:
-            out.append(rest)
+        out.append(match.group("label").strip())
+        out.extend(match.group("nums").split())
+    return out
+
+
+def fold_label_dash(cells):
+    """Join 'Total interest expense | — | net' back into one label."""
+    out = []
+    i = 0
+    while i < len(cells):
+        nxt = cells[i + 1] if i + 1 < len(cells) else ""
+        if cells[i] in {"—", "–"} and out and re.fullmatch(r"[A-Za-z][A-Za-z-]*", nxt):
+            out[-1] = f"{out[-1]} {cells[i]} {nxt}"
+            i += 2
+            continue
+        out.append(cells[i])
+        i += 1
     return out
 
 
@@ -174,8 +290,20 @@ def split_glued_dollar(cells):
     return out
 
 
+def space_bare_dollars(cells):
+    out = []
+    for cell in cells:
+        if re.fullmatch(r"\$\d[\d,]*(?:\.\d+)?", cell.replace(" ", "")):
+            cell = re.sub(r"\$(\d)", r"$ \1", cell)
+        out.append(cell)
+    return out
+
+
 def normalize(row):
-    return split_glued_dollar(merge_units(peel_amounts(explode_dashes(_cells(row)))))
+    cells = reattach_trailing_dollar(explode_dashes(_cells(row)))
+    cells = peel_amounts(cells)
+    cells = fold_label_dash(split_bare_integers(cells))
+    return space_bare_dollars(split_glued_dollar(merge_units(cells)))
 
 
 def keep_row(row):
@@ -212,6 +340,20 @@ def emit_row(cells, pending, page_num):
     return "", " | ".join(kept) + f" [Page: {page_num}]"
 
 
+def heading_fragment(label):
+    """A short row heading. Sentences and footnote lines do not carry forward."""
+    text = " ".join(label.split())
+    if not re.search(r"[A-Za-z]", text) or text.endswith(":"):
+        return ""
+    if len(text) > 90 or len(text.split()) > 16:
+        return ""
+    if "." in text:
+        return ""
+    if re.search(r"\b(the|our|this|that|following|agreement)\b", text, re.I):
+        return ""
+    return text
+
+
 def serialize_rows(matrix, page_num):
     out = []
     pending = ""
@@ -221,9 +363,8 @@ def serialize_rows(matrix, page_num):
             continue
         first, second = split_second_label(cells)
         if real_amounts(first) < 1:
-            label = label_only(first)
-            if label and len(label) <= 90 and not label.endswith(":"):
-                pending = (pending + " " + label).strip()
+            fragment = heading_fragment(label_only(first))
+            pending = (pending + " " + fragment).strip() if fragment else ""
             cells = second or []
             if not cells:
                 continue
@@ -270,7 +411,7 @@ def extract_method(page, settings):
 def row_key(line):
     body = line.rsplit(" [Page:", 1)[0]
     label = re.sub(r"[^a-z]+", "", body.split("|")[0].lower())[:32]
-    nums = tuple(re.findall(r"[\d,.]+", body))
+    nums = tuple(re.findall(r"\([\d,.]+\)|[\d,.]+", body))
     return (label, nums)
 
 

@@ -134,3 +134,16 @@ Store this metadata on every text chunk and every table:
 - doc_type (original manifest value)
 - physical_page_number
 - table_title (where available)
+
+## 8. Current extractor
+
+Sections 4 and 5 describe the old per-region csv dump. `src/ingestion/table_extractor.py` is now one row list per page. Decisions and the page checks are in `DECISIONS.md` and `EXPERIMENTS.md`.
+
+Re-checked after the extractor changes:
+
+- 3M 2015 10-K page 50 income statement: 19 rows
+- 3M 2015 10-K page 52 balance sheet: 41 rows
+- 3M 2015 10-K page 54 cash flow: 36 rows
+- Adobe 2015 10-K page 34 selected data: 16 rows
+
+JSON in `data/extracted` does not update until `src/ingestion/ingest.py --all --force`.
