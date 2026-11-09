@@ -1,0 +1,689 @@
+﻿heading,count,status,examples
+Consolidated Statements of Cash Flows,112,MATCHED,ADOBE_2016_10K | page 60 ; ADOBE_2017_10K | page 56 ; ADOBE_2018_10K | page 56
+Consolidated Statements of Comprehensive Income,80,MATCHED,ADOBE_2016_10K | page 60 ; ADOBE_2017_10K | page 56 ; ADOBE_2018_10K | page 56
+Consolidated Balance Sheets,72,MATCHED,ADOBE_2016_10K | page 60 ; ADOBE_2017_10K | page 56 ; ADOBE_2018_10K | page 56
+Consolidated Statements of Income,54,MATCHED,ADOBE_2016_10K | page 60 ; ADOBE_2017_10K | page 56 ; ADOBE_2018_10K | page 56
+Balance Sheet,41,MATCHED,3M_2015_10K | page 97 ; 3M_2015_10K | page 98 ; 3M_2016_10K | page 106
+Consolidated Statements of Operations,40,MATCHED,AMD_2015_10K | page 56 ; AMD_2016_10K | page 56 ; AMD_2017_10K | page 60
+CONSOLIDATED BALANCE SHEETS,32,MATCHED,ADOBE_2015_10K | page 59 ; ADOBE_2016_10K | page 61 ; ADOBE_2017_10K | page 57
+Consolidated Statements of Equity,32,MATCHED,BOEING_2015_10K | page 50 ; BOEING_2015_10K | page 56 ; BOEING_2016_10K | page 50
+CONSOLIDATED STATEMENTS OF CASH FLOWS,30,MATCHED,ADOBE_2015_10K | page 63 ; ADOBE_2016_10K | page 65 ; ADOBE_2017_10K | page 61
+Consolidated Balance Sheet,28,MATCHED,3M_2015_10K | page 52 ; 3M_2016_10K | page 57 ; 3M_2017_10K | page 59
+Consolidated Statement of Cash Flows,28,MATCHED,3M_2015_10K | page 54 ; 3M_2016_10K | page 59 ; 3M_2017_10K | page 61
+Consolidated Statement of Income,25,MATCHED,3M_2015_10K | page 50 ; 3M_2016_10K | page 55 ; 3M_2017_10K | page 57
+Consolidated Statement of Comprehensive Income,22,MATCHED,3M_2015_10K | page 51 ; 3M_2016_10K | page 56 ; 3M_2017_10K | page 58
+Consolidated Statements of Stockholders’ Equity,22,MATCHED,AMD_2019_10K | page 49 ; AMD_2020_10K | page 55 ; AMD_2021_10K | page 54
+Consolidated Balance Sheet that are Subject,18,MISSED,3M_2015_10K | page 97 ; 3M_2015_10K | page 98 ; 3M_2016_10K | page 106
+Statement of Earnings Location,18,MISSED,BESTBUY_2020_10K | page 55 ; BESTBUY_2020_10K | page 56 ; BESTBUY_2020_10K | page 62
+balance sheets.,18,MATCHED,AMD_2016_10K | page 65 ; AMD_2018_10K | page 38 ; AMD_2019_10K | page 72
+CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME,17,MATCHED,ADOBE_2015_10K | page 61 ; ADOBE_2016_10K | page 63 ; ADOBE_2017_10K | page 59
+Consolidated Statements of Financial Position,16,MATCHED,BOEING_2015_10K | page 50 ; BOEING_2015_10K | page 53 ; BOEING_2016_10K | page 50
+Consolidated Statements of Comprehensive Income (Loss),15,MISSED,AMD_2017_10K | page 61 ; AMD_2019_10K | page 47 ; MGMRESORTS_2015_10K | page 56
+CONSOLIDATED STATEMENTS OF OPERATIONS,14,MATCHED,MGMRESORTS_2015_10K | page 69 ; MGMRESORTS_2015_10K | page 215 ; MGMRESORTS_2016_10K | page 70
+Consolidated Statement of Equity,14,MATCHED,PEPSICO_2015_10K | page 40 ; PEPSICO_2015_10K | page 80 ; PEPSICO_2016_10K | page 42
+Balance Sheet Information,13,MISSED,PFIZER_2015_10K | page 169 ; PFIZER_2016_10K | page 166 ; PFIZER_2017_10K | page 246
+Balance sheet:,13,MATCHED,CORNING_2015_10K | page 105 ; CORNING_2015_10K | page 106 ; CORNING_2016_10K | page 96
+Consolidated Statements of Changes in Shareholders’ Equity,13,MATCHED,CORNING_2015_10K | page 85 ; CORNING_2015_10K | page 92 ; CORNING_2017_10K | page 83
+Balance sheet,11,MATCHED,CORNING_2015_10K | page 129 ; CORNING_2016_10K | page 118 ; CORNING_2017_10K | page 118
+Consolidated Statements of Changes in Equity,11,MATCHED,VERIZON_2015_10K | page 24 ; VERIZON_2016_10K | page 27 ; VERIZON_2017_10K | page 25
+Consolidated Statements of Changes in Shareholders' Equity,11,MATCHED,BESTBUY_2015_10K | page 65 ; BESTBUY_2016_10K | page 62 ; BESTBUY_2017_10K | page 59
+Statement of operations:,11,MATCHED,CORNING_2015_10K | page 106 ; CORNING_2016_10K | page 96 ; CORNING_2016_10K | page 98
+Balance Sheet Location,10,MISSED,BESTBUY_2019_10K | page 72 ; BESTBUY_2020_10K | page 62 ; BESTBUY_2020_10K | page 64
+Balance Sheets.,10,MATCHED,ADOBE_2019_10K | page 75 ; ADOBE_2019_10K | page 83 ; BESTBUY_2024Q2_10Q | page 22
+CONSOLIDATED STATEMENTS OF STOCKHOLDERS’ EQUITY,10,MATCHED,ADOBE_2015_10K | page 62 ; ADOBE_2016_10K | page 64 ; ADOBE_2017_10K | page 60
+Balance Sheet:,9,MATCHED,3M_2015_10K | page 39 ; 3M_2016_10K | page 42 ; 3M_2017_10K | page 44
+CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME (LOSS),9,MISSED,MGMRESORTS_2015_10K | page 70 ; MGMRESORTS_2016_10K | page 71 ; MGMRESORTS_2017_10K | page 68
+CONSOLIDATED STATEMENTS OF EQUITY,9,MATCHED,CORNING_2015_10K | page 155 ; JOHNSON_JOHNSON_2015_10K | page 34 ; JOHNSON_JOHNSON_2016_10K | page 42
+CONSOLIDATED STATEMENTS OF INCOME,9,MATCHED,ADOBE_2015_10K | page 60 ; ADOBE_2016_10K | page 62 ; ADOBE_2017_10K | page 58
+Consolidated Statements of Earnings,9,MATCHED,BESTBUY_2015_10K | page 61 ; BESTBUY_2016_10K | page 59 ; BESTBUY_2017_10K | page 56
+Income Statement,9,MATCHED,3M_2021_10K | page 71 ; MGMRESORTS_2020_10K | page 51 ; MGMRESORTS_2021_10K | page 52
+Statements of Operations.,9,MATCHED,AMD_2022_annualreport | page 71 ; BOEING_2015_10K | page 60 ; BOEING_2015_10K | page 168
+Balance Sheet Classification,8,MISSED,PEPSICO_2019_10K | page 122 ; PEPSICO_2020_10K | page 104 ; PEPSICO_2021_10K | page 104
+CONSOLIDATED STATEMENTS OF EARNINGS,8,MATCHED,JOHNSON_JOHNSON_2015_10K | page 32 ; JOHNSON_JOHNSON_2016_10K | page 40 ; JOHNSON_JOHNSON_2017_10K | page 41
+Condensed Consolidated Statement of Earnings,8,MATCHED,JOHNSON_JOHNSON_2022Q4_EARNINGS | page 10 ; JOHNSON_JOHNSON_2022Q4_EARNINGS | page 11 ; JOHNSON_JOHNSON_2023_8K_dated-2023-08-30 | page 12
+Consolidated Statement of Changes in Equity,8,MATCHED,3M_2015_10K | page 53 ; 3M_2016_10K | page 58 ; 3M_2017_10K | page 60
+Income Statement Information,8,MISSED,VERIZON_2015_10K | page 119 ; VERIZON_2016_10K | page 122 ; VERIZON_2017_10K | page 154
+Statement of Earnings Presentation,8,MISSED,JOHNSON_JOHNSON_2015_10K | page 41 ; JOHNSON_JOHNSON_2016_10K | page 50 ; JOHNSON_JOHNSON_2017_10K | page 50
+Statements of Comprehensive Income.,8,MATCHED,JOHNSON_JOHNSON_2015_10K | page 58 ; JOHNSON_JOHNSON_2016_10K | page 68 ; JOHNSON_JOHNSON_2017_10K | page 69
+Statements of Financial Position at December 31 were as follows:,8,MISSED,BOEING_2015_10K | page 107 ; BOEING_2016_10K | page 104 ; BOEING_2017_10K | page 103
+statements of income.,8,MATCHED,PFIZER_2016_10K | page 136 ; ULTABEAUTY_2023_10K | page 63 ; VERIZON_2018_10K | page 125
+CONSOLIDATED STATEMENTS OF STOCKHOLDERS' EQUITY,7,MATCHED,MGMRESORTS_2015_10K | page 72 ; MGMRESORTS_2016_10K | page 74 ; MGMRESORTS_2017_10K | page 70
+Consolidated Statements of Earnings Data,7,MISSED,BESTBUY_2015_10K | page 26 ; BESTBUY_2016_10K | page 27 ; BESTBUY_2017_10K | page 26
+Consolidated Statements of Stockholders' Equity,7,MATCHED,ADOBE_2016_10K | page 60 ; ADOBE_2017_10K | page 56 ; ADOBE_2018_10K | page 56
+balance sheets consist of:,7,MISSED,CORNING_2016_10K | page 108 ; CORNING_2017_10K | page 106 ; CORNING_2018_10K | page 110
+consolidated statements of income.,7,MATCHED,CORNING_2015_10K | page 165 ; CORNING_2020_10K | page 80 ; CORNING_2020_10K | page 107
+statements of cash flows.,7,MATCHED,CORNING_2019_10K | page 99 ; CORNING_2023Q2_10Q | page 31 ; VERIZON_2018_10K | page 124
+statements of income,7,MATCHED,CORNING_2015_10K | page 136 ; CORNING_2015_10K | page 210 ; CORNING_2016_10K | page 125
+Balance sheet and working capital measures are provided in the following table (in millions):,6,MISSED,CORNING_2015_10K | page 58 ; CORNING_2016_10K | page 50 ; CORNING_2018_10K | page 47
+Statement of Cash Flows,6,MATCHED,PEPSICO_2017_10K | page 128 ; PEPSICO_2018_10K | page 128 ; PEPSICO_2019_10K | page 126
+Statements of Financial Position primarily include accounts payable and certain other current and long-term liabilities including accrued,6,MISSED,BOEING_2015_10K | page 44 ; BOEING_2016_10K | page 43 ; BOEING_2017_10K | page 39
+consolidated balance sheet.,6,MATCHED,3M_2022_10K | page 112 ; AMD_2020_10K | page 34 ; AMD_2021_10K | page 35
+consolidated balance sheets.,6,MATCHED,AMD_2017_10K | page 49 ; MGMRESORTS_2015_10K | page 79 ; MGMRESORTS_2020_10K | page 99
+statement of all potential risks and uncertainties. The Company does not undertake to publicly update any forward-looking statement that may be made,6,MISSED,JOHNSON_JOHNSON_2017_10K | page 5 ; JOHNSON_JOHNSON_2018_10K | page 6 ; JOHNSON_JOHNSON_2019_10K | page 6
+Balance Sheet Location(1),5,MISSED,BESTBUY_2020_10K | page 55 ; BESTBUY_2021_10K | page 57 ; BESTBUY_2022_10K | page 55
+Condensed Consolidated Balance Sheets,5,MATCHED,BESTBUY_2024Q2_10Q | page 3 ; Pfizer_2023Q2_10Q | page 3 ; ULTABEAUTY_2023Q4_EARNINGS | page 7
+Consolidated Balance Sheets Verizon Communications Inc. and Subsidiaries,5,MISSED,VERIZON_2015_10K | page 72 ; VERIZON_2016_10K | page 76 ; VERIZON_2017_10K | page 109
+Consolidated Statement of Cash Flows (continued),5,MATCHED,PEPSICO_2015_10K | page 78 ; PEPSICO_2020_10K | page 63 ; PEPSICO_2021_10K | page 64
+Consolidated Statements of Cash Flows Verizon Communications Inc. and Subsidiaries,5,MISSED,VERIZON_2015_10K | page 73 ; VERIZON_2016_10K | page 77 ; VERIZON_2017_10K | page 110
+Consolidated Statements of Changes in Equity Verizon Communications Inc. and Subsidiaries,5,MISSED,VERIZON_2015_10K | page 74 ; VERIZON_2016_10K | page 78 ; VERIZON_2017_10K | page 111
+Consolidated Statements of Comprehensive Income Verizon Communications Inc. and Subsidiaries,5,MISSED,VERIZON_2015_10K | page 71 ; VERIZON_2016_10K | page 75 ; VERIZON_2017_10K | page 108
+Consolidated Statements of Income Verizon Communications Inc. and Subsidiaries,5,MISSED,VERIZON_2015_10K | page 70 ; VERIZON_2016_10K | page 74 ; VERIZON_2017_10K | page 107
+Income Statement Classifications,5,MISSED,ADOBE_2015_10K | page 93 ; ADOBE_2016_10K | page 92 ; ADOBE_2017_10K | page 88
+Income Statement(a),5,MISSED,PEPSICO_2015_10K | page 117 ; PEPSICO_2016_10K | page 121 ; PEPSICO_2017_10K | page 123
+consolidated statements of operations.,5,MATCHED,AMD_2015_10K | page 55 ; AMD_2015_10K | page 91 ; AMD_2017_10K | page 50
+"statements of income, estimates are used when accounting for deductions from revenues (such as rebates, chargebacks, sales allowances and sales returns), determining the",5,MISSED,PFIZER_2015_10K | page 140 ; PFIZER_2016_10K | page 136 ; PFIZER_2017_10K | page 215
+Balance Sheet Hedging—Hedges of Foreign Currency Assets and Liabilities,4,MISSED,ADOBE_2015_10K | page 78 ; ADOBE_2016_10K | page 79 ; ADOBE_2017_10K | page 75
+Balance Sheet Hedging—Hedging of Foreign Currency Assets and Liabilities,4,MISSED,ADOBE_2015_10K | page 56 ; ADOBE_2016_10K | page 58 ; ADOBE_2017_10K | page 54
+Balance sheet location,4,MISSED,CORNING_2021_10K | page 103 ; CORNING_2022_10K | page 92
+CONSOLIDATED STATEMENTS OF MEMBERS’ EQUITY,4,MATCHED,MGMRESORTS_2015_10K | page 217 ; MGMRESORTS_2016_10K | page 314 ; MGMRESORTS_2017_10K | page 177
+Condensed Consolidated Statements of Cash Flows,4,MATCHED,BESTBUY_2024Q2_10Q | page 6 ; Pfizer_2023Q2_10Q | page 3 ; ULTABEAUTY_2023Q4_EARNINGS | page 8
+Consolidated Statement of Earnings. The Company closely monitors these proposals as they arise in the countries where it operates. Changes to the,4,MISSED,JOHNSON_JOHNSON_2017_10K | page 36 ; JOHNSON_JOHNSON_2018_10K | page 38 ; JOHNSON_JOHNSON_2019_10K | page 38
+"Consolidated Statements of Financial Position include agreements for inventory procurement, tooling costs, electricity and natural gas contracts,",4,MISSED,BOEING_2017_10K | page 39 ; BOEING_2018_10K | page 41 ; BOEING_2019_10K | page 43
+"Statements of Cash Flows, and (vi) Notes to the Consolidated Financial Statements.",4,MISSED,JOHNSON_JOHNSON_2015_10K | page 91 ; JOHNSON_JOHNSON_2016_10K | page 98 ; JOHNSON_JOHNSON_2017_10K | page 103
+Statements of Financial Position were not significant. The amounts of interest included in the Consolidated Statements of Operations were not,4,MISSED,BOEING_2018_10K | page 80 ; BOEING_2019_10K | page 78 ; BOEING_2020_10K | page 91
+Statements of Income. These contracts reduce the impact of currency exchange rate movements on our assets and liabilities. At,4,MISSED,ADOBE_2019_10K | page 54 ; ADOBE_2020_10K | page 59 ; ADOBE_2021_10K | page 53
+"Balance Sheet, (v) the Consolidated Statement of Equity and (vi) Notes to Consolidated Financial Statements.",3,MISSED,PEPSICO_2015_10K | page 144 ; PEPSICO_2017_10K | page 147 ; PEPSICO_2018_10K | page 146
+Balance Sheet.,3,MATCHED,3M_2018_10K | page 86 ; 3M_2019_10K | page 84 ; 3M_2020_10K | page 86
+CONDENSED CONSOLIDATED BALANCE SHEETS,3,MATCHED,BESTBUY_2023Q4_EARNINGS | page 7 ; BESTBUY_2024Q2_EARNINGS | page 6 ; Pfizer_2023Q2_10Q | page 10
+CONDENSED CONSOLIDATED STATEMENTS OF CASH FLOWS,3,MATCHED,BESTBUY_2023Q4_EARNINGS | page 8 ; BESTBUY_2024Q2_EARNINGS | page 7 ; Pfizer_2023Q2_10Q | page 12
+Consolidated Balance Sheets.,3,MATCHED,ADOBE_2017_10K | page 68 ; BESTBUY_2019_10K | page 63 ; JOHNSON_JOHNSON_2022_10K | page 71
+"Consolidated Balance Sheets. For equity securities, the write-down would be recorded to investment gains (losses), net in our",3,MISSED,ADOBE_2016_10K | page 76 ; ADOBE_2017_10K | page 73 ; ADOBE_2018_10K | page 76
+Consolidated Statement of Comprehensive Income (Loss),3,MISSED,3M_2022_10K | page 49 ; 3M_2023Q2_10Q | page 2 ; 3M_2023Q2_10Q | page 4
+Consolidated Statement of Comprehensive Income and the Consolidated Statement of Changes in Equity. Accumulated other comprehensive income (loss),3,MISSED,3M_2018_10K | page 66 ; 3M_2019_10K | page 65 ; 3M_2020_10K | page 67
+"Consolidated Statement of Comprehensive Income, (iii) the Consolidated Statement of Cash Flows, (iv) the Consolidated",3,MISSED,PEPSICO_2015_10K | page 144 ; PEPSICO_2017_10K | page 147 ; PEPSICO_2018_10K | page 146
+Consolidated Statements of Earnings.,3,MATCHED,BESTBUY_2015_10K | page 74 ; BESTBUY_2020_10K | page 50 ; BESTBUY_2023_10K | page 45
+"Consolidated Statements of Income, (ii) the Consolidated Statements of Comprehensive Income, (iii)",3,MISSED,PEPSICO_2020_10K | page 127 ; PEPSICO_2021_10K | page 128 ; PEPSICO_2022_10K | page 128
+Consolidated Statements of Stockholders’ Equity (Deficit),3,MATCHED,AMD_2015_10K | page 59 ; AMD_2016_10K | page 59 ; AMD_2017_10K | page 63
+STATEMENT OF COMPUTATION OF RATIO OF EARNINGS TO FIXED CHARGES(1),3,MISSED,JOHNSON_JOHNSON_2015_10K | page 97 ; JOHNSON_JOHNSON_2016_10K | page 99 ; JOHNSON_JOHNSON_2017_10K | page 104
+"Statement of Cash Flows exclude the effects of acquisitions, divestitures and exchange rate impacts on cash and cash equivalents, which are",3,MISSED,3M_2015_10K | page 40 ; 3M_2016_10K | page 44 ; 3M_2017_10K | page 46
+Statement of Computation of Ratio of Earnings to Fixed Charges — Filed with this document.,3,MISSED,JOHNSON_JOHNSON_2015_10K | page 91 ; JOHNSON_JOHNSON_2016_10K | page 98 ; JOHNSON_JOHNSON_2017_10K | page 103
+Statement of Earnings,3,MATCHED,BESTBUY_2019_10K | page 73 ; BESTBUY_2024Q2_10Q | page 11
+Statement of operations (1):,3,MATCHED,CORNING_2020_10K | page 84 ; CORNING_2020_10K | page 86 ; CORNING_2021_10K | page 78
+Statements of Earnings.,3,MATCHED,BESTBUY_2015_10K | page 78 ; BESTBUY_2019_10K | page 81
+Statements of Equity and (vi) Notes to Consolidated Financial Statements.,3,MISSED,PEPSICO_2020_10K | page 127 ; PEPSICO_2021_10K | page 128 ; PEPSICO_2022_10K | page 128
+Statements of Financial Position were not significant. The amounts of interest benefit included in the Consolidated Statements of Operations were,3,MISSED,BOEING_2015_10K | page 74 ; BOEING_2016_10K | page 73 ; BOEING_2017_10K | page 72
+"balance sheet at fair value. The Company uses interest rate swaps, currency and commodity price swaps, and foreign currency forward and",3,MISSED,3M_2015_10K | page 60 ; 3M_2016_10K | page 65 ; 3M_2017_10K | page 67
+"balance sheet date, with any changes in cash surrender value or contract value during the period accounted for as an adjustment of premiums",3,MISSED,3M_2015_10K | page 56 ; 3M_2016_10K | page 62 ; 3M_2017_10K | page 63
+balance sheet. Classification of these securities as current is based on the Company’s intent and belief in its ability to sell these securities and use the proceeds from sale in,3,MISSED,AMD_2015_10K | page 62 ; AMD_2016_10K | page 63 ; AMD_2017_10K | page 67
+"consolidated balance sheet. Notional amounts below are presented at period end foreign exchange rates, except for certain interest rate swaps, which are presented using the",3,MISSED,3M_2021_10K | page 93 ; 3M_2022_10K | page 91 ; 3M_2023Q2_10Q | page 24
+statement of cash flows.,3,MATCHED,3M_2015_10K | page 43 ; 3M_2015_10K | page 65 ; 3M_2016_10K | page 48
+statement of income when the asset transferred is sold to a third-party or recovered through amortization of the asset's remaining economic life; and (ii) income tax receivables,3,MISSED,PFIZER_2015_10K | page 144 ; PFIZER_2016_10K | page 140 ; PFIZER_2017_10K | page 219
+"statements of Verizon Communications Inc. and Subsidiaries, which is incorporated by reference into this report.",3,MISSED,VERIZON_2017_10K | page 6 ; VERIZON_2018_10K | page 10 ; VERIZON_2019_10K | page 11
+"statements of unconsolidated subsidiaries are omitted because, considered in the aggregate, they would not constitute a significant",3,MISSED,3M_2015_10K | page 121 ; 3M_2016_10K | page 133 ; 3M_2017_10K | page 139
+Balance sheet location is determined by the length to maturity from the current period-end date.,2,MISSED,BESTBUY_2020_10K | page 55 ; BESTBUY_2021_10K | page 57
+CONDENSED CONSOLIDATED STATEMENTS OF EARNINGS,2,MATCHED,BESTBUY_2023Q4_EARNINGS | page 6 ; BESTBUY_2024Q2_EARNINGS | page 5
+CONSOLIDATED BALANCE SHEET,2,MATCHED,PEPSICO_2021_10K | page 31 ; PEPSICO_2022_10K | page 31
+CONSOLIDATED STATEMENT OF CASH FLOWS,2,MATCHED,PEPSICO_2021_10K | page 31 ; PEPSICO_2022_10K | page 31
+CONSOLIDATED STATEMENT OF COMPREHENSIVE INCOME,2,MATCHED,PEPSICO_2021_10K | page 31 ; PEPSICO_2022_10K | page 31
+CONSOLIDATED STATEMENT OF EQUITY,2,MATCHED,PEPSICO_2021_10K | page 31 ; PEPSICO_2022_10K | page 31
+CONSOLIDATED STATEMENT OF INCOME,2,MATCHED,PEPSICO_2021_10K | page 31 ; PEPSICO_2022_10K | page 31
+Condensed Consolidated Balance Sheet,2,MATCHED,PEPSICO_2023Q1_EARNINGS | page 8 ; PEPSICO_2023Q2_EARNINGS | page 9
+Condensed Consolidated Statement of Cash Flows,2,MATCHED,PEPSICO_2023Q1_EARNINGS | page 6 ; PEPSICO_2023Q2_EARNINGS | page 7
+Condensed Consolidated Statement of Cash Flows (continued),2,MATCHED,PEPSICO_2023Q1_EARNINGS | page 7 ; PEPSICO_2023Q2_EARNINGS | page 8
+Condensed Consolidated Statement of Income,2,MATCHED,PEPSICO_2023Q1_EARNINGS | page 4 ; PEPSICO_2023Q2_EARNINGS | page 5
+Condensed Consolidated Statements of Comprehensive Income,2,MATCHED,BESTBUY_2024Q2_10Q | page 5 ; Pfizer_2023Q2_10Q | page 3
+"Consolidated Balance Sheet at December 31, 2015 and 2014",2,MISSED,3M_2015_10K | page 47 ; 3M_2015_10K | page 121
+Consolidated Balance Sheets (1) (2),2,MATCHED,AMD_2016_10K | page 58 ; AMD_2017_10K | page 62
+"Consolidated Balance Sheets as of December 31, 2015 and 2014",2,MISSED,CORNING_2015_10K | page 148 ; MGMRESORTS_2015_10K | page 212
+"Consolidated Balance Sheets — December 31, 2018 and 201 7",2,MISSED,MGMRESORTS_2018_10K | page 54 ; MGMRESORTS_2018_10K | page 106
+"Consolidated Balance Sheets — December 31, 2019 and 2018",2,MISSED,MGMRESORTS_2019_10K | page 53 ; MGMRESORTS_2019_10K | page 111
+"Consolidated Balance Sheets — December 31, 2020 and 2019",2,MISSED,MGMRESORTS_2020_10K | page 60 ; MGMRESORTS_2020_10K | page 108
+"Consolidated Balance Sheets — December 31, 2021 and 2020",2,MISSED,MGMRESORTS_2021_10K | page 60 ; MGMRESORTS_2021_10K | page 114
+"Consolidated Balance Sheets — December 31, 2022 and 2021",2,MISSED,MGMRESORTS_2022_10K | page 54 ; MGMRESORTS_2022_10K | page 106
+"Consolidated Balance Sheets. As of December 2, 2022, the carrying value of our current debt was $500 million, net of the",2,MISSED,ADOBE_2022_10K | page 48 ; ADOBE_2022_10K | page 87
+"Consolidated Balance Sheets. Unrealized credit-related losses are recorded to other income (expense), net in our Consolidated",2,MISSED,ADOBE_2021_10K | page 72 ; ADOBE_2022_10K | page 69
+"Consolidated Balance Sheets. Upon completion of the $850 million stock repurchase agreement, $4.25 billion remains under our",2,MISSED,ADOBE_2019_10K | page 52 ; ADOBE_2019_10K | page 97
+"Consolidated Statement of Cash Flows for the years ended December 31, 2015, 2014 and 2013",2,MISSED,3M_2015_10K | page 47 ; 3M_2015_10K | page 121
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2015, 2014 and 2013",2,MISSED,3M_2015_10K | page 47 ; 3M_2015_10K | page 121
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2015, 2014 and 2013",2,MISSED,3M_2015_10K | page 47 ; 3M_2015_10K | page 121
+Consolidated Statement of Income (Loss),2,MATCHED,3M_2023Q2_10Q | page 2 ; 3M_2023Q2_10Q | page 3
+"Consolidated Statement of Income for the years ended December 31, 2015, 2014 and 2013",2,MISSED,3M_2015_10K | page 47 ; 3M_2015_10K | page 121
+Consolidated Statements of Cash Flows as follows ($ in millions):,2,MISSED,BESTBUY_2020_10K | page 47 ; BESTBUY_2024Q2_10Q | page 8
+Consolidated Statements of Cash Flows – Operating Activities and the Analysis of the Consolidated,2,MISSED,PFIZER_2021_10K | page 52 ; PFIZER_2022_10K | page 49
+Consolidated Statements of Comp rehensive Income,2,MISSED,CORNING_2017_10K | page 80 ; CORNING_2018_10K | page 81
+Consolidated Statements of Comprehensive (Loss) Income,2,MATCHED,CORNING_2023Q2_10Q | page 2 ; CORNING_2023Q2_10Q | page 4
+Consolidated Statements of Comprehensive Loss,2,MATCHED,AMD_2015_10K | page 57 ; AMD_2016_10K | page 57
+Consolidated Statements of Equity and Note 12,2,MISSED,PFIZER_2021_10K | page 52 ; PFIZER_2022_10K | page 49
+Consolidated Statements of Income (Loss),2,MATCHED,CORNING_2019_10K | page 66 ; CORNING_2019_10K | page 70
+Consolidated Statements of Income. Foreign exchange option contracts hedging forecasted foreign currency revenue and,2,MISSED,ADOBE_2020_10K | page 73 ; ADOBE_2021_10K | page 65
+Consolidated Statements of Operations.,2,MATCHED,AMD_2022_10K | page 62 ; BOEING_2022_10K | page 66
+Consolidated balance sheet of the Company and its Subsidiaries as of the end of each of the first three fiscal quarters of each fiscal year,2,MISSED,PEPSICO_2023_8K_dated-2023-05-30 | page 48 ; PEPSICO_2023_8K_dated-2023-05-30 | page 128
+Statement of Income Location and Impact of Cash Flow and Fair Value Derivative Instruments,2,MISSED,3M_2019_10K | page 103 ; 3M_2020_10K | page 105
+Statement of Income Location and Impact of Cash Flow and Fair Value Derivative Instruments and Derivatives Not Designated as Hedging Instruments,2,MISSED,3M_2021_10K | page 92 ; 3M_2022_10K | page 90
+Statements of Cash Flows in this MD&A.,2,MISSED,PFIZER_2021_10K | page 52 ; PFIZER_2022_10K | page 49
+Statements of Cash Flows within MD&A,2,MISSED,PFIZER_2021_10K | page 52 ; PFIZER_2022_10K | page 49
+"Statements of Earnings for non-restructuring and restructuring charges, respectively.",2,MISSED,BESTBUY_2021_10K | page 50 ; BESTBUY_2022_10K | page 49
+"Statements of Earnings. Unless otherwise stated, financial results discussed herein refer to continuing operations.",2,MISSED,BESTBUY_2017_10K | page 30 ; BESTBUY_2018_10K | page 30
+Statements of Financial Position.,2,MATCHED,BOEING_2016_10K | page 63 ; BOEING_2017_10K | page 58
+Statements of Income with a corresponding allowance for credit-related losses in our Consolidated Balance Sheets. Gains and,2,MISSED,ADOBE_2021_10K | page 72 ; ADOBE_2022_10K | page 69
+Statements of Income.,2,MATCHED,ADOBE_2020_10K | page 88 ; ADOBE_2022_10K | page 82
+Statements of Income. Revenue from on-premise term license or term licensing arrangements with unilateral cancellation rights,2,MISSED,ADOBE_2021_10K | page 61 ; ADOBE_2022_10K | page 59
+balance sheet arrangements.,2,MISSED,AMD_2015_10K | page 36 ; AMD_2016_10K | page 37
+"balance sheet, loans and other",2,MISSED,CORNING_2019_10K | page 111 ; CORNING_2020_10K | page 115
+balance sheet.,2,MATCHED,PEPSICO_2015_10K | page 48 ; PFIZER_2015_10K | page 123
+"balance sheet. The obligations are generally measured at the actuarial present value of all benefits attributable to employee service rendered, as provided by the applicable",2,MISSED,PFIZER_2018_10K | page 372 ; PFIZER_2019_10K | page 164
+balance sheets. Non-current deferred tax assets are included in the caption “Other assets” on the consolidated balance sheets.,2,MISSED,AMD_2015_10K | page 75 ; AMD_2016_10K | page 77
+"consolidated balance sheet. While we may be exposed to credit losses due to the nonperformance of our counterparties, we consider the risk",2,MISSED,VERIZON_2021_10K | page 46 ; VERIZON_2021_10K | page 87
+"consolidated balance sheets, estimates are used in determining the valuation and recoverability of assets, such as accounts receivable, investments, inventories, deferred tax",2,MISSED,PFIZER_2015_10K | page 140 ; PFIZER_2016_10K | page 136
+consolidated balance sheets. Gains and losses on foreign currency transactions are recorded in the consolidated statements of income in Other income and,2,MISSED,VERIZON_2015_10K | page 61 ; VERIZON_2016_10K | page 64
+consolidated balance sheets. We maintain allowances for credit losses resulting from the expected failure or inability of our,2,MISSED,VERIZON_2022_10K | page 46 ; VERIZON_2022_10K | page 62
+"consolidated statement of cash flows for the year ended December 31, 2015. On April 8, 2015, the FCC granted us these spectrum licenses.",2,MISSED,VERIZON_2015_10K | page 82 ; VERIZON_2016_10K | page 87
+"consolidated statement of income for the year ended December 31, 2013.",2,MISSED,PFIZER_2015_10K | page 150 ; VERIZON_2015_10K | page 53
+"consolidated statement of income for the year ended December 31, 2022.",2,MISSED,VERIZON_2022_10K | page 48 ; VERIZON_2022_10K | page 72
+consolidated statements of cash flows.,2,MATCHED,MGMRESORTS_2021_10K | page 75 ; VERIZON_2021_10K | page 40
+consolidated statements of income as follows (d) :,2,MISSED,PFIZER_2015_10K | page 153 ; PFIZER_2016_10K | page 150
+"consolidated statements of income. For additional information, see Note 11. Pension and Postretirement Benefit Plans and Defined Contribution Plans .",2,MISSED,PFIZER_2015_10K | page 133 ; PFIZER_2016_10K | page 128
+"statement of cash flows for the year ended December 31, 2015.",2,MISSED,VERIZON_2015_10K | page 84 ; VERIZON_2016_10K | page 89
+"statement of cash flows, are classified in operating activities in the same manner as other cash flows related to income taxes. The extent of excess tax benefits/deficiencies is",2,MISSED,3M_2021_10K | page 54 ; 3M_2022_10K | page 57
+statement of his or her Accounts in the Plan.,2,MISSED,3M_2021_10K | page 136 ; 3M_2021_10K | page 146
+"statement of income for the year ended December 31, 2016.",2,MISSED,VERIZON_2016_10K | page 53 ; VERIZON_2018_10K | page 131
+"statement of income for the year ended December 31, 2017.",2,MISSED,VERIZON_2017_10K | page 86 ; VERIZON_2019_10K | page 89
+statements of cash flows. The asset-backed debt issued and the assets securing this debt are included on our consolidated balance sheets.,2,MISSED,VERIZON_2017_10K | page 93 ; VERIZON_2017_10K | page 132
+statements of cash flows. The asset-backed debt issued is included in Debt maturing within one year and Long-term debt in our,2,MISSED,VERIZON_2022_10K | page 41 ; VERIZON_2022_10K | page 79
+statements of cash flows. The redemption resulted in a loss of $22 million.,2,MISSED,CORNING_2020_10K | page 40 ; CORNING_2020_10K | page 102
+statements of comprehensive income .,2,MATCHED,PFIZER_2015_10K | page 168 ; PFIZER_2016_10K | page 165
+statements of income (loss),2,MATCHED,CORNING_2018_10K | page 127 ; CORNING_2019_10K | page 117
+"statements of income, comprehensive income, cash flows and equity of the Company and its Subsidiaries for the fiscal year then ended,",2,MISSED,PEPSICO_2023_8K_dated-2023-05-30 | page 47 ; PEPSICO_2023_8K_dated-2023-05-30 | page 127
+"statements of income, were primarily driven by a decrease in our discount rate assumption used to determine the current year liabilities of our pension and other postretirement",2,MISSED,VERIZON_2018_10K | page 89 ; VERIZON_2018_10K | page 155
+statements of operations.,2,MATCHED,MGMRESORTS_2017_10K | page 88 ; MGMRESORTS_2020_10K | page 83
+statements of stockholders’ equity.,2,MATCHED,MGMRESORTS_2021_10K | page 79 ; MGMRESORTS_2022_10K | page 74
+"Balance Sheet - As of December 30, 2018",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 47
+"Balance Sheet Classification of Deferred Taxes classifying all deferred tax assets, liabilities and associated valuation allowances as non-current.",1,MISSED,PFIZER_2015_10K | page 130
+"Balance Sheet Classification of Deferred Taxes, ASU 2015-03 Simplifying the Presentation of Debt Issuance Costs, and ASU 2015-15 Presentation and Subsequent Measurement of Debt",1,MISSED,BESTBUY_2016_10K | page 28
+Balance Sheet Date,1,MISSED,PEPSICO_2016_10K | page 105
+"Balance Sheet Date, such differences shall be based on facts or occurrences arising solely between the Balance Sheet Date and the",1,MISSED,PFIZER_2018_10K | page 115
+Balance Sheet and will amortize the amount over the remaining term of the long-term supply agreement as a reduction in revenue.,1,MISSED,CORNING_2017_10K | page 121
+"Balance Sheet were $0.1 billion of inventory and property, plant and equipment, net. As of December 30, 2018, the assets held for sale on the Consolidated",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 89
+"Balance Sheet were $0.3 billion of inventory and $0.1 billion of property, plant and equipment, net. For additional details on the global supply chain",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 89
+Balance Sheet. Changes in the fair value of the derivative contracts are recorded currently in earnings in the Translated earnings contract,1,MISSED,CORNING_2017_10K | page 118
+"Balance Sheet. Refer to Note 1, Summary of Significant Accounting Policies , for further information regarding this balance sheet reclassification.",1,MISSED,BESTBUY_2016_10K | page 89
+Balance Sheet. Such balances are pledged as collateral or restricted to use for general liability insurance and workers' compensation insurance.,1,MISSED,BESTBUY_2016_10K | page 65
+Balance Sheets and Consolidated Statements of Cash Flows.,1,MISSED,ADOBE_2016_10K | page 66
+Balance Sheets and in Income tax expense on our Consolidated Statements of Earnings.,1,MISSED,BESTBUY_2022_10K | page 49
+Balance Sheets and in income tax expense in our Consolidated Statements of Earnings.,1,MISSED,BESTBUY_2015_10K | page 71
+Balance Sheets and represents the expected value of the aggregate refunds that will be due to our customers. We also have a corresponding asset included in Other,1,MISSED,BESTBUY_2019_10K | page 80
+"Balance Sheets at $144.1 million, the lesser of cost or fair value, which represented the total purchase price plus other direct costs",1,MISSED,ADOBE_2015_10K | page 80
+"Balance Sheets related to our foreign exchange forward contracts outstanding at January 31, 2015 , and February 1, 2014 , $30 million and $(3)",1,MISSED,BESTBUY_2015_10K | page 55
+"Balance Sheets was $26 million and $33 million , respectively, and the obligation associated with vacant properties included in long-term",1,MISSED,BESTBUY_2015_10K | page 68
+Balance Sheets with a corresponding offset to current debt.,1,MISSED,ADOBE_2019_10K | page 84
+"Balance Sheets, Consolidated Statements of Income and Consolidated Statements of Cash Flows.",1,MISSED,ADOBE_2017_10K | page 62
+"Balance Sheets. As of the end of fiscal 2017, we have no indefinite-lived tradenames within our International segment.",1,MISSED,BESTBUY_2017_10K | page 64
+"Balance Sheets. As of the end of fiscal 2018, we have no indefinite-lived tradenames within our International segment.",1,MISSED,BESTBUY_2018_10K | page 67
+"Balance Sheets. For equity securities, the write-down would be recorded to investment gains (losses), net in our Consolidated",1,MISSED,ADOBE_2015_10K | page 74
+Balance Sheets. See Note 6 for further details regarding our interest rate swap derivatives.,1,MISSED,ADOBE_2019_10K | page 101
+Balance Sheets. We manage the risk of changes in the fair value of the liability for deferred compensation by electing to match our liability under the plan with,1,MISSED,BESTBUY_2018_10K | page 85
+Balance sheet (3):,1,MATCHED,CORNING_2020_10K | page 86
+Balance sheet and working capital measures are provided in the following table (in millions ):,1,MISSED,CORNING_2017_10K | page 48
+Balance sheet location is determined by the length to maturity at date of purchase and whether the assets are restricted for particular use.,1,MISSED,BESTBUY_2024Q2_10Q | page 10
+Balance sheet location is determined by the length to maturity at date of purchase.,1,MISSED,BESTBUY_2023_10K | page 53
+Balance sheet location is determined by the length to maturity.,1,MISSED,BESTBUY_2022_10K | page 55
+CONDENSED CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME,1,MATCHED,Pfizer_2023Q2_10Q | page 9
+CONDENSED CONSOLIDATED STATEMENTS OF EQUITY,1,MATCHED,Pfizer_2023Q2_10Q | page 11
+CONDENSED CONSOLIDATED STATEMENTS OF INCOME,1,MATCHED,Pfizer_2023Q2_10Q | page 8
+CONSOLIDATED STATEMENTS OF INCOME(1),1,MISSED,PFIZER_2023Q2_EARNINGS | page 18
+CONSOLIDATED STATEMENTS OF STOCKHOLDERS' EQUITy,1,MATCHED,MGMRESORTS_2019_10K | page 61
+"Condensed Consolidated Balance Sheets as of July 29, 2023, January 28, 2023, and July 30, 2022",1,MISSED,BESTBUY_2024Q2_10Q | page 2
+"Condensed Consolidated Statements of Cash Flows for the six months ended July 29, 2023, and July 30, 2022",1,MISSED,BESTBUY_2024Q2_10Q | page 2
+Condensed Consolidated Statements of Changes in Shareholders' Equity,1,MATCHED,BESTBUY_2024Q2_10Q | page 7
+"Condensed Consolidated Statements of Changes in Shareholders' Equity for the three and six months ended July 29, 2023, and July 30, 2022",1,MISSED,BESTBUY_2024Q2_10Q | page 2
+"Condensed Consolidated Statements of Comprehensive Income for the three and six months ended July 29, 2023, and July 30, 2022",1,MISSED,BESTBUY_2024Q2_10Q | page 2
+"Condensed Consolidated Statements of Comprehensive Income for the three and six months ended July 29, 2023, and July 30, 2022, (iv) the Condensed",1,MISSED,BESTBUY_2024Q2_10Q | page 25
+Condensed Consolidated Statements of Earnings,1,MATCHED,BESTBUY_2024Q2_10Q | page 4
+"Condensed Consolidated Statements of Earnings for the three and six months ended July 29, 2023, and July 30, 2022",1,MISSED,BESTBUY_2024Q2_10Q | page 2
+Condensed Consolidated Statements of Equity,1,MATCHED,Pfizer_2023Q2_10Q | page 3
+Condensed Consolidated Statements of Income,1,MATCHED,Pfizer_2023Q2_10Q | page 3
+"Consolidated Balance Sheet at December 31, 2016 and 2015",1,MISSED,3M_2016_10K | page 2
+"Consolidated Balance Sheet at December 31, 2017 and 2016",1,MISSED,3M_2017_10K | page 2
+"Consolidated Balance Sheet at December 31, 2018 and 2017",1,MISSED,3M_2018_10K | page 2
+"Consolidated Balance Sheet at December 31, 2019 and 2018",1,MISSED,3M_2019_10K | page 2
+"Consolidated Balance Sheet at December 31, 2020 and 2019",1,MISSED,3M_2020_10K | page 2
+"Consolidated Balance Sheet at December 31, 2021 and 2020",1,MISSED,3M_2021_10K | page 2
+"Consolidated Balance Sheet at December 31, 2022 and 2021",1,MISSED,3M_2022_10K | page 2
+"Consolidated Balance Sheet dates. For operations reported on a one-month lag, we use the exchange rates in effect one month prior to",1,MISSED,BESTBUY_2020_10K | page 50
+Consolidated Balance Sheet s . Changes in the fair value of the derivative contracts are recorded currently in earnings in,1,MISSED,CORNING_2018_10K | page 121
+"Consolidated Balance Sheet – December 25, 2021 and December 26, 2020",1,MISSED,PEPSICO_2021_10K | page 119
+"Consolidated Balance Sheet – December 26, 2015 and December 27, 2014",1,MISSED,PEPSICO_2015_10K | page 132
+"Consolidated Balance Sheet – December 26, 2020 and December 28, 2019",1,MISSED,PEPSICO_2020_10K | page 118
+"Consolidated Balance Sheet – December 28, 2019 and December 29, 2018",1,MISSED,PEPSICO_2019_10K | page 137
+"Consolidated Balance Sheet – December 29, 2018 and December 30, 2017",1,MISSED,PEPSICO_2018_10K | page 138
+"Consolidated Balance Sheet – December 30, 2017 and December 31, 2016",1,MISSED,PEPSICO_2017_10K | page 138
+"Consolidated Balance Sheet – December 31, 2016 and December 26, 2015",1,MISSED,PEPSICO_2016_10K | page 135
+"Consolidated Balance Sheet – December 31, 2022 and December 25, 2021",1,MISSED,PEPSICO_2022_10K | page 121
+Consolidated Balance Sheet.,1,MATCHED,PEPSICO_2015_10K | page 116
+Consolidated Balance Sheet. Such balances are pledged as collateral or restricted to use for general liability insurance and workers' compensation insurance.,1,MISSED,BESTBUY_2017_10K | page 62
+Consolidated Balance Sheets (1),1,MATCHED,AMD_2018_10K | page 53
+Consolidated Balance Sheets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .,1,MISSED,AMD_2022_annualreport | page 113
+Consolidated Balance Sheets .......................................................................................................................................,1,MISSED,ADOBE_2015_10K | page 58
+Consolidated Balance Sheets and Notes to Consolidated Financial Statements.,1,MISSED,ADOBE_2022_10K | page 58
+"Consolidated Balance Sheets and were $31 million as of January 30, 2016. In May 2016, we completed the sale of the property and recognized a gain, net of",1,MISSED,BESTBUY_2017_10K | page 68
+"Consolidated Balance Sheets as of December 2, 2022 and December 3, 2021 were as follows:",1,MISSED,ADOBE_2022_10K | page 74
+"Consolidated Balance Sheets as of December 31, 2016 and 2015",1,MISSED,MGMRESORTS_2016_10K | page 309
+"Consolidated Balance Sheets as of December 31, 2017 and 2016",1,MISSED,MGMRESORTS_2017_10K | page 172
+"Consolidated Balance Sheets as of December 31, 2018 and 2017",1,MISSED,MGMRESORTS_2018_10K | page 172
+"Consolidated Balance Sheets at June 30, 2023 and December 31, 2022",1,MISSED,MGMRESORTS_2023Q2_10Q | page 2
+Consolidated Balance Sheets at end of Fiscal Years 2015 and 2014,1,MISSED,JOHNSON_JOHNSON_2015_10K | page 87
+Consolidated Balance Sheets at end of Fiscal Years 2016 and 2015,1,MISSED,JOHNSON_JOHNSON_2016_10K | page 94
+Consolidated Balance Sheets at end of Fiscal Years 2017 and 2016,1,MISSED,JOHNSON_JOHNSON_2017_10K | page 99
+Consolidated Balance Sheets at end of Fiscal Years 2018 and 2017,1,MISSED,JOHNSON_JOHNSON_2018_10K | page 111
+Consolidated Balance Sheets at end of Fiscal Years 2019 and 2018,1,MISSED,JOHNSON_JOHNSON_2019_10K | page 117
+Consolidated Balance Sheets at end of Fiscal Years 2020 and 2019,1,MISSED,JOHNSON_JOHNSON_2020_10K | page 114
+Consolidated Balance Sheets at end of Fiscal Years 2021 and 2020,1,MISSED,JOHNSON_JOHNSON_2021_10K | page 116
+Consolidated Balance Sheets at end of Fiscal Years 2022 and 2021,1,MISSED,JOHNSON_JOHNSON_2022_10K | page 116
+Consolidated Balance Sheets based on the percentage of points that are projected to be redeemed. We recognize revenue for this performance obligation over,1,MISSED,BESTBUY_2023_10K | page 50
+"Consolidated Balance Sheets — December 31, 2015 and 2014",1,MISSED,MGMRESORTS_2015_10K | page 56
+"Consolidated Balance Sheets — December 31, 2016 and 2015",1,MISSED,MGMRESORTS_2016_10K | page 60
+"Consolidated Balance Sheets — December 31, 2017 and 2016",1,MISSED,MGMRESORTS_2017_10K | page 56
+"Consolidated Balance Sheets, (v) the Consolidated Statements of Equity and (vi) Notes to Consolidated Financial",1,MISSED,PEPSICO_2019_10K | page 145
+"Consolidated Balance Sheets, however does not expect to have a material impact on the financial position. The actual impact will depend on the Company's",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 46
+"Consolidated Balance Sheets. As of December 2, 2016, the carrying value of the lease receivable related to the Almaden Tower",1,MISSED,ADOBE_2016_10K | page 95
+"Consolidated Balance Sheets. As of November 27, 2015, the carrying value of the lease receivable related to the Almaden Tower",1,MISSED,ADOBE_2015_10K | page 96
+"Consolidated Balance Sheets. During fiscal 2020, 2019 and 2018, we did not consider any of our investments to be other-than-",1,MISSED,ADOBE_2020_10K | page 85
+Consolidated Balance Sheets. Gains and losses are determined using the specific identification method and recognized when,1,MISSED,ADOBE_2019_10K | page 78
+Consolidated Balance Sheets. Goodwill of $52 million was recorded and assigned to our Best Buy Health reporting unit and is not,1,MISSED,BESTBUY_2020_10K | page 54
+"Consolidated Balance Sheets. Refund liabilities were $127 million and $126 million as of November 27, 2020 and",1,MISSED,ADOBE_2020_10K | page 79
+Consolidated Balance Sheets. Such balances are pledged as collateral or restricted to use for general liability insurance and workers' compensation insurance.,1,MISSED,BESTBUY_2018_10K | page 64
+"Consolidated Balance Sheets. We had no definite-lived intangible assets as of February 3, 2018. The following table provides the gross carrying amount and",1,MISSED,BESTBUY_2019_10K | page 63
+Consolidated Balance Sheets:,1,MATCHED,PFIZER_2021_10K | page 64
+Consolidated S tatements of (Loss) I ncome.,1,MISSED,CORNING_2017_10K | page 117
+Consolidated Statem ents of (Loss) Income,1,MISSED,CORNING_2017_10K | page 79
+Consolidated Statem ents of Income (Loss),1,MISSED,CORNING_2018_10K | page 80
+"Consolidated Statement of Cash Flows for the years ended December 31, 2016, 2015 and 2014",1,MISSED,3M_2016_10K | page 3
+"Consolidated Statement of Cash Flows for the years ended December 31, 2017, 2016 and 2015",1,MISSED,3M_2017_10K | page 3
+"Consolidated Statement of Cash Flows for the years ended December 31, 2018, 2017 and 2016",1,MISSED,3M_2018_10K | page 3
+"Consolidated Statement of Cash Flows for the years ended December 31, 2019, 2018 and 2017",1,MISSED,3M_2019_10K | page 3
+"Consolidated Statement of Cash Flows for the years ended December 31, 2020, 2019 and 2018",1,MISSED,3M_2020_10K | page 3
+"Consolidated Statement of Cash Flows for the years ended December 31, 2021, 2020 and 2019",1,MISSED,3M_2021_10K | page 2
+"Consolidated Statement of Cash Flows for the years ended December 31, 2022, 2021 and 2020",1,MISSED,3M_2022_10K | page 2
+"Consolidated Statement of Cash Flows – Fiscal years ended December 25, 2021, December 26, 2020 and December 28,",1,MISSED,PEPSICO_2021_10K | page 119
+"Consolidated Statement of Cash Flows – Fiscal years ended December 26, 2015, December 27, 2014 and December 28,",1,MISSED,PEPSICO_2015_10K | page 132
+"Consolidated Statement of Cash Flows – Fiscal years ended December 26, 2020, December 28, 2019 and December 29,",1,MISSED,PEPSICO_2020_10K | page 118
+"Consolidated Statement of Cash Flows – Fiscal years ended December 28, 2019, December 29, 2018 and December 30,",1,MISSED,PEPSICO_2019_10K | page 137
+"Consolidated Statement of Cash Flows – Fiscal years ended December 29, 2018, December 30, 2017 and December 31,",1,MISSED,PEPSICO_2018_10K | page 138
+"Consolidated Statement of Cash Flows – Fiscal years ended December 30, 2017, December 31, 2016 and December 26,",1,MISSED,PEPSICO_2017_10K | page 138
+"Consolidated Statement of Cash Flows – Fiscal years ended December 31, 2016, December 26, 2015 and December 27, 2014",1,MISSED,PEPSICO_2016_10K | page 135
+"Consolidated Statement of Cash Flows – Fiscal years ended December 31, 2022, December 25, 2021 and December 26,",1,MISSED,PEPSICO_2022_10K | page 121
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2016, 2015 and 2014",1,MISSED,3M_2016_10K | page 3
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2017, 2016 and 2015",1,MISSED,3M_2017_10K | page 3
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2018, 2017 and 2016",1,MISSED,3M_2018_10K | page 3
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2019, 2018 and 2017",1,MISSED,3M_2019_10K | page 3
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2020, 2019 and 2018",1,MISSED,3M_2020_10K | page 3
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2021, 2020 and 2019",1,MISSED,3M_2021_10K | page 2
+"Consolidated Statement of Changes in Equity for the years ended December 31, 2022, 2021 and 2020",1,MISSED,3M_2022_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2016, 2015 and",1,MISSED,3M_2016_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2017, 2016 and",1,MISSED,3M_2017_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2018, 2017 and 2016",1,MISSED,3M_2018_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2019, 2018 and 2017",1,MISSED,3M_2019_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2020, 2019 and 2018",1,MISSED,3M_2020_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2021, 2020 and 2019",1,MISSED,3M_2021_10K | page 2
+"Consolidated Statement of Comprehensive Income for the years ended December 31, 2022, 2021 and 2020",1,MISSED,3M_2022_10K | page 2
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 25, 2021, December 26, 2020 and",1,MISSED,PEPSICO_2021_10K | page 119
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 26, 2015, December 27, 2014 and",1,MISSED,PEPSICO_2015_10K | page 132
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 26, 2020, December 28, 2019 and",1,MISSED,PEPSICO_2020_10K | page 118
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 28, 2019, December 29, 2018 and",1,MISSED,PEPSICO_2019_10K | page 137
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 29, 2018, December 30, 2017 and",1,MISSED,PEPSICO_2018_10K | page 138
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 30, 2017, December 31, 2016 and",1,MISSED,PEPSICO_2017_10K | page 138
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 31, 2016, December 26, 2015 and December 27, 2014",1,MISSED,PEPSICO_2016_10K | page 135
+"Consolidated Statement of Comprehensive Income – Fiscal years ended December 31, 2022, December 25, 2021 and",1,MISSED,PEPSICO_2022_10K | page 121
+"Consolidated Statement of Earnings for that period. For a discussion of risks of changes in tax rates in other countries, including Belgium, please see",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 10
+Consolidated Statement of Earnings where other employee compensation costs are reported. All other components of net periodic benefit cost are presented,1,MISSED,JOHNSON_JOHNSON_2018_10K | page 67
+Consolidated Statement of Earnings. The Company closely monitors these proposals as they arise in the countries where it operates. Changes to tax laws or,1,MISSED,JOHNSON_JOHNSON_2022_10K | page 17
+Consolidated Statement of Earnings. The Company does not expect there to be a material impact to net earnings.,1,MISSED,JOHNSON_JOHNSON_2017_10K | page 47
+"Consolidated Statement of Equity – Fiscal years ended December 25, 2021, December 26, 2020 and December 28, 2019",1,MISSED,PEPSICO_2021_10K | page 119
+"Consolidated Statement of Equity – Fiscal years ended December 26, 2015, December 27, 2014 and December 28, 2013",1,MISSED,PEPSICO_2015_10K | page 132
+"Consolidated Statement of Equity – Fiscal years ended December 26, 2020, December 28, 2019 and December 29, 2018",1,MISSED,PEPSICO_2020_10K | page 118
+"Consolidated Statement of Equity – Fiscal years ended December 28, 2019, December 29, 2018 and December 30, 2017",1,MISSED,PEPSICO_2019_10K | page 137
+"Consolidated Statement of Equity – Fiscal years ended December 29, 2018, December 30, 2017 and December 31, 2016",1,MISSED,PEPSICO_2018_10K | page 138
+"Consolidated Statement of Equity – Fiscal years ended December 30, 2017, December 31, 2016 and December 26, 2015",1,MISSED,PEPSICO_2017_10K | page 138
+"Consolidated Statement of Equity – Fiscal years ended December 31, 2016, December 26, 2015 and December 27, 2014",1,MISSED,PEPSICO_2016_10K | page 135
+"Consolidated Statement of Equity – Fiscal years ended December 31, 2022, December 25, 2021 and December 26, 2020",1,MISSED,PEPSICO_2022_10K | page 121
+Consolidated Statement of Financial Position,1,MATCHED,BOEING_2018_10K | page 71
+"Consolidated Statement of Income for the years ended December 31, 2015, 2014 and 2013, (ii) the Consolidated Statement",1,MISSED,3M_2015_10K | page 123
+"Consolidated Statement of Income for the years ended December 31, 2016, 2015 and 2014",1,MISSED,3M_2016_10K | page 2
+"Consolidated Statement of Income for the years ended December 31, 2016, 2015 and 2014, (ii) the Consolidated Statement",1,MISSED,3M_2016_10K | page 135
+"Consolidated Statement of Income for the years ended December 31, 2017, 2016 and 2015",1,MISSED,3M_2017_10K | page 2
+"Consolidated Statement of Income for the years ended December 31, 2018, 2017 and 2016",1,MISSED,3M_2018_10K | page 2
+"Consolidated Statement of Income for the years ended December 31, 2019, 2018 and 2017",1,MISSED,3M_2019_10K | page 2
+"Consolidated Statement of Income for the years ended December 31, 2020, 2019 and 2018",1,MISSED,3M_2020_10K | page 2
+"Consolidated Statement of Income for the years ended December 31, 2021, 2020 and 2019",1,MISSED,3M_2021_10K | page 2
+"Consolidated Statement of Income for years ended December 31, 2022, 2021 and 2020",1,MISSED,3M_2022_10K | page 2
+"Consolidated Statement of Income using a combination of the fixed exchange and SICAD rates, as appropriate. As of the end of",1,MISSED,PEPSICO_2015_10K | page 86
+"Consolidated Statement of Income – Fiscal years ended December 25, 2021, December 26, 2020 and December 28, 2019",1,MISSED,PEPSICO_2021_10K | page 119
+"Consolidated Statement of Income – Fiscal years ended December 26, 2015, December 27, 2014 and December 28, 2013",1,MISSED,PEPSICO_2015_10K | page 132
+"Consolidated Statement of Income – Fiscal years ended December 26, 2020, December 28, 2019 and December 29, 2018",1,MISSED,PEPSICO_2020_10K | page 118
+"Consolidated Statement of Income – Fiscal years ended December 28, 2019, December 29, 2018 and December 30, 2017",1,MISSED,PEPSICO_2019_10K | page 137
+"Consolidated Statement of Income – Fiscal years ended December 29, 2018, December 30, 2017 and December 31, 2016",1,MISSED,PEPSICO_2018_10K | page 138
+"Consolidated Statement of Income – Fiscal years ended December 30, 2017, December 31, 2016 and December 26, 2015",1,MISSED,PEPSICO_2017_10K | page 138
+"Consolidated Statement of Income – Fiscal years ended December 31, 2016, December 26, 2015 and December 27, 2014",1,MISSED,PEPSICO_2016_10K | page 135
+"Consolidated Statement of Income – Fiscal years ended December 31, 2022, December 25, 2021 and December 26, 2020",1,MISSED,PEPSICO_2022_10K | page 121
+Consolidated Statement of Income.,1,MATCHED,CORNING_2015_10K | page 128
+"Consolidated Statement of Income. Research, development and related expenses totaled $1.821 billion in 2018, $1.870 billion in 2017 and $1.764 billion in",1,MISSED,3M_2018_10K | page 65
+"Consolidated Statement of Income. Research, development and related expenses totaled $1.878 billion in 2020, $1.911 billion in 2019 and $1.821 billion in",1,MISSED,3M_2020_10K | page 66
+"Consolidated Statement of Income. Research, development and related expenses totaled $1.911 billion in 2019, $1.821 billion in 2018 and $1.870 billion in",1,MISSED,3M_2019_10K | page 64
+Consolidated Statements of Cash Flows (1),1,MATCHED,AMD_2018_10K | page 55
+Consolidated Statements of Cash Flows . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .,1,MISSED,AMD_2022_annualreport | page 113
+Consolidated Statements of Cash Flows ......................................................................................................................,1,MISSED,ADOBE_2015_10K | page 58
+Consolidated Statements of Cash Flows and Notes to Consolidated Financial Statements.,1,MISSED,ADOBE_2020_10K | page 68
+"Consolidated Statements of Cash Flows for Fiscal Years 2015, 2014 and 2013",1,MISSED,JOHNSON_JOHNSON_2015_10K | page 87
+"Consolidated Statements of Cash Flows for Fiscal Years 2016, 2015 and 2014",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 94
+"Consolidated Statements of Cash Flows for Fiscal Years 2017, 2016 and 2015",1,MISSED,JOHNSON_JOHNSON_2017_10K | page 99
+"Consolidated Statements of Cash Flows for Fiscal Years 2018, 2017 and 2016",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 111
+"Consolidated Statements of Cash Flows for Fiscal Years 2019, 2018 and 2017",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 117
+"Consolidated Statements of Cash Flows for Fiscal Years 2020, 2019 and 2018",1,MISSED,JOHNSON_JOHNSON_2020_10K | page 114
+"Consolidated Statements of Cash Flows for Fiscal Years 2021, 2020 and 2019",1,MISSED,JOHNSON_JOHNSON_2021_10K | page 116
+"Consolidated Statements of Cash Flows for Fiscal Years 2022, 2021 and 2020",1,MISSED,JOHNSON_JOHNSON_2022_10K | page 116
+"Consolidated Statements of Cash Flows for the Six Months Ended June 30, 2023 and June 30, 2022",1,MISSED,MGMRESORTS_2023Q2_10Q | page 2
+"Consolidated Statements of Cash Flows for the six months ended July 29, 2023, and July 30, 2022, (v) the Condensed Consolidated Statements of Changes in",1,MISSED,BESTBUY_2024Q2_10Q | page 25
+"Consolidated Statements of Cash Flows for the years ended December 31, 2015, 2014 and 2013",1,MISSED,MGMRESORTS_2015_10K | page 212
+"Consolidated Statements of Cash Flows for the years ended December 31, 2016, 2015 and 2014",1,MISSED,MGMRESORTS_2016_10K | page 309
+"Consolidated Statements of Cash Flows for the years ended December 31, 2017, 2016 and 2015",1,MISSED,MGMRESORTS_2017_10K | page 172
+"Consolidated Statements of Cash Flows for the years ended December 31, 2017, 2016 and 2015, respectively. The income tax benefit",1,MISSED,CORNING_2017_10K | page 126
+"Consolidated Statements of Cash Flows for the years ended December 31, 2018, 2017 and 2016",1,MISSED,MGMRESORTS_2018_10K | page 172
+Consolidated Statements of Cash Flows.,1,MATCHED,CORNING_2017_10K | page 105
+Consolidated Statements of Cash Flows:,1,MATCHED,PFIZER_2021_10K | page 64
+Consolidated Statements of Changes in Shareholders’,1,MISSED,CORNING_2018_10K | page 84
+Consolidated Statements of Comprehensive Income (Loss) (1),1,MISSED,AMD_2018_10K | page 52
+Consolidated Statements of Comprehensive Income . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .,1,MISSED,AMD_2022_annualreport | page 113
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2015, 2014 and 2013",1,MISSED,JOHNSON_JOHNSON_2015_10K | page 87
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2016, 2015 and 2014",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 94
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2017, 2016 and 2015",1,MISSED,JOHNSON_JOHNSON_2017_10K | page 99
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2018, 2017 and 2016",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 111
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2019, 2018 and 2017",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 117
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2020, 2019 and 2018",1,MISSED,JOHNSON_JOHNSON_2020_10K | page 114
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2021, 2020 and 2019",1,MISSED,JOHNSON_JOHNSON_2021_10K | page 116
+"Consolidated Statements of Comprehensive Income for Fiscal Years 2022, 2021 and 2020",1,MISSED,JOHNSON_JOHNSON_2022_10K | page 116
+"Consolidated Statements of Comprehensive Income for the Three and Six Months Ended June 30, 2023 and",1,MISSED,MGMRESORTS_2023Q2_10Q | page 2
+Consolidated Statements of Comprehensive Income...................................................................................................,1,MISSED,ADOBE_2015_10K | page 58
+Consolidated Statements of Comprehensive Income:,1,MATCHED,PFIZER_2021_10K | page 64
+"Consolidated Statements of Earnings for Fiscal Years 2015, 2014 and 2013",1,MISSED,JOHNSON_JOHNSON_2015_10K | page 87
+"Consolidated Statements of Earnings for Fiscal Years 2016, 2015 and 2014",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 94
+"Consolidated Statements of Earnings for Fiscal Years 2017, 2016 and 2015",1,MISSED,JOHNSON_JOHNSON_2017_10K | page 99
+"Consolidated Statements of Earnings for Fiscal Years 2018, 2017 and 2016",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 111
+"Consolidated Statements of Earnings for Fiscal Years 2019, 2018 and 2017",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 117
+"Consolidated Statements of Earnings for Fiscal Years 2020, 2019 and 2018",1,MISSED,JOHNSON_JOHNSON_2020_10K | page 114
+"Consolidated Statements of Earnings for Fiscal Years 2021, 2020 and 2019",1,MISSED,JOHNSON_JOHNSON_2021_10K | page 116
+"Consolidated Statements of Earnings for Fiscal Years 2022, 2021 and 2020",1,MISSED,JOHNSON_JOHNSON_2022_10K | page 116
+"Consolidated Statements of Earnings for the fiscal years presented. We incurred restructuring charges of $0 million , $3 million and $5 million in fiscal 2019, fiscal",1,MISSED,BESTBUY_2019_10K | page 83
+Consolidated Statements of Earnings from the fair value of the derivatives.,1,MISSED,BESTBUY_2023_10K | page 47
+"Consolidated Statements of Earnings. Gift card breakage income was $65 million , $19 million and $53 million in fiscal 2016 , 2015 and 2014 , respectively.",1,MISSED,BESTBUY_2016_10K | page 70
+Consolidated Statements of Earnings. Results of operations from the date of acquisition were included within our Best Buy Health,1,MISSED,BESTBUY_2020_10K | page 53
+"Consolidated Statements of Equity for Fiscal Years 2015, 2014 and 2013",1,MISSED,JOHNSON_JOHNSON_2015_10K | page 87
+"Consolidated Statements of Equity for Fiscal Years 2016, 2015 and 2014",1,MISSED,JOHNSON_JOHNSON_2016_10K | page 94
+"Consolidated Statements of Equity for Fiscal Years 2017, 2016 and 2015",1,MISSED,JOHNSON_JOHNSON_2017_10K | page 99
+"Consolidated Statements of Equity for Fiscal Years 2018, 2017 and 2016",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 111
+"Consolidated Statements of Equity for Fiscal Years 2019, 2018 and 2017",1,MISSED,JOHNSON_JOHNSON_2019_10K | page 117
+"Consolidated Statements of Equity for Fiscal Years 2020, 2019 and 2018",1,MISSED,JOHNSON_JOHNSON_2020_10K | page 114
+"Consolidated Statements of Equity for Fiscal Years 2021, 2020 and 2019",1,MISSED,JOHNSON_JOHNSON_2021_10K | page 116
+"Consolidated Statements of Equity for Fiscal Years 2022, 2021 and 2020",1,MISSED,JOHNSON_JOHNSON_2022_10K | page 116
+Consolidated Statements of Financial Position were not significant. The amounts of interest included in the Consolidated Statements of,1,MISSED,BOEING_2022_10K | page 79
+"Consolidated Statements of Financial Position, approximate their fair value at December 31, 2017 and 2016 . The fair value of assets and liabilities",1,MISSED,BOEING_2017_10K | page 104
+Consolidated Statements of Financial Position.,1,MATCHED,BOEING_2015_10K | page 62
+Consolidated Statements of Income (Loss).,1,MATCHED,CORNING_2018_10K | page 87
+"Consolidated Statements of Income section, and the Analysis of Operating Segment Information section in our 2015 Financial Report, which are incorporated by",1,MISSED,PFIZER_2015_10K | page 6
+"Consolidated Statements of Income — Product Developments––Biopharmaceutical section in our 2018 Financial Report, which is incorporated by reference.",1,MISSED,PFIZER_2018_10K | page 12
+"Consolidated Statements of Income — Revenues — Overview, — Revenues by Segment and Geography and — Revenues—Selected Product Discussion",1,MISSED,PFIZER_2018_10K | page 9
+Consolidated Statements of Income. Any portion not related to credit loss would be recorded to accumulated other comprehensive,1,MISSED,ADOBE_2019_10K | page 80
+"Consolidated Statements of Income. During fiscal 2016, we recorded immaterial other-than-temporary impairment losses",1,MISSED,ADOBE_2016_10K | page 76
+"Consolidated Statements of Income. During fiscal 2017 and 2015, we did not consider any of our investments to be other-than-",1,MISSED,ADOBE_2017_10K | page 73
+"Consolidated Statements of Income. During fiscal 2018 and 2017, we did not consider any of our investments to be other-than-",1,MISSED,ADOBE_2018_10K | page 76
+"Consolidated Statements of Income. During fiscal 2020 and 2019, we amortized $186 million and $171 million of capitalized",1,MISSED,ADOBE_2020_10K | page 79
+"Consolidated Statements of Income. During fiscal 2021 and 2020, we amortized $212 million and $186 million of capitalized",1,MISSED,ADOBE_2021_10K | page 69
+"Consolidated Statements of Income. During fiscal 2022, 2021 and 2020, we amortized $238 million, $212 million and $186",1,MISSED,ADOBE_2022_10K | page 67
+Consolidated Statements of Income. Foreign exchange option contracts hedging forecasted foreign currency revenue and Treasury,1,MISSED,ADOBE_2019_10K | page 69
+"Consolidated Statements of Income. Subscription revenue by segment for fiscal 2020, 2019 and 2018, updated for the",1,MISSED,ADOBE_2020_10K | page 77
+Consolidated Statements of Income. Supplemental pro forma information was not provided because the Purchased Assets,1,MISSED,CORNING_2018_10K | page 103
+"Consolidated Statements of Income. The net gain or loss recognized in interest and other income (expense), net due to hedge",1,MISSED,ADOBE_2019_10K | page 83
+"Consolidated Statements of Income. When we have determined that an other-than-temporary decline in fair value has occurred,",1,MISSED,ADOBE_2015_10K | page 71
+Consolidated Statements of Income.............................................................................................................................,1,MISSED,ADOBE_2015_10K | page 58
+Consolidated Statements of Income:,1,MATCHED,PFIZER_2021_10K | page 64
+Consolidated Statements of Income––Revenues––Selected Product Discussion within MD&A for additional analysis,1,MISSED,PFIZER_2021_10K | page 39
+"Consolidated Statements of Income—Product Developments — Biopharmaceutical section in our 2015 Financial Report, which is incorporated by reference.",1,MISSED,PFIZER_2015_10K | page 10
+"Consolidated Statements of Income—Product Developments — Biopharmaceutical section in our 2016 Financial Report, which is incorporated by reference.",1,MISSED,PFIZER_2016_10K | page 13
+"Consolidated Statements of Income—Product Developments — Biopharmaceutical section in our 2017 Financial Report, which is incorporated by reference.",1,MISSED,PFIZER_2017_10K | page 12
+"Consolidated Statements of Income—Product Developments––Biopharmaceutical section in our 2019 Financial Report, which is incorporated by reference.",1,MISSED,PFIZER_2019_10K | page 12
+"Consolidated Statements of Members’ Equity for the years ended December 31, 2015, 2014 and 2013",1,MISSED,MGMRESORTS_2015_10K | page 212
+"Consolidated Statements of Members’ Equity for the years ended December 31, 2016, 2015 and 2014",1,MISSED,MGMRESORTS_2016_10K | page 309
+"Consolidated Statements of Members’ Equity for the years ended December 31, 2017, 2016 and 2015",1,MISSED,MGMRESORTS_2017_10K | page 172
+"Consolidated Statements of Members’ Equity for the years ended December 31, 2018, 2017 and 2016",1,MISSED,MGMRESORTS_2018_10K | page 172
+Consolidated Statements of Operations (1),1,MATCHED,AMD_2018_10K | page 51
+Consolidated Statements of Operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .,1,MISSED,AMD_2022_annualreport | page 113
+Consolidated Statements of Operations and,1,MISSED,AMD_2018_10K | page 70
+"Consolidated Statements of Operations for the Three and Six Months Ended June 30, 2023 and June 30, 2022",1,MISSED,MGMRESORTS_2023Q2_10Q | page 2
+"Consolidated Statements of Operations for the year ended December 31, 2015. The carrying value of goodwill related to the MGM China reporting unit as of",1,MISSED,MGMRESORTS_2015_10K | page 85
+"Consolidated Statements of Operations for the years ended December 31, 2015, 2014 and 2013",1,MISSED,MGMRESORTS_2015_10K | page 212
+"Consolidated Statements of Operations for the years ended December 31, 2016, 2015 and 2014",1,MISSED,MGMRESORTS_2016_10K | page 309
+"Consolidated Statements of Operations for the years ended December 31, 2017, 2016 and 2015",1,MISSED,MGMRESORTS_2017_10K | page 172
+"Consolidated Statements of Operations for the years ended December 31, 2018, 2017 and 2016",1,MISSED,MGMRESORTS_2018_10K | page 172
+Consolidated Statements of Stockholders' Equity........................................................................................................,1,MISSED,ADOBE_2015_10K | page 58
+Consolidated Statements of Stockholders’ Equity (Deficit) (1),1,MATCHED,AMD_2018_10K | page 54
+Consolidated Statements of Stockholders’ Equity . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .,1,MISSED,AMD_2022_annualreport | page 113
+"Consolidated Statements of Stockholders’ Equity for the Three and Six Months Ended June 30, 2023 and June",1,MISSED,MGMRESORTS_2023Q2_10Q | page 2
+"Consolidated Statements of Stockholders’ Equity for the years ended December 31, 2015, 2014 and 2013; (vi) Notes to the Consolidated Financial",1,MISSED,MGMRESORTS_2015_10K | page 64
+Statement of,1,MISSED,BESTBUY_2023_10K | page 52
+"Statement of Cash Flows, (iv) the Consolidated Balance Sheet, (v) the Consolidated Statement of Equity and (vi) Notes to Consolidated Financial",1,MISSED,PEPSICO_2016_10K | page 146
+"Statement of Cash Flows. In August 2016, the FASB issued ASU 2016-15, Statement of Cash Flows (ASC 230): Classification of Certain Cash Receipts and Cash",1,MISSED,AMD_2018_10K | page 63
+"Statement of Cash Flows. In August 2016, the FASB issued ASU 2016-15, Statement of Cash Flows (Topic 230): Classification of Certain Cash Receipts and Cash",1,MISSED,AMD_2017_10K | page 70
+"Statement of Cash Flows. In August 2016, the FASB issued ASU No. 2016-15, Statement of Cash Flows (Topic 230): Classification of Certain Cash Receipts and Cash",1,MISSED,AMD_2016_10K | page 67
+"Statement of Claim under Section 8.2 of the Patented Medicines (Notice of Compliance) Regulations against Sandoz asserting the ’721 and ’256 patents,",1,MISSED,JOHNSON_JOHNSON_2022_10K | page 100
+"Statement of Earnings - For the fiscal year ended December 30, 2018",1,MISSED,JOHNSON_JOHNSON_2018_10K | page 47
+"Statement of Financial Position $1,064 of lease liabilities with corresponding right-of-use assets for operating leases. Our accounting for finance",1,MISSED,BOEING_2019_10K | page 60
+"Statement of Financial Position as of January 1, 2020 and a $162 cumulative-effect adjustment to retained earnings to align our credit loss",1,MISSED,BOEING_2020_10K | page 74
+Statement of Income (Loss) Location and Impact of Cash Flow and Fair Value Derivative Instruments and Derivatives Not Designated as Hedging Instruments,1,MISSED,3M_2023Q2_10Q | page 23
+Statement of Income and our financial results only included revenue relating to the sales of inventory to our Venezuelan entities to,1,MISSED,PEPSICO_2015_10K | page 46
+Statement of operations (1)(2) :,1,MISSED,CORNING_2015_10K | page 105
+Statements of Cash Flows.,1,MATCHED,ADOBE_2018_10K | page 62
+Statements of Cash Flows. Presentation requirements for cash flows related to employee taxes paid for withheld shares had no,1,MISSED,ADOBE_2017_10K | page 68
+Statements of Comprehensive Income (Loss) Location,1,MISSED,AMD_2018_10K | page 70
+"Statements of Earnings, and the remainder of the restructuring charges are presented in Restructuring charges on our Consolidated Statements of Earnings. All",1,MISSED,BESTBUY_2018_10K | page 75
+Statements of Financial Position,1,MATCHED,BOEING_2020_10K | page 51
+"Statements of Financial Position. Should future orders not materialize or we determine the costs are no longer probable of recovery, the capitalized",1,MISSED,BOEING_2016_10K | page 65
+"Statements of Income section, and the Analysis of Operating Segment Information section in our 2016 Financial Report, which are incorporated by reference.",1,MISSED,PFIZER_2016_10K | page 8
+"Statements of Income section, and the Analysis of Operating Segment Information section in our 2017 Financial Report, which are incorporated by reference.",1,MISSED,PFIZER_2017_10K | page 7
+"Statements of Income section, and the Analysis of Operating Segment Information section in our 2018 Financial Report, which are incorporated by reference.",1,MISSED,PFIZER_2018_10K | page 9
+Statements of Income –– Revenues –– Selected Product Descriptions section in our 2016 Financial Report.,1,MISSED,PFIZER_2016_10K | page 9
+Statements of Income — Revenues — Overview section in our 2015 Financial Report and in the Notes to Consolidated Financial Statements— Note 1G. Basis,1,MISSED,PFIZER_2015_10K | page 18
+Statements of Income — Revenues — Overview section in our 2016 Financial Report and in the Notes to Consolidated Financial Statements— Note 1G. Basis,1,MISSED,PFIZER_2016_10K | page 20
+Statements of Income — Revenues — Overview section in our 2017 Financial Report and in the Notes to Consolidated Financial Statements— Note 1G. Basis of,1,MISSED,PFIZER_2017_10K | page 19
+"Statements of Income. During fiscal 2015, 2014 and 2013, we did not consider any of our investments to be other-than-temporarily",1,MISSED,ADOBE_2015_10K | page 74
+"Statements of Income. During fiscal 2019, we amortized $170.9 million of capitalized contract acquisition costs into sales and",1,MISSED,ADOBE_2019_10K | page 74
+Statements of Income––Revenues––Selected Product Discussion and ––Revenues by Geography sections within MD&A. For additional information regarding the primary,1,MISSED,PFIZER_2020_10K | page 34
+Statements of Income––Revenues––Selected Product Discussion within MD&A for additional analysis,1,MISSED,PFIZER_2020_10K | page 40
+Statements of Operations .,1,MATCHED,BOEING_2016_10K | page 194
+Statements of Operations. This change in classification is considered preferable as it i) better aligns classification,1,MISSED,AMD_2022_annualreport | page 75
+balance sheet,1,MATCHED,CORNING_2015_10K | page 130
+balance sheet accounts.,1,MISSED,VERIZON_2021_10K | page 110
+"balance sheet amounts of our foreign operations into U.S. dollars is recorded as cumulative translation adjustments, which are",1,MISSED,VERIZON_2022_10K | page 50
+"balance sheet and we periodically evaluate the carrying value of those licenses based on their future economic benefit to us. Factors such as the life of the assets, changes in",1,MISSED,AMD_2018_10K | page 26
+"balance sheet as deferred tax assets and their related valuation allowance, and the amounts reported on the",1,MISSED,AMD_2022_annualreport | page 99
+"balance sheet as of December 31, 2016 and December 26, 2015 were not material. Collateral received against any of our asset positions was not material.",1,MISSED,PEPSICO_2016_10K | page 120
+"balance sheet as of December 31, 2016.",1,MISSED,PFIZER_2016_10K | page 57
+"balance sheet as of December 31, 2019:",1,MISSED,PFIZER_2019_10K | page 165
+"balance sheet as of December 31, 2020:",1,MISSED,PFIZER_2020_10K | page 107
+"balance sheet financing arrangements, including variable interest entities, that we believe could have a material impact on our",1,MISSED,PEPSICO_2022_10K | page 51
+"balance sheet in Accumulated other comprehensive loss––Foreign currency translation adjustments at November 30, 2018 , our international quarter-end.",1,MISSED,PFIZER_2018_10K | page 340
+balance sheet with the related tax liability.,1,MISSED,PFIZER_2020_10K | page 73
+"balance sheet) by approximately $80 million, which was offset within accumulated other comprehensive income (located within the equity section of the Company’s balance",1,MISSED,3M_2022_10K | page 78
+"balance sheet, is accounted for as deferred rent and as a financing obligation. The $2.4 billion accounted for as deferred rent, which is presented within Other, net",1,MISSED,VERIZON_2016_10K | page 88
+"balance sheet, must be paid over eight years. We expect to pay approximately $0.3 billion per year in 2019-2023, $0.6 billion in 2024, $0.9 billion in 2025 and $1.0 billion in 2026",1,MISSED,PEPSICO_2017_10K | page 72
+"balance sheet. ASU 2016-02 will continue to classify leases as either finance or operating, with classification affecting the pattern of expense recognition in the",1,MISSED,CORNING_2016_10K | page 91
+"balance sheet. As of July 2, 2023 and December 31, 2022, respectively, $779 million and $849 million of our trade payables to suppliers who participate in",1,MISSED,Pfizer_2023Q2_10Q | page 26
+"balance sheet. At December 31, 2019, the difference between the amortized cost of the U.S. Treasury security and its fair value was not material. Upon the",1,MISSED,3M_2020_10K | page 87
+"balance sheet. For additional unaudited information on our sales incentives, see “Our Customers” in “Item 1. Business” and “Our",1,MISSED,PEPSICO_2017_10K | page 90
+balance sheet. ROU assets represent the Company’s right to use an underlying asset for the lease term and lease,1,MISSED,AMD_2022_annualreport | page 74
+balance sheet. The standard is effective in 2017 with early adoption permitted. The guidance is not expected to have a material,1,MISSED,PEPSICO_2015_10K | page 90
+"balance sheet. We adopted the provisions of this guidance retrospectively during our first quarter of 2017, resulting in the",1,MISSED,PEPSICO_2017_10K | page 93
+balance sheets and (iii) the pre-tax components of cumulative amounts recognized in Accumulated other comprehensive loss:,1,MISSED,PFIZER_2022_10K | page 89
+"balance sheets and depreciate them accordingly. In addition to the rights to lease and operate the towers, American Tower",1,MISSED,VERIZON_2022_10K | page 75
+"balance sheets and depreciate them accordingly. In addition to the rights to lease and operate the towers, American Tower assumed the interest in the underlying ground",1,MISSED,VERIZON_2020_10K | page 75
+"balance sheets and depreciate them accordingly. In addition to the rights to lease and operate the towers, American Tower assumed the interest in the underlying ground leases",1,MISSED,VERIZON_2019_10K | page 95
+balance sheets and within income tax expense in the consolidated statements of income.,1,MISSED,CORNING_2022_10K | page 69
+balance sheets as Other current liabilities and Other liabilities.,1,MISSED,VERIZON_2021_10K | page 66
+"balance sheets at January 31, 2015 and February 1, 2014, (ii) the",1,MISSED,BESTBUY_2015_10K | page 105
+"balance sheets of Pfizer Inc. and Subsidiary Companies as of December 31, 2016 and 2015 , and the related consolidated statements of income, comprehensive income,",1,MISSED,PFIZER_2016_10K | page 218
+"balance sheets of Pfizer Inc. and Subsidiary Companies as of December 31, 2017 and 2016 , and the related consolidated statements of income, comprehensive income,",1,MISSED,PFIZER_2017_10K | page 294
+"balance sheets of Pfizer Inc. and Subsidiary Companies as of December 31, 2018 and 2017 , and the related consolidated statements of income, comprehensive income,",1,MISSED,PFIZER_2018_10K | page 451
+"balance sheets of Pfizer Inc. and Subsidiary Companies as of December 31, 2019 and 2018, and the related consolidated statements of income, comprehensive income,",1,MISSED,PFIZER_2019_10K | page 242
+"balance sheets of the Company as of December 25, 2021 and December 26, 2020, the related consolidated statements of operations, comprehensive income,",1,MISSED,AMD_2021_10K | page 87
+"balance sheets of the Company as of December 26, 2020 and December 28, 2019, the related consolidated statements of operations, comprehensive income,",1,MISSED,AMD_2020_10K | page 88
+"balance sheets of the Company as of December 31, 2022 and December 25, 2021, the related consolidated statements of operations, comprehensive income,",1,MISSED,AMD_2022_10K | page 96
+"balance sheets of the MGM subsidiaries that contributed such assets. In addition, such subsidiaries recognized finance liabilities within “Other long-term obligations”",1,MISSED,MGMRESORTS_2016_10K | page 114
+balance sheets on an annual basis and amortize them into our operating results over the average remaining service period,1,MISSED,CORNING_2018_10K | page 55
+balance sheets represent an unconditional right to consideration. Contract balances represent amounts from an arrangement,1,MISSED,VERIZON_2022_10K | page 68
+"balance sheets through the completion of the transaction on April 1, 2016. As a result of the closing of the transaction, we derecognized plant, property, and",1,MISSED,VERIZON_2016_10K | page 88
+"balance sheets through the completion of the transaction on April 1, 2016. As a result of the closing of the transaction, we derecognized property, plant and equipment of $9.0",1,MISSED,VERIZON_2017_10K | page 121
+balance sheets. Changes in the fair value of the derivative contracts are recorded currently in earnings in the translated earnings contract (loss),1,MISSED,CORNING_2020_10K | page 114
+balance sheets. The Company did not contribute capital or receive investment tax credits during fiscal 2022 and 2021.,1,MISSED,ULTABEAUTY_2023_10K | page 74
+balance sheets. The amounts recognized represent reasonable estimates based on an evaluation of current facts and,1,MISSED,VERIZON_2022_10K | page 71
+"condensed consolidated statements of income. OCI = Other comprehensive income/(loss), included in the condensed consolidated statements of comprehensive income.",1,MISSED,Pfizer_2023Q2_10Q | page 25
+"consolidated Balance Sheet. The Company also exercised the option acquired on ACT-132577, a product within Idorsia being developed for resistant",1,MISSED,JOHNSON_JOHNSON_2017_10K | page 76
+"consolidated balance sheet and aggregated less than $35 million as of December 31, 2015 and 2014.",1,MISSED,3M_2015_10K | page 83
+"consolidated balance sheet and aggregated less than $35 million as of December 31, 2016 and 2015.",1,MISSED,3M_2016_10K | page 91
+"consolidated balance sheet and aggregated to less than $40 million as of December 31, 2021 and 2020.",1,MISSED,3M_2021_10K | page 80
+"consolidated balance sheet and aggregated to less than $51 million as of December 31, 2022 and 2021.",1,MISSED,3M_2022_10K | page 78
+"consolidated balance sheet and related statements of earnings, shareholders’ equity",1,MISSED,BESTBUY_2023_8K_dated-2023-04-12 | page 94
+"consolidated balance sheet as of December 31, 2014 to conform to the current period presentation, none of which were material to our financial statements.",1,MISSED,PFIZER_2015_10K | page 140
+consolidated balance sheet as we expect to recognize a right-of-use,1,MISSED,VERIZON_2018_10K | page 126
+"consolidated balance sheet at December 31, 2016. The non-real estate assets and liabilities that will be sold are currently",1,MISSED,VERIZON_2016_10K | page 88
+consolidated balance sheet of the Borrower and its Subsidiaries for the fiscal quarter or,1,MISSED,BESTBUY_2023_8K_dated-2023-04-12 | page 38
+"consolidated balance sheet of the Borrower in accordance with GAAP, but excluding any such",1,MISSED,BESTBUY_2023_8K_dated-2023-04-12 | page 30
+"consolidated balance sheet on a gross basis were $45 million and $44 million, respectively. Included in these interest and penalty amounts",1,MISSED,3M_2015_10K | page 76
+"consolidated balance sheet on a gross basis were $52 million and $45 million, respectively. Included in these interest and penalty amounts",1,MISSED,3M_2016_10K | page 84
+"consolidated balance sheet on a gross basis were $68 million and $52 million, respectively. Included in these interest and penalty amounts",1,MISSED,3M_2017_10K | page 89
+"consolidated balance sheet upon execution of each agreement. Additionally, the Company has entered into certain vaccine development cost sharing",1,MISSED,JOHNSON_JOHNSON_2020_10K | page 42
+"consolidated balance sheet. ASU 2015-17 will be effective in the first quarter of 2017, with early adoption permitted. ASU 2015-17 may be adopted either prospectively or",1,MISSED,AMD_2015_10K | page 65
+consolidated balance sheet. Classification of these securities as current is based on the Company’s intent and belief in its ability to sell these securities and use the proceeds,1,MISSED,AMD_2018_10K | page 59
+consolidated balance sheet. The ROU Assets represent the right to use an underlying asset for the lease term and lease liabilities represent an obligation to,1,MISSED,JOHNSON_JOHNSON_2019_10K | page 47
+consolidated balance sheet. The average remaining renewal period for these acquired licenses was 9.9 years.,1,MISSED,VERIZON_2020_10K | page 71
+consolidated balance sheets and recognized in net sales when the gift card is redeemed for product or services. Gift cards do not expire and,1,MISSED,ULTABEAUTY_2023_10K | page 63
+consolidated balance sheets and the proceeds are included in cash flows from operating activities in the consolidated statements of cash flows. By utilizing these types of,1,MISSED,CORNING_2022_10K | page 34
+consolidated balance sheets as assets and liabilities. Changes in the fair value of the interest rate swaps are recorded to Interest,1,MISSED,VERIZON_2022_10K | page 89
+"consolidated balance sheets as of December 30, 2017 and December 31, 2016 were zero and $3 million, respectively.",1,MISSED,AMD_2017_10K | page 46
+"consolidated balance sheets as of December 31, 2015 and 2014, and the related consolidated statements of operations, members’ equity, and cash flows for each of",1,MISSED,MGMRESORTS_2015_10K | page 213
+"consolidated balance sheets as of December 31, 2016 and 2015, and the related consolidated statements of operations, members’ equity, and cash flows for each of the",1,MISSED,MGMRESORTS_2016_10K | page 310
+"consolidated balance sheets as of December 31, 2018 and 2017, and the related consolidated statements of operations, members’ equity, and cash flows for each of",1,MISSED,MGMRESORTS_2018_10K | page 173
+"consolidated balance sheets of Pfizer Inc. and Subsidiary Companies as of December 31, 2015 and 2014 , and the related consolidated statements of income,",1,MISSED,PFIZER_2015_10K | page 220
+"consolidated balance sheets of Verizon as of December 31, 2021 and 2020, the related consolidated statements of income, comprehensive",1,MISSED,VERIZON_2021_10K | page 48
+"consolidated balance sheets of the Company as of January 28, 2023 and January 29, 2022, the related consolidated statements of income,",1,MISSED,ULTABEAUTY_2023_10K | page 52
+consolidated balance sheets on an annual basis and amortize them into our operating results over the average remaining,1,MISSED,CORNING_2018_10K | page 91
+"consolidated balance sheets, is $104 million and $278 million, respectively, as of June 30, 2023 and December 31, 2022. The carrying amount of the leased",1,MISSED,CORNING_2023Q2_10Q | page 13
+consolidated balance sheets. Classification of these securities as current is based on the Company’s intent and belief in its ability to sell these securities and use the proceeds,1,MISSED,AMD_2019_10K | page 54
+consolidated balance sheets. Costs incurred in implementing a cloud computing arrangement are deferred during the application-development,1,MISSED,VERIZON_2021_10K | page 60
+"consolidated balance sheets. During the first and second quarters of 2015, we paid an immaterial amount of cash to enter into amendments to certain collateral",1,MISSED,VERIZON_2015_10K | page 101
+"consolidated balance sheets. Finance leases are included in property, plant and equipment, with the corresponding liability in the current",1,MISSED,CORNING_2020_10K | page 78
+"consolidated balance sheets. Once a project is substantially complete and ready for its intended use, we stop deferring the related cloud computing arrangement costs.",1,MISSED,VERIZON_2020_10K | page 63
+consolidated balance sheets. Our derivative instruments are valued primarily using models based on readily observable market parameters for all substantial terms,1,MISSED,VERIZON_2015_10K | page 80
+"consolidated balance sheets. The Company’s resales back to the ATMP JV during 2018 and 2017 amounted to approximately $62 million and $3 million, respectively. As",1,MISSED,AMD_2018_10K | page 66
+"consolidated balance sheets. The Company’s resales back to the ATMP JV during 2019 and 2018 amounted to $56 million and $62 million, respectively. As of December 28,",1,MISSED,AMD_2019_10K | page 58
+consolidated balance sheets. The Company’s resales to the ATMP JV during 2022 and 2021 amounted to,1,MISSED,AMD_2022_annualreport | page 86
+"consolidated statement of cash flows for the year ended December 31, 2019. The net gain as a result of this transaction is included in the components of net lease cost table",1,MISSED,VERIZON_2020_10K | page 76
+"consolidated statement of cash flows for the year-ended December 31, 2017. In addition, we are entitled to receive a contingent amount of up to an additional $225 million in",1,MISSED,PFIZER_2017_10K | page 224
+consolidated statement of cash flows. Deferred profit is reduced and recognized into income in connection with such quarterly,1,MISSED,3M_2015_10K | page 73
+consolidated statement of earnings. We also expect that adoption of the new standard will require changes to our internal controls over financial reporting.,1,MISSED,BESTBUY_2018_10K | page 62
+"consolidated statement of income for the year ended December 31, 2018 nor on our consolidated balance sheet as of December 31, 2018 . For additional information, see",1,MISSED,PFIZER_2018_10K | page 363
+"consolidated statement of income for the year ended December 31, 2021.",1,MISSED,VERIZON_2022_10K | page 72
+"consolidated statement of income for the year ended December 31, 2021. See Note 3 to the consolidated financial statements",1,MISSED,VERIZON_2022_10K | page 48
+"consolidated statement of income on a gross basis approximately $10 million of expense, $2 million of expense, and $14 million of benefit",1,MISSED,3M_2016_10K | page 84
+"consolidated statement of income on a gross basis approximately $2 million of expense, $14 million of benefit, and $22 million of expense",1,MISSED,3M_2015_10K | page 76
+"consolidated statement of income on a gross basis approximately $20 million of expense, $10 million of expense, and $2 million of expense",1,MISSED,3M_2017_10K | page 89
+consolidated statement of income. The goodwill balance,1,MISSED,VERIZON_2018_10K | page 102
+consolidated statement of operations since the Company is not obligated to fund the THATIC JV's losses in excess of the Company’s investment in the THATIC JV.,1,MISSED,AMD_2016_10K | page 70
+consolidated statement of operations.,1,MATCHED,AMD_2018_10K | page 66
+"consolidated statements of cash flows for the years ended February 1, 2020,",1,MISSED,BESTBUY_2020_10K | page 70
+consolidated statements of cash flows included in its Annual Report on Form 10-K.,1,MISSED,BOEING_2016_10K | page 183
+"consolidated statements of cash flows were $0.8 billion during 2017 and insignificant during 2016. During 2017, we repurchased all outstanding receivables previously sold to",1,MISSED,VERIZON_2017_10K | page 136
+"consolidated statements of comprehensive income for the years ended February 3,",1,MISSED,BESTBUY_2018_10K | page 98
+"consolidated statements of earnings for the years ended January 31, 2015,",1,MISSED,BESTBUY_2015_10K | page 105
+"consolidated statements of earnings or cash flows. As part of our adoption, we have also modified our control procedures and processes.",1,MISSED,BESTBUY_2019_10K | page 58
+consolidated statements of income (in millions):,1,MISSED,CORNING_2020_10K | page 83
+consolidated statements of income (loss). Supplemental pro forma information was not provided because the acquisition was not material to,1,MISSED,CORNING_2019_10K | page 94
+consolidated statements of income as follows (e) :,1,MISSED,PFIZER_2017_10K | page 229
+consolidated statements of income based on the use of the facility or equipment that the rent is being paid on. See Note 1 for additional information. Variable lease costs,1,MISSED,VERIZON_2020_10K | page 75
+"consolidated statements of income in Other income (expense), net. At December 31, 2021, our primary translation exposure was to the British",1,MISSED,VERIZON_2021_10K | page 47
+"consolidated statements of income, comprehensive income, cash flows and changes in equity for each of the three years in the period ended December 31, 2017, and the related",1,MISSED,VERIZON_2017_10K | page 106
+"consolidated statements of income, comprehensive income, cash flows and changes in equity for each of the three years in the period ended December 31, 2018, and the related",1,MISSED,VERIZON_2018_10K | page 110
+"consolidated statements of income, comprehensive income, cash flows, and changes in equity for each of the three years in the period ended December 31, 2019, and the",1,MISSED,VERIZON_2019_10K | page 69
+"consolidated statements of income, comprehensive income, cash flows, and changes in equity for each of the three years in the period ended December 31, 2020, and the",1,MISSED,VERIZON_2020_10K | page 52
+"consolidated statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2017 , and the related",1,MISSED,PFIZER_2017_10K | page 204
+"consolidated statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2018 , and the related",1,MISSED,PFIZER_2018_10K | page 351
+"consolidated statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2019, and the related",1,MISSED,PFIZER_2019_10K | page 143
+"consolidated statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2020, and the related",1,MISSED,PFIZER_2020_10K | page 59
+"consolidated statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2021, and the related notes",1,MISSED,PFIZER_2021_10K | page 55
+"consolidated statements of income, mainly in Cost of sales",1,MISSED,Pfizer_2023Q2_10Q | page 16
+"consolidated statements of income, of comprehensive income (loss), of changes in equity and of cash flows for each of the three years in the period ended December 31, 2022,",1,MISSED,3M_2022_10K | page 45
+"consolidated statements of income, of comprehensive income, of changes in equity and of cash flows for each of the three years in the period ended December 31, 2021,",1,MISSED,3M_2021_10K | page 43
+"consolidated statements of income. For additional information, see Note 1B and Note 4 .",1,MISSED,PFIZER_2018_10K | page 404
+"consolidated statements of income. For additional information, see Note 4.",1,MISSED,PFIZER_2019_10K | page 198
+"consolidated statements of income. In 2015 , we recorded net interest expense of $71 million . In 2014 , we recorded net interest expense of $40 million ; and in 2013 , we",1,MISSED,PFIZER_2015_10K | page 160
+"consolidated statements of income. In 2016 , we recorded net interest expense of $72 million . In 2015 , we recorded net interest expense of $71 million ; and in 2014 , we",1,MISSED,PFIZER_2016_10K | page 156
+consolidated statements of income. See Note 9 for additional information. The amounts reclassified to net income related to unrealized gains,1,MISSED,VERIZON_2021_10K | page 101
+consolidated statements of income. The amounts reclassified to net income related to defined benefit pension and postretirement plans in the table above are included in Cost of,1,MISSED,VERIZON_2017_10K | page 154
+consolidated statements of income. The amounts reclassified to net income related to defined benefit pension and postretirement plans in the table above are included in Other,1,MISSED,VERIZON_2018_10K | page 162
+"consolidated statements of operations, comprehensive income (loss), stockholders’ equity (deficit) and cash flows for each of the three years in the period ended December 29,",1,MISSED,AMD_2018_10K | page 92
+"consolidated statements of operations, comprehensive income (loss), stockholders’ equity and cash flows for each of the three years in the period ended December 28, 2019,",1,MISSED,AMD_2019_10K | page 80
+"consolidated statements of operations, comprehensive income (loss), stockholders’ equity and cash flows for each of the three years in the period ended December 30, 2017,",1,MISSED,AMD_2017_10K | page 104
+"consolidated statements of operations, comprehensive loss, stockholders’ equity (deficit), and cash flows for each of the three years in the period ended December 26, 2015.",1,MISSED,AMD_2015_10K | page 92
+"consolidated statements of operations, comprehensive loss, stockholders’ equity (deficit), and cash flows for each of the three years in the period ended December 31, 2016.",1,MISSED,AMD_2016_10K | page 98
+"consolidated statements of operations. In connection with the closing of the IPO, on May 25, 2016 (the “Redemption Date”) the Company redeemed for cash all $1.23",1,MISSED,MGMRESORTS_2016_10K | page 95
+consolidated statements of position.,1,MISSED,CORNING_2017_10K | page 50
+consolidated statements of stockholders’ equity.,1,MATCHED,MGMRESORTS_2020_10K | page 76
+consolidated statements of stockholders’ equity. Amounts reported in accumulated other comprehensive income related to cash flow hedges will be reclassified to,1,MISSED,MGMRESORTS_2017_10K | page 77
+income statement as incurred.,1,MISSED,PEPSICO_2015_10K | page 113
+income statement during the fourth quarter or upon a remeasurement event pursuant to our accounting policy for the recognition of actuarial gains/losses. We,1,MISSED,VERIZON_2016_10K | page 44
+income statement impact. A summary of affected material consolidated balance sheet amounts is included at the end of this Combat Arms litigation discussion.,1,MISSED,3M_2023Q2_10Q | page 48
+"income statement in a manner similar to current accounting. For lessors, the guidance modifies the classification criteria and the",1,MISSED,PEPSICO_2017_10K | page 94
+"income statement of the income tax effects of vested or settled awards on a prospective basis. Additionally, within the cash flow statement, the guidance requires the",1,MISSED,PEPSICO_2016_10K | page 91
+income statements for each quarter of fiscal 2020 would have been as follows:,1,MISSED,ADOBE_2020_10K | page 68
+statement of a Financial Officer or other executive officer of the Borrower setting forth the,1,MISSED,BESTBUY_2023_8K_dated-2023-04-12 | page 96
+statement of all potential risks and,1,MISSED,JOHNSON_JOHNSON_2016_10K | page 4
+statement of all potential risks and uncertainties. The Company has identified the factors on this list as permitted by the Private Securities Litigation,1,MISSED,JOHNSON_JOHNSON_2015_10K | page 111
+"statement of cash flow. For further information, see Note 1B .",1,MISSED,PFIZER_2018_10K | page 371
+"statement of cash flows for the year ended December 31, 2019. The net gain as a result of this transaction is included in the components of net lease cost table above.",1,MISSED,VERIZON_2019_10K | page 97
+"statement of cash flows for the year ended December 31, 2022.",1,MISSED,VERIZON_2022_10K | page 103
+statement of cash flows in the same category as the cash flows from the items subject to designated hedge or undesignated (economic) hedge,1,MISSED,3M_2016_10K | page 66
+statement of cash flows include those amounts deemed to be restricted cash and,1,MISSED,VERIZON_2018_10K | page 125
+"statement of cash flows, are classified in operating activities in the same manner as other cash flows related to income taxes. The extent of",1,MISSED,3M_2017_10K | page 66
+"statement of cash flows, while ASU 2016-18 requires restricted cash balances be included in the beginning and ending cash balance within the statement of cash",1,MISSED,BESTBUY_2017_10K | page 61
+statement of charges related to this investigation.,1,MISSED,JOHNSON_JOHNSON_2021_10K | page 102
+statement of income (loss) in which the effects of derivatives are recorded,1,MISSED,3M_2023Q2_10Q | page 23
+"statement of income for the year ended December 31, 2017. Verizon has completed its analysis of the impacts of the TCJA, including analyzing the effects of any IRS and U.S.",1,MISSED,VERIZON_2018_10K | page 165
+statement of income in which the effects of cash flow or fair value hedges are recorded,1,MISSED,3M_2021_10K | page 92
+statement of income in which the effects of derivatives are recorded,1,MISSED,3M_2022_10K | page 90
+"statement of income on a gross basis approximately $12 million of expense, $20 million of expense, and $10 million of expense in 2018, 2017, and 2016,",1,MISSED,3M_2018_10K | page 86
+"statement of income on a gross basis approximately $21 million of expense, $33 million of expense, and $12 million of expense in 2020, 2019, and 2018,",1,MISSED,3M_2020_10K | page 86
+"statement of income on a gross basis approximately $33 million of expense, $12 million of expense, and $20 million of expense in 2019, 2018, and 2017,",1,MISSED,3M_2019_10K | page 84
+"statement of income or statement of cash flows, or (ii) includes amounts, or is subject to adjustments that have the effect of including amounts, that are excluded",1,MISSED,CORNING_2016_10K | page 34
+statement of income or statement of cash flows.,1,MISSED,CORNING_2018_10K | page 36
+statement of income resulting in a $184 million tax benefit for 2016. 3M typically experiences the largest volume of stock option exercises,1,MISSED,3M_2016_10K | page 41
+"statement of income. ASU 2016-02 is effective for fiscal years beginning after December 15, 2018, including interim periods within those fiscal years. Early",1,MISSED,CORNING_2016_10K | page 91
+statement of operations.,1,MATCHED,AMD_2015_10K | page 69
+statement of the Claimant’s right to bring a civil action under ERISA Section 502(a) following an adverse benefit,1,MISSED,JOHNSON_JOHNSON_2020_10K | page 138
+statement of the business and condition of the Corporation.,1,MISSED,AMD_2020_10K | page 122
+"statements of Best Buy Co., Inc. and the effectiveness of Best Buy Co., Inc.’s internal control over financial reporting,",1,MISSED,BESTBUY_2023_10K | page 71
+"statements of Verizon Communications Inc. and Subsidiaries, which are incorporated by reference into this report.",1,MISSED,VERIZON_2016_10K | page 4
+"statements of cash flows included in its Annual Report on Form 10-K, adjusted to eliminate the effect on operating cash flows of net customer",1,MISSED,BOEING_2021_10K | page 198
+"statements of cash flows, or (ii) includes amounts, or is subject to adjustments that have the effect of including amounts, that are excluded from the comparable measure as",1,MISSED,CORNING_2021_10K | page 33
+"statements of cash flows, proceeds from asset-backed securitizations are reflected in cash flows from financing activities. This change will result in lower cash",1,MISSED,VERIZON_2016_10K | page 55
+"statements of cash flows. As a result, for the year ended December 31, 2018 , $2 million is presented as a decrease in Cash, cash equivalents, restricted cash and restricted",1,MISSED,PFIZER_2018_10K | page 364
+"statements of earnings, shareholders’ equity and cash flows of the Borrower and its",1,MISSED,BESTBUY_2023_8K_dated-2023-04-12 | page 94
+"statements of equity, and statements of cash flows present fairly, in all material respects, the financial position of Johnson & Johnson and its subsidiaries at",1,MISSED,JOHNSON_JOHNSON_2015_10K | page 82
+"statements of income (loss). In arriving at the fair value of Corning’s derivative assets and liabilities, we have considered the appropriate",1,MISSED,CORNING_2019_10K | page 49
+statements of income (see Note 4).,1,MISSED,PFIZER_2019_10K | page 190
+statements of income based on the use of the facility or equipment that the rent is being paid on. See Note 1 for additional information. Variable lease costs represent,1,MISSED,VERIZON_2019_10K | page 95
+"statements of income fluctuate from period to period, depending on the value of the U.S. dollar against foreign currencies.",1,MISSED,CORNING_2015_10K | page 160
+statements of income was not material.,1,MISSED,CORNING_2023Q2_10Q | page 9
+"statements of income when the inventory is sold to a third party, as well as (ii) income tax receivables that are expected to be recovered either as refunds from taxing",1,MISSED,PFIZER_2019_10K | page 163
+"statements of income while the other components, including mark-to-market adjustments, if any, are recorded in Other income (expense), net.",1,MISSED,VERIZON_2020_10K | page 92
+"statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2015 . These consolidated financial",1,MISSED,PFIZER_2015_10K | page 130
+"statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2016 . These consolidated financial",1,MISSED,PFIZER_2016_10K | page 125
+"statements of income, comprehensive income, equity, and cash flows for each of the years in the three-year period ended December 31, 2022, and the related notes (collectively, the",1,MISSED,PFIZER_2022_10K | page 52
+"statements of income, were primarily driven by an increase in our discount rate assumption used to determine the current year liabilities of our pension plans and",1,MISSED,VERIZON_2020_10K | page 96
+"statements of income. Changes in the fair value of derivatives not designated as hedging instruments are recognized within translated earnings contract gain (loss), net",1,MISSED,CORNING_2022_10K | page 70
+"statements of income. For additional information, see Note 11. Pension and Postretirement Benefit Plans and Defined Contribution Plans .",1,MISSED,PFIZER_2017_10K | page 207
+"statements of income. In arriving at the fair value of Corning’s derivative assets and liabilities, we have considered the appropriate valuation",1,MISSED,CORNING_2020_10K | page 49
+"statements of income. In arriving at the fair value of Corning’s derivative assets and liabilities, we have considered the appropriate valuation and risk criteria, including such",1,MISSED,CORNING_2021_10K | page 46
+"statements of income. In arriving at the fair value of our derivative assets and liabilities, we have considered the appropriate valuation and risk criteria, including such",1,MISSED,CORNING_2022_10K | page 41
+"statements of income. The total losses are reflected within Other, net cash flow from operating activities and the portion of the",1,MISSED,VERIZON_2022_10K | page 82
+"statements of operations for the years ended December 31, 2016 and 2015 as the sale of Crystals was a strategic shift in business. The cash flows of discontinued",1,MISSED,MGMRESORTS_2017_10K | page 182
+statements of position.,1,MISSED,CORNING_2016_10K | page 53
+statements of stockholders’ equity. Amounts reported in accumulated other comprehensive income related to cash flow hedges will be reclassified to interest expense,1,MISSED,MGMRESORTS_2018_10K | page 68
+statements of the Company shall be furnished to the Members within fifty (50) days after the end of each Fiscal Year.,1,MISSED,MGMRESORTS_2015_10K | page 138
+"statements of unconsolidated subsidiaries are omitted because, considered in the aggregate, they would not constitute a significant subsidiary.",1,MISSED,PFIZER_2022_10K | page 111

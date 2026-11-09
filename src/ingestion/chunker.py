@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -10,7 +11,73 @@ if str(PROJECT_DIR) not in sys.path:
 from src.config import CHUNK_OVERLAP, CHUNK_SIZE, EXTRACTED_DIR
 
 META_FIELDS = ("doc_id", "company", "sector", "desk", "doc_type", "period")
+CHUNKING_VERSION = "table-row-v3"
+_YEAR_HEADER = re.compile(r"\b(?:19|20)\d{2}\b")
+_STATEMENT_HEADING = re.compile(
+    r"(?i)^\s*"
+    r"(?:(?:consolidated|condensed|combined)\s+)*"
+    r"(?:"
+    r"statements?\s+of\s+"
+    r"(?:"
+    r"cash\s+flows?"
+    r"|(?:income(?:\s*\(loss\))?|\(loss\)\s+income)"
+    r"|earnings"
+    r"|operations"
+    r"|comprehensive\s+(?:\(?loss\)?\s+)?income"
+    r"|comprehensive\s+loss"
+    r"|(?:changes\s+in\s+)?"
+    r"(?:(?:stockholders|shareholders|members)[’']?\s+)?"
+    r"equity(?:\s+\(deficit\))?"
+    r"|financial\s+position"
+    r")"
+    r"|balance\s+sheets?"
+    r"|income\s+statements?"
+    r")"
+    r"(?:\s+\((?:continued|unaudited)\))?"
+    r"(?:\s+\(\d+\))*"
+    r"\s*[.:;]?\s*$"
+)
 
+def extract_statement_heading(page):
+    for block in page.get("content") or []:
+        if block.get("type") != "text":
+            continue
+
+        for line in (block.get("text") or "").splitlines():
+            original = line.strip()
+            if not original:
+                continue
+
+            readable = re.sub(r"\s+", " ", original).strip()
+
+            # Repair common OCR splits before matching.
+            readable = re.sub(
+                r"(?i)\b(incom)\s+e\b", r"\1e", readable
+            )
+            readable = re.sub(
+                r"(?i)\b(equit)\s+y\b", r"\1y", readable
+            )
+            readable = re.sub(
+                r"(?i)\b(flow)\s+s\b", r"\1s", readable
+            )
+            readable = re.sub(
+                r"(?i)\b(shee)\s+t\b", r"\1t", readable
+            )
+            readable = re.sub(
+                r"(?i)\bcomp\s+rehensive\b", "comprehensive", readable
+            )
+            readable = re.sub(
+                r"(?i)\bstatem\s+ents\b", "statements", readable
+            )
+
+            # Reject entirely lowercase fragments that are not statement titles.
+            if readable == readable.lower():
+                continue
+
+            if _STATEMENT_HEADING.match(readable):
+                return original
+
+    return ""
 
 def approx_tokens(text):
     return len(text.split())
@@ -40,34 +107,26 @@ def split_words(text, size, overlap):
 
 
 def split_table_rows(text, size, overlap):
-    rows = [row for row in text.splitlines() if row.strip()]
+    """One data row per chunk. A year header is repeated on each row.
+
+    Packing a whole statement into one chunk still fits ``size``, but the
+    embedding of that chunk is pulled toward the other rows. ``size`` and
+    ``overlap`` stay in the signature for the text chunker.
+    """
+    del size, overlap
+    rows = [row.strip() for row in text.splitlines() if row.strip()]
     if not rows:
         return []
-    packed = []
-    current = []
-    current_tokens = 0
-    for row in rows:
-        row_tokens = approx_tokens(row)
-        if current and current_tokens + row_tokens > size:
-            packed.append("\n".join(current))
-            overlap_rows = []
-            overlap_tokens = 0
-            for prev in reversed(current):
-                n = approx_tokens(prev)
-                if overlap_tokens + n > overlap:
-                    break
-                overlap_rows.append(prev)
-                overlap_tokens += n
-            current = list(reversed(overlap_rows))
-            current_tokens = overlap_tokens
-        current.append(row)
-        current_tokens += row_tokens
-    if current:
-        packed.append("\n".join(current))
-    return packed
+    header = rows[0] if len(_YEAR_HEADER.findall(rows[0])) >= 2 else ""
+    body = rows[1:] if header else rows
+    if not body:
+        return [header]
+    if header:
+        return [f"{header}\n{row}" for row in body]
+    return body
 
 
-def _chunks_for_block(doc, page_num, content_type, text, size, overlap):
+def _chunks_for_block(doc, page_num, content_type, text, size, overlap, page_context=""):
     text = (text or "").strip()
     if not text:
         return []
@@ -76,6 +135,12 @@ def _chunks_for_block(doc, page_num, content_type, text, size, overlap):
         if content_type == "table"
         else split_words(text, size, overlap)
     )
+    if content_type == "table":
+        company = str(doc.get("company") or "").strip()
+        period = str(doc.get("period") or "").strip()
+        context = " ".join(part for part in (company, period, page_context) if part)
+        if context:
+            pieces = [f"{context}\n{piece}" for piece in pieces]
     meta = {key: doc.get(key, "") for key in META_FIELDS}
     out = []
     for index, piece in enumerate(pieces):
@@ -99,6 +164,7 @@ def chunk_document(doc, size=None, overlap=None):
     chunks = []
     for page in doc.get("pages") or []:
         page_num = page["page"]
+        statement_heading = extract_statement_heading(page)
         for block in page.get("content") or []:
             chunks.extend(
                 _chunks_for_block(
@@ -108,6 +174,7 @@ def chunk_document(doc, size=None, overlap=None):
                     block.get("text") or "",
                     size,
                     overlap,
+                    page_context=statement_heading,
                 )
             )
     return chunks

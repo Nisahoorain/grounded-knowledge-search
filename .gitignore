@@ -9,6 +9,8 @@ pdfs/
 pdf_inspection_output/
 data/extracted/
 data/chroma_db/
+data/bm25_index.pkl
+data/bm25_index.pkl.tmp
 
 Grounded Knowledge Search.pdf
 

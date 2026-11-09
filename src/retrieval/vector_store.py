@@ -10,7 +10,7 @@ if str(PROJECT_DIR) not in sys.path:
     sys.path.insert(0, str(PROJECT_DIR))
 
 from src.config import CHROMA_DIR, PROJECT_DIR as CONFIG_ROOT
-from src.ingestion.chunker import chunk_extracted_file, extracted_json_files
+from src.ingestion.chunker import CHUNKING_VERSION, chunk_extracted_file, extracted_json_files
 from src.retrieval.embeddings import embed_chunks
 
 COLLECTION_NAME = "gks_chunks"
@@ -133,7 +133,7 @@ def delete_doc(doc_id):
 def index_file(path, hashes=None):
     path = Path(path)
     doc_id = path.stem
-    digest = hash_file(path)
+    digest = f"{CHUNKING_VERSION}:{hash_file(path)}"
     own_store = hashes is None
     if hashes is None:
         hashes = load_hashes()
