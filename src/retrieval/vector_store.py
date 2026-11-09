@@ -1,4 +1,8 @@
+import hashlib
+import json
+import os
 import sys
+import time
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -6,10 +10,11 @@ if str(PROJECT_DIR) not in sys.path:
     sys.path.insert(0, str(PROJECT_DIR))
 
 from src.config import CHROMA_DIR, PROJECT_DIR as CONFIG_ROOT
-from src.ingestion.chunker import chunk_extracted_file
+from src.ingestion.chunker import chunk_extracted_file, extracted_json_files
 from src.retrieval.embeddings import embed_chunks
 
 COLLECTION_NAME = "gks_chunks"
+HASH_NAME = "index_hashes.json"
 BATCH = 200
 META_KEYS = ("doc_id", "company", "sector", "desk", "doc_type", "period", "page", "content_type")
 
@@ -75,15 +80,153 @@ def collection_count():
     return get_collection().count()
 
 
+def hash_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as file:
+        for block in iter(lambda: file.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def hash_store_path():
+    return chroma_path() / HASH_NAME
+
+
+def load_hashes():
+    path = hash_store_path()
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as file:
+        data = json.load(file)
+    return data if isinstance(data, dict) else {}
+
+
+def save_hashes(hashes):
+    path = hash_store_path()
+    payload = json.dumps(hashes, indent=2, sort_keys=True) + "\n"
+    tmp = path.with_suffix(".json.tmp")
+    with open(tmp, "w", encoding="utf-8") as file:
+        file.write(payload)
+    for _ in range(5):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            time.sleep(0.2)
+    with open(path, "w", encoding="utf-8") as file:
+        file.write(payload)
+    try:
+        tmp.unlink()
+    except OSError:
+        pass
+
+
+def doc_has_chunks(doc_id):
+    found = get_collection().get(where={"doc_id": doc_id}, limit=1, include=["metadatas"])
+    return bool(found.get("ids"))
+
+
+def delete_doc(doc_id):
+    get_collection().delete(where={"doc_id": doc_id})
+
+
+def index_file(path, hashes=None):
+    path = Path(path)
+    doc_id = path.stem
+    digest = hash_file(path)
+    own_store = hashes is None
+    if hashes is None:
+        hashes = load_hashes()
+    if hashes.get(doc_id) == digest:
+        return "skip", 0
+    already = doc_has_chunks(doc_id)
+    if hashes.get(doc_id) is None and already:
+        hashes[doc_id] = digest
+        if own_store:
+            save_hashes(hashes)
+        return "recorded", 0
+    if already:
+        delete_doc(doc_id)
+        action = "replaced"
+    else:
+        action = "indexed"
+    n = upsert_chunks(chunk_extracted_file(path))
+    hashes[doc_id] = digest
+    if own_store:
+        save_hashes(hashes)
+    return action, n
+
+
+def index_all_extracted():
+    files = extracted_json_files()
+    total_files = len(files)
+    hashes = load_hashes()
+    counts = {"skip": 0, "recorded": 0, "indexed": 0, "replaced": 0}
+    upserted = 0
+    for index, path in enumerate(files, start=1):
+        action, n = index_file(path, hashes)
+        if action != "skip":
+            save_hashes(hashes)
+        counts[action] += 1
+        upserted += n
+        if action == "skip":
+            detail = "skip"
+        elif action == "recorded":
+            detail = "recorded hash"
+        else:
+            detail = f"{action} {n} chunks"
+        print(
+            f"[{index}/{total_files}] {path.stem}: {detail}  chroma={collection_count()}",
+            flush=True,
+        )
+    return upserted, total_files, counts
+
+
+def indexed_doc_ids(page_size=1000):
+    collection = get_collection()
+    found = set()
+    offset = 0
+    while True:
+        batch = collection.get(include=["metadatas"], limit=page_size, offset=offset)
+        metas = batch.get("metadatas") or []
+        if not metas:
+            break
+        for meta in metas:
+            if meta and meta.get("doc_id"):
+                found.add(meta["doc_id"])
+        offset += len(metas)
+        if len(metas) < page_size:
+            break
+    return found
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python src/retrieval/vector_store.py <extracted_json>")
+        print("Usage: python src/retrieval/vector_store.py <extracted_json|--all>")
         sys.exit(1)
+    if sys.argv[1] == "--all":
+        upserted, file_count, counts = index_all_extracted()
+        doc_ids = indexed_doc_ids()
+        expected = {path.stem for path in extracted_json_files()}
+        missing = sorted(expected - doc_ids)
+        print(f"collection: {COLLECTION_NAME}")
+        print(f"path: {chroma_path()}")
+        print(f"files indexed: {len(doc_ids)}/{file_count}")
+        print(
+            "skip={skip} recorded={recorded} indexed={indexed} replaced={replaced}".format(
+                **counts
+            )
+        )
+        print(f"chunks embedded this run: {upserted}")
+        print(f"total in chroma: {collection_count()}")
+        if missing:
+            print(f"missing: {', '.join(missing)}")
+            sys.exit(1)
+        sys.exit(0)
     path = Path(sys.argv[1])
-    chunks = chunk_extracted_file(path)
-    n = upsert_chunks(chunks)
-    print(f"upserted: {n}")
+    action, n = index_file(path)
+    print(f"{action}: {path.stem}")
+    print(f"chunks embedded this run: {n}")
     print(f"collection: {COLLECTION_NAME}")
     print(f"total in chroma: {collection_count()}")
     print(f"path: {chroma_path()}")
-    print(f"sample id: {chunks[0]['chunk_id']}")

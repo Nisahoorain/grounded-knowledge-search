@@ -9,6 +9,7 @@ from src.config import EMBEDDING_MODEL
 from src.ingestion.chunker import chunk_extracted_file
 
 _model = None
+ENCODE_BATCH = 64
 
 
 def get_model(name=None):
@@ -26,8 +27,9 @@ def embed_texts(texts, model_name=None):
     model = get_model(model_name)
     vectors = model.encode(
         list(texts),
+        batch_size=ENCODE_BATCH,
         convert_to_numpy=True,
-        show_progress_bar=len(texts) > 32,
+        show_progress_bar=len(texts) > ENCODE_BATCH,
     )
     return [vec.tolist() for vec in vectors]
 
