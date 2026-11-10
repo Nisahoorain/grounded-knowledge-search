@@ -30,13 +30,7 @@ MANIFEST_PATH = PROJECT_DIR / "manifest.csv"
 EXTRACTED_DIR = PROJECT_DIR / "data" / "extracted"
 CHROMA_DIR = Path(os.getenv("CHROMA_DIR", PROJECT_DIR / "data" / "chroma_db"))
 
-# models (independent of each other)
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama")
-LLM_MODEL = os.getenv("LLM_MODEL", "llama3.2")
 
-# chunking / retrieval
 CHUNK_SIZE = _int("CHUNK_SIZE", 500)
 CHUNK_OVERLAP = _int("CHUNK_OVERLAP", 100)
-TOP_K = _int("TOP_K", 5)
-MAX_CONTEXT_SIZE = _int("MAX_CONTEXT_SIZE", 3500)

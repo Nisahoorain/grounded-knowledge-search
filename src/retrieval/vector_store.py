@@ -4,6 +4,7 @@ import os
 import sys
 import time
 from pathlib import Path
+from src.retrieval.embeddings import embed_texts
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 if str(PROJECT_DIR) not in sys.path:
@@ -31,6 +32,7 @@ META_KEYS = (
 )
 
 _client = None
+_collection = None
 
 
 def chroma_path():
@@ -51,11 +53,20 @@ def get_client():
 
 
 def get_collection():
-    return get_client().get_or_create_collection(
-        name=COLLECTION_NAME,
-        metadata={"hnsw:space": "cosine"},
-    )
+    global _collection
 
+    if _collection is None:
+        _collection = get_client().get_or_create_collection(
+            name=COLLECTION_NAME,
+            metadata={
+                "hnsw:space": "cosine",
+                "hnsw:construction_ef": 100,
+                "hnsw:M": 16,
+                "hnsw:search_ef": 50,
+            },
+        )
+
+    return _collection
 
 def _meta(chunk):
     out = {}
@@ -242,3 +253,72 @@ if __name__ == "__main__":
     print(f"collection: {COLLECTION_NAME}")
     print(f"total in chroma: {collection_count()}")
     print(f"path: {chroma_path()}")
+
+
+ROLE_DESKS = {
+    "consumer": ["consumer"],
+    "health_industrials": ["health_industrials"],
+    "tech_telecom": ["tech_telecom"],
+    "lead": ["consumer", "health_industrials", "tech_telecom"],
+}
+
+
+def search_chunks(question, role, k=5, doc_ids=None):
+    if role not in ROLE_DESKS:
+        raise ValueError(f"Invalid role: {role}")
+
+    if k < 1:
+        raise ValueError("k must be at least 1")
+
+    collection = get_collection()
+
+    query_args = {
+        "n_results": k,
+        "include": ["documents", "metadatas", "distances"],
+    }
+
+    conds = []
+    if role != "lead":
+        conds.append({"desk": role})
+    if doc_ids:
+        conds.append({"doc_id": {"$in": list(doc_ids)}})
+
+    if len(conds) == 1:
+        query_args["where"] = conds[0]
+    elif conds:
+        query_args["where"] = {"$and": conds}
+
+    t0 = time.perf_counter()
+
+    query_vector = embed_texts([question])[0]
+
+    t1 = time.perf_counter()
+
+    query_args["query_embeddings"] = [query_vector]
+
+    results = collection.query(**query_args)
+
+    t2 = time.perf_counter()
+
+    print(
+        f"Embedding: {t1-t0:.2f}s | "
+        f"Chroma search: {t2-t1:.2f}s",
+        file=sys.stderr,
+    )
+
+    output = []
+
+    for document, metadata, distance in zip(
+        results["documents"][0],
+        results["metadatas"][0],
+        results["distances"][0],
+    ):
+        output.append({
+            "doc_id": metadata.get("doc_id"),
+            "page": metadata.get("page"),
+            "chunk_id": metadata.get("chunk_id"),
+            "score": round(1.0 - float(distance), 4),
+            "text": document,
+        })
+
+    return output
