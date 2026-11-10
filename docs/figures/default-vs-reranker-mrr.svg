@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" role="img" aria-labelledby="mrr-title mrr-desc">
+  <title id="mrr-title">Default vs Reranker MRR</title>
+  <desc id="mrr-desc">Grouped bar chart of MRR. Default method: development 0.3910, holdout 0.5067. Reranker: development 0.3514, holdout 0.7700. Higher MRR means relevant results appear earlier.</desc>
+  <rect width="720" height="460" fill="#ffffff"/>
+  <text x="360" y="34" text-anchor="middle" fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600">Default vs Reranker MRR</text>
+  <text x="360" y="56" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="13">Higher MRR means relevant results appear earlier.</text>
+  <rect x="248" y="74" width="12" height="12" fill="#0072B2"/>
+  <text x="266" y="85" fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="13">Development</text>
+  <rect x="378" y="74" width="12" height="12" fill="#E69F00"/>
+  <text x="396" y="85" fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="13">Holdout</text>
+  <text x="22" y="262" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="13" transform="rotate(-90 22 262)">MRR</text>
+  <g fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="12" text-anchor="end">
+    <text x="86" y="136">1</text>
+    <text x="86" y="198.5">0.75</text>
+    <text x="86" y="261">0.50</text>
+    <text x="86" y="323.5">0.25</text>
+    <text x="86" y="386">0</text>
+  </g>
+  <g stroke="#e6edf3" stroke-width="1">
+    <line x1="96" y1="132" x2="684" y2="132"/>
+    <line x1="96" y1="194.5" x2="684" y2="194.5"/>
+    <line x1="96" y1="257" x2="684" y2="257"/>
+    <line x1="96" y1="319.5" x2="684" y2="319.5"/>
+  </g>
+  <polyline points="96,132 96,382 684,382" fill="none" stroke="#9aa8b5" stroke-width="1.25"/>
+  <rect x="173" y="284.3" width="64" height="97.7" fill="#0072B2"/>
+  <rect x="249" y="255.3" width="64" height="126.7" fill="#E69F00"/>
+  <rect x="467" y="294.2" width="64" height="87.8" fill="#0072B2"/>
+  <rect x="543" y="189.5" width="64" height="192.5" fill="#E69F00"/>
+  <g fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+    <text x="205" y="274">0.3910</text>
+    <text x="281" y="245">0.5067</text>
+    <text x="499" y="284">0.3514</text>
+    <text x="575" y="179">0.7700</text>
+  </g>
+  <g fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="14" text-anchor="middle">
+    <text x="243" y="410">Default</text>
+    <text x="537" y="410">Reranker</text>
+  </g>
+</svg>

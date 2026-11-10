@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" role="img" aria-labelledby="hit-title hit-desc">
+  <title id="hit-title">Retrieval Hit Rate</title>
+  <desc id="hit-desc">Bar chart of retrieval hit rate for the default chunk and dedupe method. Development: 0.60. Holdout: 1.00. Higher is better.</desc>
+  <rect width="720" height="420" fill="#ffffff"/>
+  <text x="360" y="36" text-anchor="middle" fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="18" font-weight="600">Retrieval Hit Rate</text>
+  <text x="360" y="58" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="13">Default chunk+dedupe1 method; higher is better.</text>
+  <text x="22" y="230" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="13" transform="rotate(-90 22 230)">Hit rate</text>
+  <g fill="#5c6b7a" font-family="Segoe UI, system-ui, sans-serif" font-size="12" text-anchor="end">
+    <text x="86" y="104">1</text>
+    <text x="86" y="166.5">0.75</text>
+    <text x="86" y="229">0.50</text>
+    <text x="86" y="291.5">0.25</text>
+    <text x="86" y="354">0</text>
+  </g>
+  <g stroke="#e6edf3" stroke-width="1">
+    <line x1="96" y1="100" x2="684" y2="100"/>
+    <line x1="96" y1="162.5" x2="684" y2="162.5"/>
+    <line x1="96" y1="225" x2="684" y2="225"/>
+    <line x1="96" y1="287.5" x2="684" y2="287.5"/>
+  </g>
+  <polyline points="96,100 96,350 684,350" fill="none" stroke="#9aa8b5" stroke-width="1.25"/>
+  <rect x="199" y="200" width="88" height="150" fill="#0072B2"/>
+  <rect x="493" y="100" width="88" height="250" fill="#0072B2"/>
+  <g fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+    <text x="243" y="190">0.60</text>
+    <text x="537" y="90">1.00</text>
+  </g>
+  <g fill="#1c2834" font-family="Segoe UI, system-ui, sans-serif" font-size="14" text-anchor="middle">
+    <text x="243" y="378">Development</text>
+    <text x="537" y="378">Holdout</text>
+  </g>
+</svg>

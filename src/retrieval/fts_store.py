@@ -4,6 +4,7 @@ import re
 import sqlite3
 from pathlib import Path
 
+from src.config import ROLE_DESKS
 from src.retrieval.vector_store import get_collection
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -11,13 +12,6 @@ FTS_PATH = PROJECT_DIR / "data" / "fts_index.sqlite3"
 
 PAGE_SIZE = 1000
 BATCH_SIZE = 1000
-
-ROLE_DESKS = {
-    "consumer": ["consumer"],
-    "health_industrials": ["health_industrials"],
-    "tech_telecom": ["tech_telecom"],
-    "lead": ["consumer", "health_industrials", "tech_telecom"],
-}
 
 STOPWORDS = {
     "what", "were", "was", "the", "is", "are",

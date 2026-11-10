@@ -1,7 +1,8 @@
 import time
 
+from src.config import ROLE_DESKS
 from src.retrieval.vector_store import search_chunks
-from src.retrieval.fts_store import search_bm25, ROLE_DESKS
+from src.retrieval.fts_store import search_bm25
 from src.retrieval.query_parse import parse_query
 
 _ce = None
@@ -68,6 +69,8 @@ def rrf_fuse(dense, bm25, rrf_constant=60, dense_weight=1.0, bm25_weight=1.0,
             if fused[key][f"{source}_rank"] is None:
                 fused[key]["score"] += weight / (rrf_constant + rank)
                 fused[key][f"{source}_rank"] = rank
+                if source == "dense":
+                    fused[key]["dense_score"] = item["score"]
     return sorted(fused.values(), key=lambda x: x["score"], reverse=True)
 
 

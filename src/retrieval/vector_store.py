@@ -10,7 +10,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 if str(PROJECT_DIR) not in sys.path:
     sys.path.insert(0, str(PROJECT_DIR))
 
-from src.config import CHROMA_DIR, PROJECT_DIR as CONFIG_ROOT
+from src.config import CHROMA_DIR, PROJECT_DIR as CONFIG_ROOT, ROLE_DESKS
 from src.ingestion.chunker import CHUNKING_VERSION, chunk_extracted_file, extracted_json_files
 from src.retrieval.embeddings import embed_chunks
 
@@ -253,14 +253,6 @@ if __name__ == "__main__":
     print(f"collection: {COLLECTION_NAME}")
     print(f"total in chroma: {collection_count()}")
     print(f"path: {chroma_path()}")
-
-
-ROLE_DESKS = {
-    "consumer": ["consumer"],
-    "health_industrials": ["health_industrials"],
-    "tech_telecom": ["tech_telecom"],
-    "lead": ["consumer", "health_industrials", "tech_telecom"],
-}
 
 
 def search_chunks(question, role, k=5, doc_ids=None):
