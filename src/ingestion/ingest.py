@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import json
 import os
 import sys
@@ -176,6 +177,38 @@ def save_document(records, out_dir=None):
     return path, doc
 
 
+PDF_HASH_NAME = "_pdf_hashes.json"
+
+
+def file_sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as file:
+        for block in iter(lambda: file.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _pdf_hash_path(out_dir):
+    return Path(out_dir) / PDF_HASH_NAME
+
+
+def load_pdf_hashes(out_dir):
+    path = _pdf_hash_path(out_dir)
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as file:
+        data = json.load(file)
+    return data if isinstance(data, dict) else {}
+
+
+def save_pdf_hashes(out_dir, hashes):
+    path = _pdf_hash_path(out_dir)
+    tmp = path.with_suffix(".json.tmp")
+    with open(tmp, "w", encoding="utf-8") as file:
+        json.dump(hashes, file, indent=2, sort_keys=True)
+    os.replace(tmp, path)
+
+
 def existing_json_names(out_dir):
     try:
         return {
@@ -192,27 +225,56 @@ def ingest_one(pdf_path=None, doc_id=None, manifest=None, out_dir=None):
     return save_document(records, out_dir=out_dir)
 
 
-def ingest_all(manifest=None, out_dir=None, force=False):
+def ingest_all(manifest=None, out_dir=None, force=False, pdf_dir=None):
+    """Extract every manifest filing under ``pdf_dir``.
+
+    An unchanged PDF is skipped. A changed PDF is extracted again. Chunk
+    replacement, so the new file does not duplicate the old one, happens when
+    the extracted JSON is indexed.
+    """
     manifest = manifest if manifest is not None else load_manifest()
+    pdf_dir = Path(pdf_dir or PDF_DIR)
     out_dir = Path(out_dir or EXTRACTED_DIR)
     out_dir.mkdir(parents=True, exist_ok=True)
-    done = set() if force else existing_json_names(out_dir)
+    hashes = {} if force else load_pdf_hashes(out_dir)
+    dirty = False
     total = len(manifest)
     saved = 0
     skipped = 0
     failed = 0
-    print(f"output: {out_dir.resolve()}  already={len(done)}/{total}", flush=True)
+    print(f"pdfs: {pdf_dir.resolve()}", flush=True)
+    print(f"output: {out_dir.resolve()}", flush=True)
     for i, doc_id in enumerate(manifest, start=1):
-        name = f"{doc_id}.json".lower()
-        if name in done:
+        pdf_path = pdf_dir / f"{doc_id}.pdf"
+        json_path = out_dir / f"{doc_id}.json"
+        if not pdf_path.exists():
+            failed += 1
+            message = f"PDF not found: {pdf_path}"
+            log_extraction_issue(doc_id, message, out_dir=out_dir)
+            print(f"[{i}/{total}] FAIL {doc_id}: {message}", flush=True)
+            continue
+        digest = file_sha256(pdf_path)
+        if not force and json_path.exists() and hashes.get(doc_id) == digest:
             skipped += 1
             print(f"[{i}/{total}] skip {doc_id}", flush=True)
             continue
+        if not force and json_path.exists() and doc_id not in hashes:
+            hashes[doc_id] = digest
+            dirty = True
+            skipped += 1
+            print(f"[{i}/{total}] skip {doc_id} (recorded hash)", flush=True)
+            continue
         print(f"[{i}/{total}] start {doc_id} ...", flush=True)
         try:
-            _, doc = ingest_one(doc_id=doc_id, manifest=manifest, out_dir=out_dir)
+            _, doc = ingest_one(
+                pdf_path=pdf_path,
+                doc_id=doc_id,
+                manifest=manifest,
+                out_dir=out_dir,
+            )
+            hashes[doc_id] = digest
+            dirty = True
             saved += 1
-            done.add(name)
             print(
                 f"[{i}/{total}] saved {doc_id}  "
                 f"pages={doc['page_count']} tables={doc['table_count']}  "
@@ -224,7 +286,9 @@ def ingest_all(manifest=None, out_dir=None, force=False):
             failed += 1
             log_extraction_issue(doc_id, str(exc), out_dir=out_dir)
             print(f"[{i}/{total}] FAIL {doc_id}: {exc}", flush=True)
-    return saved, skipped
+    if dirty:
+        save_pdf_hashes(out_dir, hashes)
+    return saved, skipped, failed
 
 
 def _print_summary(path, doc):
@@ -249,9 +313,9 @@ if __name__ == "__main__":
     target = args[0] if args else "--all"
 
     if target == "--all":
-        saved, skipped = ingest_all(force=force)
-        print(f"done. saved={saved} skipped={skipped}")
-        sys.exit(0)
+        saved, skipped, failed = ingest_all(force=force)
+        print(f"done. saved={saved} skipped={skipped} failed={failed}")
+        sys.exit(1 if failed else 0)
 
     path = Path(target)
     if path.suffix.lower() == ".pdf":

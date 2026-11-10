@@ -14,23 +14,38 @@ from src.retrieval.embeddings import embed_texts
 from src.retrieval.vector_store import get_collection
 
 
-def search(question, role, k=None):
-    """Return the top-k chunks for a question, already limited to the role's desks.
-
-    Chroma's cosine distance is smaller for a closer chunk. The returned score is
-    ``1 - distance``, so a higher score is more relevant. Results are sorted by
-    that score, descending.
+def search(question, role, k=None, company_docs=None, periods=None):
+    """Return top-k chunks scoped to the user's desk and, when identified,
+    the requested company and reporting year.
     """
     text = (question or "").strip()
     if not text:
         raise ValueError("question is required")
+
     limit = TOP_K if k is None else int(k)
     if limit < 1:
         raise ValueError("k must be at least 1")
 
     desks = desks_for(role)
-    where = {"desk": desks[0]} if len(desks) == 1 else {"desk": {"$in": desks}}
+
+    conditions = [
+        {"desk": desks[0]} if len(desks) == 1
+        else {"desk": {"$in": desks}}
+    ]
+
+    if company_docs:
+        conditions.append({"doc_id": {"$in": sorted(company_docs)}})
+
+    if periods:
+        conditions.append({"period": {"$in": sorted(periods)}})
+
+    where = (
+        conditions[0]
+        if len(conditions) == 1
+        else {"$and": conditions}
+    )
     vector = embed_texts([text])[0]
+
     found = get_collection().query(
         query_embeddings=[vector],
         n_results=limit,
@@ -42,19 +57,25 @@ def search(question, role, k=None):
     distances = (found.get("distances") or [[]])[0]
     metadatas = (found.get("metadatas") or [[]])[0]
     documents = (found.get("documents") or [[]])[0]
+
     hits = []
-    for chunk_id, distance, meta, body in zip(ids, distances, metadatas, documents):
+
+    for chunk_id, distance, meta, body in zip(
+        ids, distances, metadatas, documents
+    ):
         meta = meta or {}
-        hits.append(
-            {
-                "doc_id": meta.get("doc_id", ""),
-                "page": int(meta.get("page") or 0),
-                "chunk_id": chunk_id,
-                "score": 1.0 - float(distance),
-                "text": body or "",
-            }
-        )
+
+        hits.append({
+            "doc_id": meta.get("doc_id", ""),
+            "period": str(meta.get("period") or ""),
+            "page": int(meta.get("page") or 0),
+            "chunk_id": chunk_id,
+            "score": 1.0 - float(distance),
+            "text": body or "",
+        })
+
     hits.sort(key=lambda hit: hit["score"], reverse=True)
+
     return hits
 
 

@@ -1,0 +1,368 @@
+[
+  {
+    "id": "fb_00735",
+    "role": "consumer",
+    "question": "Has Pepsico reported any materially important ongoing legal battles from FY2022 and FY2021?",
+    "expected_doc_id": "PEPSICO_2022_10K",
+    "expected_pages": [
+      26
+    ],
+    "answer": "the retrieved pages do not contain the answer",
+    "sources": [],
+    "grounded": false
+  },
+  {
+    "id": "fb_04171",
+    "role": "consumer",
+    "question": "Basing your judgments off of the balance sheet, what is the year end FY2018 amount of accounts payable for MGM Resorts? Answer in USD millions.",
+    "expected_doc_id": "MGMRESORTS_2018_10K",
+    "expected_pages": [
+      57
+    ],
+    "answer": "302,578 USD millions",
+    "sources": [
+      {
+        "doc_id": "MGMRESORTS_2018_10K",
+        "page": 57
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00603",
+    "role": "consumer",
+    "question": "What drove the increase in Ulta Beauty's merchandise inventories balance at end of FY2023?",
+    "expected_doc_id": "ULTABEAUTY_2023Q4_EARNINGS",
+    "expected_pages": [
+      3
+    ],
+    "answer": "$1.5 billion",
+    "sources": [
+      {
+        "doc_id": "ULTABEAUTY_2023Q4_EARNINGS",
+        "page": 3
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00499",
+    "role": "health_industrials",
+    "question": "Is 3M a capital-intensive business based on FY2022 data?",
+    "expected_doc_id": "3M_2022_10K",
+    "expected_pages": [
+      48,
+      50,
+      52
+    ],
+    "answer": "{\"answer\": \"the amount and unit\", \"sources\": [4], \"grounded\": true}\n{\"answer\": \"9,429\", \"sources\": [4], \"grounded\": true}",
+    "sources": [],
+    "grounded": false
+  },
+  {
+    "id": "fb_10285",
+    "role": "health_industrials",
+    "question": "We need to calculate a financial metric by using information only provided within the balance sheet. Please answer the following question: what is Boeing's year end FY2018 net property, plant, and equipment (in USD millions)?",
+    "expected_doc_id": "BOEING_2018_10K",
+    "expected_pages": [
+      52
+    ],
+    "answer": "($112) million",
+    "sources": [
+      {
+        "doc_id": "BOEING_2018_10K",
+        "page": 108
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00494",
+    "role": "health_industrials",
+    "question": "What production rate changes is Boeing forecasting for FY2023?",
+    "expected_doc_id": "BOEING_2022_10K",
+    "expected_pages": [
+      9
+    ],
+    "answer": "the retrieved pages do not contain the answer",
+    "sources": [],
+    "grounded": false
+  },
+  {
+    "id": "fb_00215",
+    "role": "tech_telecom",
+    "question": "Is Verizon a capital intensive business based on FY 2022 data?",
+    "expected_doc_id": "VERIZON_2022_10K",
+    "expected_pages": [
+      23,
+      56
+    ],
+    "answer": "23,087 million",
+    "sources": [
+      {
+        "doc_id": "VERIZON_2022_10K",
+        "page": 42
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_10130",
+    "role": "tech_telecom",
+    "question": "Based on the information provided primarily in the balance sheet and the statement of income, what is FY2020 days payable outstanding (DPO) for Corning? DPO is defined as: 365 * (average accounts payable between FY2019 and FY2020) / (FY2020 COGS + change in inventory between FY2019 and FY2020). Round your answer to two decimal places.",
+    "expected_doc_id": "CORNING_2020_10K",
+    "expected_pages": [
+      70,
+      72
+    ],
+    "answer": "the printed amount and unit",
+    "sources": [
+      {
+        "doc_id": "CORNING_2020_10K",
+        "page": 72
+      },
+      {
+        "doc_id": "CORNING_2020_10K",
+        "page": 86
+      },
+      {
+        "doc_id": "CORNING_2020_10K",
+        "page": 87
+      },
+      {
+        "doc_id": "CORNING_2020_10K",
+        "page": 43
+      },
+      {
+        "doc_id": "CORNING_2019_10K",
+        "page": 44
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00757",
+    "role": "tech_telecom",
+    "question": "Did AMD report customer concentration in FY22?",
+    "expected_doc_id": "AMD_2022_10K",
+    "expected_pages": [
+      12
+    ],
+    "answer": "793 1 year",
+    "sources": [
+      {
+        "doc_id": "AMD_2022_10K",
+        "page": 72
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_01275",
+    "role": "consumer",
+    "question": "Among operations, investing, and financing activities, which brought in the most (or lost the least) cash flow for Best Buy in FY2023?",
+    "expected_doc_id": "BESTBUY_2023_10K",
+    "expected_pages": [
+      42
+    ],
+    "answer": "(952) million",
+    "sources": [
+      {
+        "doc_id": "BESTBUY_2023_10K",
+        "page": 42
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_04980",
+    "role": "consumer",
+    "question": "What is the FY2021 capital expenditure amount (in USD billions) for PepsiCo? Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the statement of cash flows.",
+    "expected_doc_id": "PEPSICO_2021_10K",
+    "expected_pages": [
+      63
+    ],
+    "answer": "4,625",
+    "sources": [
+      {
+        "doc_id": "PEPSICO_2021_10K",
+        "page": 63
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00407",
+    "role": "consumer",
+    "question": "Which type of debt received the largest investment among the short term investments for MGM in H1 FY2023?",
+    "expected_doc_id": "MGMRESORTS_2023Q2_10Q",
+    "expected_pages": [
+      11
+    ],
+    "answer": "U.S. government securities $57,696",
+    "sources": [
+      {
+        "doc_id": "MGMRESORTS_2023Q2_10Q",
+        "page": 11
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00941",
+    "role": "health_industrials",
+    "question": "Which debt securities are registered to trade on a national securities exchange under 3M's name as of Q2 of 2023?",
+    "expected_doc_id": "3M_2023Q2_10Q",
+    "expected_pages": [
+      1
+    ],
+    "answer": "$4.3 billion",
+    "sources": [
+      {
+        "doc_id": "3M_2023Q2_10Q",
+        "page": 71
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_03029",
+    "role": "health_industrials",
+    "question": "What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.",
+    "expected_doc_id": "3M_2018_10K",
+    "expected_pages": [
+      60
+    ],
+    "answer": "6,439",
+    "sources": [
+      {
+        "doc_id": "3M_2018_10K",
+        "page": 46
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_01484",
+    "role": "health_industrials",
+    "question": "How did JnJ's US sales growth compare to international sales growth in FY2022?",
+    "expected_doc_id": "JOHNSON_JOHNSON_2022Q4_EARNINGS",
+    "expected_pages": [
+      2
+    ],
+    "answer": "1.3% and billion",
+    "sources": [
+      {
+        "doc_id": "JOHNSON_JOHNSON_2022_10K",
+        "page": 29
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00005",
+    "role": "tech_telecom",
+    "question": "Does Corning have positive working capital based on FY2022 data? If working capital is not a useful or relevant metric for this company, then please state that and explain why.",
+    "expected_doc_id": "CORNING_2022_10K",
+    "expected_pages": [
+      60
+    ],
+    "answer": "$2,278 million",
+    "sources": [
+      {
+        "doc_id": "CORNING_2022_10K",
+        "page": 34
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_03069",
+    "role": "tech_telecom",
+    "question": "Answer the following question as if you are an equity research analyst and have lost internet connection so you do not have access to financial metric providers. According to the details clearly outlined within the P&L statement and the statement of cash flows, what is the FY2015 depreciation and amortization (D&A from cash flow statement) % margin for AMD?",
+    "expected_doc_id": "AMD_2015_10K",
+    "expected_pages": [
+      56,
+      60
+    ],
+    "answer": "167 million",
+    "sources": [
+      {
+        "doc_id": "AMD_2015_10K",
+        "page": 60
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_00591",
+    "role": "tech_telecom",
+    "question": "Does Adobe have an improving Free cashflow conversion as of FY2022?",
+    "expected_doc_id": "ADOBE_2022_10K",
+    "expected_pages": [
+      57
+    ],
+    "answer": "$1,828",
+    "sources": [
+      {
+        "doc_id": "ADOBE_2022_10K",
+        "page": 47
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_01254",
+    "role": "consumer",
+    "question": "Has MGM Resorts paid dividends to common shareholders in FY2022?",
+    "expected_doc_id": "MGMRESORTS_2022_10K",
+    "expected_pages": [
+      32
+    ],
+    "answer": "$0.01 per share",
+    "sources": [
+      {
+        "doc_id": "MGMRESORTS_2022_10K",
+        "page": 64
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "fb_02608",
+    "role": "consumer",
+    "question": "In agreement with the information outlined in the income statement, what is the FY2015 - FY2017 3 year average net profit margin (as a %) for Best Buy? Answer in units of percents and round to one decimal place.",
+    "expected_doc_id": "BESTBUY_2017_10K",
+    "expected_pages": [
+      56
+    ],
+    "answer": "23.1%",
+    "sources": [
+      {
+        "doc_id": "BESTBUY_2016_10K",
+        "page": 27
+      }
+    ],
+    "grounded": true
+  },
+  {
+    "id": "gks_001",
+    "role": "health_industrials",
+    "question": "What were Pfizer's total revenues for FY2022?",
+    "expected_doc_id": "PFIZER_2022_10K",
+    "expected_pages": [
+      33,
+      34,
+      39,
+      54
+    ],
+    "answer": "$100,330",
+    "sources": [
+      {
+        "doc_id": "PFIZER_2022_10K",
+        "page": 106
+      }
+    ],
+    "grounded": true
+  }
+]

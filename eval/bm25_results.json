@@ -1,0 +1,1437 @@
+{
+  "retrieval": "bm25_only",
+  "k": 5,
+  "summary": {
+    "total_questions": 30,
+    "document_hit_at_k": 25,
+    "document_hit_rate": 0.8333,
+    "page_hit_at_k": 16,
+    "page_hit_rate": 0.5333,
+    "document_mrr": 0.64,
+    "page_mrr": 0.3244
+  },
+  "results": [
+    {
+      "id": "fb_00735",
+      "role": "consumer",
+      "question": "Has Pepsico reported any materially important ongoing legal battles from FY2022 and FY2021?",
+      "expected_doc_id": "PEPSICO_2022_10K",
+      "expected_pages": [
+        26
+      ],
+      "retrieved": [
+        {
+          "doc_id": "PEPSICO_2017_10K",
+          "page": 178,
+          "chunk_id": "PEPSICO_2017_10K:p178:table:0:80f6f0c7c562",
+          "score": 19.775486598266554
+        },
+        {
+          "doc_id": "PEPSICO_2019_10K",
+          "page": 637,
+          "chunk_id": "PEPSICO_2019_10K:p637:table:0:b89c12c4c4cf",
+          "score": 19.775486598266554
+        },
+        {
+          "doc_id": "PEPSICO_2019_10K",
+          "page": 46,
+          "chunk_id": "PEPSICO_2019_10K:p46:table:0:24c799583cdb",
+          "score": 16.223779156344172
+        },
+        {
+          "doc_id": "PEPSICO_2022_10K",
+          "page": 159,
+          "chunk_id": "PEPSICO_2022_10K:p159:table:0:2ff78a135997",
+          "score": 16.21187242875775
+        },
+        {
+          "doc_id": "PEPSICO_2022_10K",
+          "page": 68,
+          "chunk_id": "PEPSICO_2022_10K:p68:text:0:8e53061d8e79",
+          "score": 14.824129363053999
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 4,
+      "page_rank": null,
+      "document_mrr": 0.25,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_04171",
+      "role": "consumer",
+      "question": "Basing your judgments off of the balance sheet, what is the year end FY2018 amount of accounts payable for MGM Resorts? Answer in USD millions.",
+      "expected_doc_id": "MGMRESORTS_2018_10K",
+      "expected_pages": [
+        57
+      ],
+      "retrieved": [
+        {
+          "doc_id": "MGMRESORTS_2015_10K",
+          "page": 230,
+          "chunk_id": "MGMRESORTS_2015_10K:p230:text:0:7641c98fa565",
+          "score": 21.628134347391892
+        },
+        {
+          "doc_id": "MGMRESORTS_2018_10K",
+          "page": 48,
+          "chunk_id": "MGMRESORTS_2018_10K:p48:text:0:a23fff3ab161",
+          "score": 20.803861038888577
+        },
+        {
+          "doc_id": "MGMRESORTS_2018_10K",
+          "page": 94,
+          "chunk_id": "MGMRESORTS_2018_10K:p94:text:0:ca59b1c9433f",
+          "score": 20.078093472492604
+        },
+        {
+          "doc_id": "MGMRESORTS_2018_10K",
+          "page": 174,
+          "chunk_id": "MGMRESORTS_2018_10K:p174:text:0:1b2c577fcabb",
+          "score": 20.056755159916893
+        },
+        {
+          "doc_id": "MGMRESORTS_2018_10K",
+          "page": 57,
+          "chunk_id": "MGMRESORTS_2018_10K:p57:text:0:9c8b4b5e91ed",
+          "score": 19.512887227590998
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 2,
+      "page_rank": 5,
+      "document_mrr": 0.5,
+      "page_mrr": 0.2
+    },
+    {
+      "id": "fb_00603",
+      "role": "consumer",
+      "question": "What drove the increase in Ulta Beauty's merchandise inventories balance at end of FY2023?",
+      "expected_doc_id": "ULTABEAUTY_2023Q4_EARNINGS",
+      "expected_pages": [
+        3
+      ],
+      "retrieved": [
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 11,
+          "chunk_id": "ULTABEAUTY_2023_10K:p11:text:0:1cc9c21bf7df",
+          "score": 37.34191144281982
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 41,
+          "chunk_id": "ULTABEAUTY_2023_10K:p41:text:0:fb6e70c96b05",
+          "score": 34.77916653828307
+        },
+        {
+          "doc_id": "ULTABEAUTY_2024Q1_EARNINGS",
+          "page": 1,
+          "chunk_id": "ULTABEAUTY_2024Q1_EARNINGS:p1:text:0:8907dcd593c2",
+          "score": 33.17142488836048
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 42,
+          "chunk_id": "ULTABEAUTY_2023_10K:p42:text:0:fa2dd45be6d0",
+          "score": 32.17988644860581
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 19,
+          "chunk_id": "ULTABEAUTY_2023_10K:p19:text:0:94599d1c2515",
+          "score": 32.08197915978764
+        }
+      ],
+      "document_hit": false,
+      "page_hit": false,
+      "document_rank": null,
+      "page_rank": null,
+      "document_mrr": 0.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00499",
+      "role": "health_industrials",
+      "question": "Is 3M a capital-intensive business based on FY2022 data?",
+      "expected_doc_id": "3M_2022_10K",
+      "expected_pages": [
+        48,
+        50,
+        52
+      ],
+      "retrieved": [
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 37,
+          "chunk_id": "3M_2022_10K:p37:text:0:e94259e50701",
+          "score": 14.002166017670566
+        },
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 8,
+          "chunk_id": "3M_2022_10K:p8:table:19:5564b603fa9d",
+          "score": 13.984108494624017
+        },
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 2,
+          "chunk_id": "3M_2022_10K:p2:table:8:66d0cbf088cf",
+          "score": 13.858408676446855
+        },
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 41,
+          "chunk_id": "3M_2022_10K:p41:text:0:b242a66a40f5",
+          "score": 13.416091862898558
+        },
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 3,
+          "chunk_id": "3M_2022_10K:p3:table:13:93f1ce159149",
+          "score": 13.35212256954157
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 1,
+      "page_rank": null,
+      "document_mrr": 1.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_10285",
+      "role": "health_industrials",
+      "question": "We need to calculate a financial metric by using information only provided within the balance sheet. Please answer the following question: what is Boeing's year end FY2018 net property, plant, and equipment (in USD millions)?",
+      "expected_doc_id": "BOEING_2018_10K",
+      "expected_pages": [
+        52
+      ],
+      "retrieved": [
+        {
+          "doc_id": "3M_2019_10K",
+          "page": 125,
+          "chunk_id": "3M_2019_10K:p125:table:2:e43a9f0231f7",
+          "score": 28.40463737359488
+        },
+        {
+          "doc_id": "BOEING_2018_10K",
+          "page": 71,
+          "chunk_id": "BOEING_2018_10K:p71:table:9:f5f50977c30b",
+          "score": 26.32917225878135
+        },
+        {
+          "doc_id": "3M_2018_10K",
+          "page": 81,
+          "chunk_id": "3M_2018_10K:p81:text:0:098b6fb6a4d5",
+          "score": 25.120519802039208
+        },
+        {
+          "doc_id": "3M_2020_10K",
+          "page": 129,
+          "chunk_id": "3M_2020_10K:p129:table:12:6cdf5beb8c1f",
+          "score": 25.022643730347667
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2018_10K",
+          "page": 55,
+          "chunk_id": "JOHNSON_JOHNSON_2018_10K:p55:text:0:4c7ad9c57237",
+          "score": 23.83335684200391
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 2,
+      "page_rank": null,
+      "document_mrr": 0.5,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00494",
+      "role": "health_industrials",
+      "question": "What production rate changes is Boeing forecasting for FY2023?",
+      "expected_doc_id": "BOEING_2022_10K",
+      "expected_pages": [
+        9
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BOEING_2022_10K",
+          "page": 9,
+          "chunk_id": "BOEING_2022_10K:p9:text:0:d3d5f60ffef0",
+          "score": 18.675146786897407
+        },
+        {
+          "doc_id": "BOEING_2021_10K",
+          "page": 40,
+          "chunk_id": "BOEING_2021_10K:p40:text:0:6f826eb4475a",
+          "score": 17.733841242267655
+        },
+        {
+          "doc_id": "BOEING_2022_10K",
+          "page": 35,
+          "chunk_id": "BOEING_2022_10K:p35:text:0:b8246777267e",
+          "score": 17.313642525199036
+        },
+        {
+          "doc_id": "BOEING_2021_10K",
+          "page": 39,
+          "chunk_id": "BOEING_2021_10K:p39:text:0:ea1fbb662f65",
+          "score": 16.98729774739604
+        },
+        {
+          "doc_id": "BOEING_2020_10K",
+          "page": 41,
+          "chunk_id": "BOEING_2020_10K:p41:text:0:bcb34304393b",
+          "score": 16.8179691695781
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "fb_00215",
+      "role": "tech_telecom",
+      "question": "Is Verizon a capital intensive business based on FY 2022 data?",
+      "expected_doc_id": "VERIZON_2022_10K",
+      "expected_pages": [
+        23,
+        56
+      ],
+      "retrieved": [
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 21,
+          "chunk_id": "VERIZON_2022_10K:p21:text:0:5f725129a4af",
+          "score": 16.537868411884546
+        },
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 12,
+          "chunk_id": "VERIZON_2022_10K:p12:text:0:4fd965d83ad9",
+          "score": 16.15405950068957
+        },
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 23,
+          "chunk_id": "VERIZON_2022_10K:p23:text:0:4c67bbebf9e5",
+          "score": 15.02164238935135
+        },
+        {
+          "doc_id": "ADOBE_2022_10K",
+          "page": 23,
+          "chunk_id": "ADOBE_2022_10K:p23:text:0:d455a3a9ee0b",
+          "score": 14.816682318676552
+        },
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 37,
+          "chunk_id": "VERIZON_2022_10K:p37:text:0:c05680ba1f4b",
+          "score": 14.68099672762235
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 3,
+      "document_mrr": 1.0,
+      "page_mrr": 0.3333333333333333
+    },
+    {
+      "id": "fb_10130",
+      "role": "tech_telecom",
+      "question": "Based on the information provided primarily in the balance sheet and the statement of income, what is FY2020 days payable outstanding (DPO) for Corning? DPO is defined as: 365 * (average accounts payable between FY2019 and FY2020) / (FY2020 COGS + change in inventory between FY2019 and FY2020). Round your answer to two decimal places.",
+      "expected_doc_id": "CORNING_2020_10K",
+      "expected_pages": [
+        70,
+        72
+      ],
+      "retrieved": [
+        {
+          "doc_id": "CORNING_2020_10K",
+          "page": 43,
+          "chunk_id": "CORNING_2020_10K:p43:text:0:7623850aea17",
+          "score": 41.87903228597774
+        },
+        {
+          "doc_id": "CORNING_2019_10K",
+          "page": 44,
+          "chunk_id": "CORNING_2019_10K:p44:text:0:2effdd59452c",
+          "score": 40.73957943479958
+        },
+        {
+          "doc_id": "CORNING_2021_10K",
+          "page": 41,
+          "chunk_id": "CORNING_2021_10K:p41:text:0:2cf946c2ba0d",
+          "score": 39.901379130673654
+        },
+        {
+          "doc_id": "CORNING_2017_10K",
+          "page": 48,
+          "chunk_id": "CORNING_2017_10K:p48:text:0:e5b757eb2279",
+          "score": 38.36555194038744
+        },
+        {
+          "doc_id": "CORNING_2018_10K",
+          "page": 47,
+          "chunk_id": "CORNING_2018_10K:p47:text:0:733a43d0440f",
+          "score": 37.57482060617455
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 1,
+      "page_rank": null,
+      "document_mrr": 1.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00757",
+      "role": "tech_telecom",
+      "question": "Did AMD report customer concentration in FY22?",
+      "expected_doc_id": "AMD_2022_10K",
+      "expected_pages": [
+        12
+      ],
+      "retrieved": [
+        {
+          "doc_id": "AMD_2022_annualreport",
+          "page": 79,
+          "chunk_id": "AMD_2022_annualreport:p79:text:0:083319faf0da",
+          "score": 21.994688921424213
+        },
+        {
+          "doc_id": "AMD_2022_10K",
+          "page": 69,
+          "chunk_id": "AMD_2022_10K:p69:text:0:4494208a9a11",
+          "score": 21.295929736786135
+        },
+        {
+          "doc_id": "AMD_2022_10K",
+          "page": 68,
+          "chunk_id": "AMD_2022_10K:p68:text:0:ed197ef6f6c3",
+          "score": 20.629636617364056
+        },
+        {
+          "doc_id": "AMD_2020_10K",
+          "page": 10,
+          "chunk_id": "AMD_2020_10K:p10:text:0:ff616e8c774f",
+          "score": 19.987967652948555
+        },
+        {
+          "doc_id": "AMD_2021_10K",
+          "page": 9,
+          "chunk_id": "AMD_2021_10K:p9:text:0:0f56a8a9e0fc",
+          "score": 19.712452773191615
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 2,
+      "page_rank": null,
+      "document_mrr": 0.5,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_01275",
+      "role": "consumer",
+      "question": "Among operations, investing, and financing activities, which brought in the most (or lost the least) cash flow for Best Buy in FY2023?",
+      "expected_doc_id": "BESTBUY_2023_10K",
+      "expected_pages": [
+        42
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BESTBUY_2023_10K",
+          "page": 29,
+          "chunk_id": "BESTBUY_2023_10K:p29:text:0:9deb898115e0",
+          "score": 34.4696204874427
+        },
+        {
+          "doc_id": "BESTBUY_2024Q2_10Q",
+          "page": 21,
+          "chunk_id": "BESTBUY_2024Q2_10Q:p21:text:0:5228601c3632",
+          "score": 31.838285871241357
+        },
+        {
+          "doc_id": "BESTBUY_2020_10K",
+          "page": 30,
+          "chunk_id": "BESTBUY_2020_10K:p30:text:0:df7a7ba2fdc0",
+          "score": 29.73921937159722
+        },
+        {
+          "doc_id": "BESTBUY_2023Q4_EARNINGS",
+          "page": 8,
+          "chunk_id": "BESTBUY_2023Q4_EARNINGS:p8:text:0:bc366262adfa",
+          "score": 29.08279954449669
+        },
+        {
+          "doc_id": "BESTBUY_2023_10K",
+          "page": 42,
+          "chunk_id": "BESTBUY_2023_10K:p42:text:0:febbced2e1eb",
+          "score": 28.95327618464816
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 5,
+      "document_mrr": 1.0,
+      "page_mrr": 0.2
+    },
+    {
+      "id": "fb_04980",
+      "role": "consumer",
+      "question": "What is the FY2021 capital expenditure amount (in USD billions) for PepsiCo? Respond to the question by assuming the perspective of an investment analyst who can only use the details shown within the statement of cash flows.",
+      "expected_doc_id": "PEPSICO_2021_10K",
+      "expected_pages": [
+        63
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BESTBUY_2022_10K",
+          "page": 30,
+          "chunk_id": "BESTBUY_2022_10K:p30:text:0:ce4327d99365",
+          "score": 27.319905846765764
+        },
+        {
+          "doc_id": "BESTBUY_2023_10K",
+          "page": 29,
+          "chunk_id": "BESTBUY_2023_10K:p29:text:0:9deb898115e0",
+          "score": 26.526692452500885
+        },
+        {
+          "doc_id": "BESTBUY_2021_10K",
+          "page": 31,
+          "chunk_id": "BESTBUY_2021_10K:p31:text:0:93d20e35db22",
+          "score": 25.725509046245527
+        },
+        {
+          "doc_id": "PEPSICO_2022_10K",
+          "page": 54,
+          "chunk_id": "PEPSICO_2022_10K:p54:text:0:1b99d39dc309",
+          "score": 24.798668820932363
+        },
+        {
+          "doc_id": "PEPSICO_2022Q4_EARNINGS",
+          "page": 11,
+          "chunk_id": "PEPSICO_2022Q4_EARNINGS:p11:table:21:390d5ffbdd5d",
+          "score": 24.785141661755457
+        }
+      ],
+      "document_hit": false,
+      "page_hit": false,
+      "document_rank": null,
+      "page_rank": null,
+      "document_mrr": 0.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00407",
+      "role": "consumer",
+      "question": "Which type of debt received the largest investment among the short term investments for MGM in H1 FY2023?",
+      "expected_doc_id": "MGMRESORTS_2023Q2_10Q",
+      "expected_pages": [
+        11
+      ],
+      "retrieved": [
+        {
+          "doc_id": "MGMRESORTS_2023Q2_10Q",
+          "page": 10,
+          "chunk_id": "MGMRESORTS_2023Q2_10Q:p10:text:0:ea27b3d35a77",
+          "score": 23.3962320396601
+        },
+        {
+          "doc_id": "BESTBUY_2023_10K",
+          "page": 54,
+          "chunk_id": "BESTBUY_2023_10K:p54:text:0:4f93948383a0",
+          "score": 23.352817873438273
+        },
+        {
+          "doc_id": "MGMRESORTS_2023Q2_10Q",
+          "page": 11,
+          "chunk_id": "MGMRESORTS_2023Q2_10Q:p11:table:7:e7ae09b55873",
+          "score": 21.58011300362342
+        },
+        {
+          "doc_id": "MGMRESORTS_2023Q2_10Q",
+          "page": 38,
+          "chunk_id": "MGMRESORTS_2023Q2_10Q:p38:text:0:fc14c63d7af5",
+          "score": 21.366243832719576
+        },
+        {
+          "doc_id": "MGMRESORTS_2016_10K",
+          "page": 8,
+          "chunk_id": "MGMRESORTS_2016_10K:p8:text:0:fbb835f2dc03",
+          "score": 20.510941176804955
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 3,
+      "document_mrr": 1.0,
+      "page_mrr": 0.3333333333333333
+    },
+    {
+      "id": "fb_00941",
+      "role": "health_industrials",
+      "question": "Which debt securities are registered to trade on a national securities exchange under 3M's name as of Q2 of 2023?",
+      "expected_doc_id": "3M_2023Q2_10Q",
+      "expected_pages": [
+        1
+      ],
+      "retrieved": [
+        {
+          "doc_id": "3M_2023Q2_10Q",
+          "page": 1,
+          "chunk_id": "3M_2023Q2_10Q:p1:text:0:7577ae791c9e",
+          "score": 22.771844275856317
+        },
+        {
+          "doc_id": "3M_2022_10K",
+          "page": 1,
+          "chunk_id": "3M_2022_10K:p1:text:0:1d8a5ee0a33e",
+          "score": 21.10940858682568
+        },
+        {
+          "doc_id": "3M_2021_10K",
+          "page": 1,
+          "chunk_id": "3M_2021_10K:p1:text:0:431988d33d00",
+          "score": 19.283783084957822
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-23",
+          "page": 1,
+          "chunk_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-23:p1:text:0:83b47f2d4588",
+          "score": 19.278679874976064
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-30",
+          "page": 1,
+          "chunk_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-30:p1:text:0:296a83fb4d4c",
+          "score": 19.278679874976064
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "fb_03029",
+      "role": "health_industrials",
+      "question": "What is the FY2018 capital expenditure amount (in USD millions) for 3M? Give a response to the question by relying on the details shown in the cash flow statement.",
+      "expected_doc_id": "3M_2018_10K",
+      "expected_pages": [
+        60
+      ],
+      "retrieved": [
+        {
+          "doc_id": "3M_2017_10K",
+          "page": 50,
+          "chunk_id": "3M_2017_10K:p50:text:0:e241cbb1c6c4",
+          "score": 28.621022142857697
+        },
+        {
+          "doc_id": "3M_2015_10K",
+          "page": 41,
+          "chunk_id": "3M_2015_10K:p41:text:0:95af704c709c",
+          "score": 28.314142498429383
+        },
+        {
+          "doc_id": "3M_2020_10K",
+          "page": 48,
+          "chunk_id": "3M_2020_10K:p48:text:0:c9f44b965ed3",
+          "score": 27.96516780437434
+        },
+        {
+          "doc_id": "3M_2018_10K",
+          "page": 49,
+          "chunk_id": "3M_2018_10K:p49:text:0:9361cd62cd78",
+          "score": 27.641697288053194
+        },
+        {
+          "doc_id": "3M_2021_10K",
+          "page": 39,
+          "chunk_id": "3M_2021_10K:p39:text:0:c59064c1b0a6",
+          "score": 27.515906369365748
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 4,
+      "page_rank": null,
+      "document_mrr": 0.25,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_01484",
+      "role": "health_industrials",
+      "question": "How did JnJ's US sales growth compare to international sales growth in FY2022?",
+      "expected_doc_id": "JOHNSON_JOHNSON_2022Q4_EARNINGS",
+      "expected_pages": [
+        2
+      ],
+      "retrieved": [
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 39,
+          "chunk_id": "PFIZER_2022_10K:p39:text:0:b373c29112a4",
+          "score": 20.93765133851445
+        },
+        {
+          "doc_id": "Pfizer_2023Q2_10Q",
+          "page": 46,
+          "chunk_id": "Pfizer_2023Q2_10Q:p46:text:0:27713aec9c77",
+          "score": 20.012371758051835
+        },
+        {
+          "doc_id": "PFIZER_2021_10K",
+          "page": 40,
+          "chunk_id": "PFIZER_2021_10K:p40:text:0:6c36be67b640",
+          "score": 18.420455800570842
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2022_10K",
+          "page": 28,
+          "chunk_id": "JOHNSON_JOHNSON_2022_10K:p28:text:0:840898127315",
+          "score": 18.3949269818632
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2022Q4_EARNINGS",
+          "page": 1,
+          "chunk_id": "JOHNSON_JOHNSON_2022Q4_EARNINGS:p1:text:0:9cb2f752aaab",
+          "score": 17.77125674500556
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 5,
+      "page_rank": null,
+      "document_mrr": 0.2,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00005",
+      "role": "tech_telecom",
+      "question": "Does Corning have positive working capital based on FY2022 data? If working capital is not a useful or relevant metric for this company, then please state that and explain why.",
+      "expected_doc_id": "CORNING_2022_10K",
+      "expected_pages": [
+        60
+      ],
+      "retrieved": [
+        {
+          "doc_id": "CORNING_2022_10K",
+          "page": 34,
+          "chunk_id": "CORNING_2022_10K:p34:table:0:a22bc9e60d20",
+          "score": 22.314915618835105
+        },
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 34,
+          "chunk_id": "CORNING_2023Q2_10Q:p34:table:0:99fe120d31e2",
+          "score": 21.064228017052045
+        },
+        {
+          "doc_id": "CORNING_2022_10K",
+          "page": 150,
+          "chunk_id": "CORNING_2022_10K:p150:text:0:5ff65eae1012",
+          "score": 20.242523180041704
+        },
+        {
+          "doc_id": "CORNING_2022_10K",
+          "page": 118,
+          "chunk_id": "CORNING_2022_10K:p118:text:0:8ae400284a43",
+          "score": 19.18890328006807
+        },
+        {
+          "doc_id": "CORNING_2022_10K",
+          "page": 34,
+          "chunk_id": "CORNING_2022_10K:p34:table:8:5b78ba7c2a10",
+          "score": 18.820450222446123
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 1,
+      "page_rank": null,
+      "document_mrr": 1.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_03069",
+      "role": "tech_telecom",
+      "question": "Answer the following question as if you are an equity research analyst and have lost internet connection so you do not have access to financial metric providers. According to the details clearly outlined within the P&L statement and the statement of cash flows, what is the FY2015 depreciation and amortization (D&A from cash flow statement) % margin for AMD?",
+      "expected_doc_id": "AMD_2015_10K",
+      "expected_pages": [
+        56,
+        60
+      ],
+      "retrieved": [
+        {
+          "doc_id": "VERIZON_2015_10K",
+          "page": 83,
+          "chunk_id": "VERIZON_2015_10K:p83:text:0:0ad5c79eb390",
+          "score": 26.518188579721485
+        },
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 37,
+          "chunk_id": "VERIZON_2022_10K:p37:text:0:c05680ba1f4b",
+          "score": 26.04110410911042
+        },
+        {
+          "doc_id": "AMD_2016_10K",
+          "page": 44,
+          "chunk_id": "AMD_2016_10K:p44:text:0:3b2d5a414a5e",
+          "score": 25.74764149766244
+        },
+        {
+          "doc_id": "AMD_2022_annualreport",
+          "page": 58,
+          "chunk_id": "AMD_2022_annualreport:p58:text:0:d4a6156cb3c9",
+          "score": 25.524592347832886
+        },
+        {
+          "doc_id": "VERIZON_2017_10K",
+          "page": 87,
+          "chunk_id": "VERIZON_2017_10K:p87:text:0:a207502e07ee",
+          "score": 25.388163157431258
+        }
+      ],
+      "document_hit": false,
+      "page_hit": false,
+      "document_rank": null,
+      "page_rank": null,
+      "document_mrr": 0.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_00591",
+      "role": "tech_telecom",
+      "question": "Does Adobe have an improving Free cashflow conversion as of FY2022?",
+      "expected_doc_id": "ADOBE_2022_10K",
+      "expected_pages": [
+        57
+      ],
+      "retrieved": [
+        {
+          "doc_id": "ADOBE_2016_10K",
+          "page": 10,
+          "chunk_id": "ADOBE_2016_10K:p10:text:0:2a18b5f3f7ec",
+          "score": 16.346698599031484
+        },
+        {
+          "doc_id": "ADOBE_2018_10K",
+          "page": 12,
+          "chunk_id": "ADOBE_2018_10K:p12:text:0:7fd872069b42",
+          "score": 14.90453994076773
+        },
+        {
+          "doc_id": "ADOBE_2015_10K",
+          "page": 9,
+          "chunk_id": "ADOBE_2015_10K:p9:text:0:9753cca19b04",
+          "score": 14.645282372756238
+        },
+        {
+          "doc_id": "ADOBE_2017_10K",
+          "page": 11,
+          "chunk_id": "ADOBE_2017_10K:p11:text:0:79156d582006",
+          "score": 14.622724497673417
+        },
+        {
+          "doc_id": "ADOBE_2018_10K",
+          "page": 5,
+          "chunk_id": "ADOBE_2018_10K:p5:text:0:c49b37d0c5a1",
+          "score": 14.616359172708886
+        }
+      ],
+      "document_hit": false,
+      "page_hit": false,
+      "document_rank": null,
+      "page_rank": null,
+      "document_mrr": 0.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "fb_01254",
+      "role": "consumer",
+      "question": "Has MGM Resorts paid dividends to common shareholders in FY2022?",
+      "expected_doc_id": "MGMRESORTS_2022_10K",
+      "expected_pages": [
+        32
+      ],
+      "retrieved": [
+        {
+          "doc_id": "MGMRESORTS_2022_10K",
+          "page": 64,
+          "chunk_id": "MGMRESORTS_2022_10K:p64:text:0:a5eece36f401",
+          "score": 29.332740848925308
+        },
+        {
+          "doc_id": "MGMRESORTS_2022_10K",
+          "page": 32,
+          "chunk_id": "MGMRESORTS_2022_10K:p32:text:0:038e17ef9a3f",
+          "score": 29.272538168244793
+        },
+        {
+          "doc_id": "MGMRESORTS_2018_10K",
+          "page": 47,
+          "chunk_id": "MGMRESORTS_2018_10K:p47:text:0:76e035e3ed3c",
+          "score": 28.87430574629207
+        },
+        {
+          "doc_id": "MGMRESORTS_2017_10K",
+          "page": 48,
+          "chunk_id": "MGMRESORTS_2017_10K:p48:text:0:181fcf03d063",
+          "score": 28.047445206707366
+        },
+        {
+          "doc_id": "MGMRESORTS_2022_10K",
+          "page": 48,
+          "chunk_id": "MGMRESORTS_2022_10K:p48:text:0:92a835a1a632",
+          "score": 27.47045488168267
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 2,
+      "document_mrr": 1.0,
+      "page_mrr": 0.5
+    },
+    {
+      "id": "fb_02608",
+      "role": "consumer",
+      "question": "In agreement with the information outlined in the income statement, what is the FY2015 - FY2017 3 year average net profit margin (as a %) for Best Buy? Answer in units of percents and round to one decimal place.",
+      "expected_doc_id": "BESTBUY_2017_10K",
+      "expected_pages": [
+        56
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BESTBUY_2016_10K",
+          "page": 37,
+          "chunk_id": "BESTBUY_2016_10K:p37:text:0:2bf71025661f",
+          "score": 27.69435364955156
+        },
+        {
+          "doc_id": "BESTBUY_2017_10K",
+          "page": 36,
+          "chunk_id": "BESTBUY_2017_10K:p36:text:0:9eab8081a7a4",
+          "score": 27.220377823395136
+        },
+        {
+          "doc_id": "BESTBUY_2017_10K",
+          "page": 56,
+          "chunk_id": "BESTBUY_2017_10K:p56:text:0:ce585fd15011",
+          "score": 24.503279078356098
+        },
+        {
+          "doc_id": "BESTBUY_2015_10K",
+          "page": 82,
+          "chunk_id": "BESTBUY_2015_10K:p82:text:0:5c22355377e6",
+          "score": 23.865233062611285
+        },
+        {
+          "doc_id": "BESTBUY_2017_10K",
+          "page": 66,
+          "chunk_id": "BESTBUY_2017_10K:p66:text:0:c8c8ae9572f6",
+          "score": 23.371735783324624
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 2,
+      "page_rank": 3,
+      "document_mrr": 0.5,
+      "page_mrr": 0.3333333333333333
+    },
+    {
+      "id": "gks_001",
+      "role": "health_industrials",
+      "question": "What were Pfizer's total revenues for FY2022?",
+      "expected_doc_id": "PFIZER_2022_10K",
+      "expected_pages": [
+        33,
+        34,
+        39,
+        54
+      ],
+      "retrieved": [
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 39,
+          "chunk_id": "PFIZER_2022_10K:p39:text:0:b373c29112a4",
+          "score": 19.277703283910533
+        },
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 106,
+          "chunk_id": "PFIZER_2022_10K:p106:text:0:fb9b8216a1c2",
+          "score": 18.70066553759139
+        },
+        {
+          "doc_id": "Pfizer_2023Q2_10Q",
+          "page": 46,
+          "chunk_id": "Pfizer_2023Q2_10Q:p46:text:0:27713aec9c77",
+          "score": 18.160142177081173
+        },
+        {
+          "doc_id": "Pfizer_2023Q2_10Q",
+          "page": 49,
+          "chunk_id": "Pfizer_2023Q2_10Q:p49:text:0:e4860c73f66c",
+          "score": 17.249245682035983
+        },
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 72,
+          "chunk_id": "PFIZER_2022_10K:p72:text:1:fcdcb1ef7ef4",
+          "score": 17.011422074622857
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "gks_002",
+      "role": "health_industrials",
+      "question": "In FY2022, what share of Pfizer's total revenues came from Comirnaty and Paxlovid together, and what share came from the ten products that each recorded more than $1 billion in direct product and/or Alliance revenues?",
+      "expected_doc_id": "PFIZER_2022_10K",
+      "expected_pages": [
+        22
+      ],
+      "retrieved": [
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 22,
+          "chunk_id": "PFIZER_2022_10K:p22:text:0:4e7d6e4ce870",
+          "score": 52.51607920872739
+        },
+        {
+          "doc_id": "PFIZER_2021_10K",
+          "page": 10,
+          "chunk_id": "PFIZER_2021_10K:p10:text:0:bc415bdb87e3",
+          "score": 49.0918630488472
+        },
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 41,
+          "chunk_id": "PFIZER_2022_10K:p41:text:0:96f103f2a795",
+          "score": 48.65024419792383
+        },
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 106,
+          "chunk_id": "PFIZER_2022_10K:p106:text:0:fb9b8216a1c2",
+          "score": 46.03425893524376
+        },
+        {
+          "doc_id": "PFIZER_2022_10K",
+          "page": 62,
+          "chunk_id": "PFIZER_2022_10K:p62:text:0:8759be8e886f",
+          "score": 44.99309956956615
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "gks_003",
+      "role": "health_industrials",
+      "question": "What were Johnson & Johnson's reported sales for the second quarter of FY2023, and what was the reported sales growth rate?",
+      "expected_doc_id": "JOHNSON_JOHNSON_2023Q2_EARNINGS",
+      "expected_pages": [
+        1
+      ],
+      "retrieved": [
+        {
+          "doc_id": "PFIZER_2023Q2_EARNINGS",
+          "page": 1,
+          "chunk_id": "PFIZER_2023Q2_EARNINGS:p1:text:0:83f784665627",
+          "score": 29.799667213744147
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2023Q2_EARNINGS",
+          "page": 1,
+          "chunk_id": "JOHNSON_JOHNSON_2023Q2_EARNINGS:p1:text:0:77d3d6b7d6f0",
+          "score": 29.40978248155813
+        },
+        {
+          "doc_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-30",
+          "page": 4,
+          "chunk_id": "JOHNSON_JOHNSON_2023_8K_dated-2023-08-30:p4:table:1:7d4f4b841819",
+          "score": 27.37637442398665
+        },
+        {
+          "doc_id": "PFIZER_2023Q2_EARNINGS",
+          "page": 7,
+          "chunk_id": "PFIZER_2023Q2_EARNINGS:p7:text:0:52b86d184bfb",
+          "score": 26.390517007821707
+        },
+        {
+          "doc_id": "PFIZER_2023Q2_EARNINGS",
+          "page": 4,
+          "chunk_id": "PFIZER_2023Q2_EARNINGS:p4:text:0:d90d9c737ba9",
+          "score": 26.093357408063557
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 2,
+      "page_rank": 2,
+      "document_mrr": 0.5,
+      "page_mrr": 0.5
+    },
+    {
+      "id": "gks_004",
+      "role": "health_industrials",
+      "question": "Which commercial jet aircraft models does Boeing's FY2021 Form 10-K say are in production?",
+      "expected_doc_id": "BOEING_2021_10K",
+      "expected_pages": [
+        3
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BOEING_2022_10K",
+          "page": 3,
+          "chunk_id": "BOEING_2022_10K:p3:text:0:5038f4b8e224",
+          "score": 37.61395213259795
+        },
+        {
+          "doc_id": "BOEING_2021_10K",
+          "page": 3,
+          "chunk_id": "BOEING_2021_10K:p3:text:0:5fa6ac40493c",
+          "score": 37.48219099993624
+        },
+        {
+          "doc_id": "BOEING_2015_10K",
+          "page": 3,
+          "chunk_id": "BOEING_2015_10K:p3:text:0:63ed6f85a683",
+          "score": 36.188253502923985
+        },
+        {
+          "doc_id": "BOEING_2016_10K",
+          "page": 3,
+          "chunk_id": "BOEING_2016_10K:p3:text:0:240774c1814a",
+          "score": 36.023322125533916
+        },
+        {
+          "doc_id": "BOEING_2017_10K",
+          "page": 3,
+          "chunk_id": "BOEING_2017_10K:p3:text:0:e5d018bac679",
+          "score": 35.42565470523853
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 2,
+      "page_rank": 2,
+      "document_mrr": 0.5,
+      "page_mrr": 0.5
+    },
+    {
+      "id": "gks_005",
+      "role": "tech_telecom",
+      "question": "What percentage of Adobe's total revenue in FY2021 came from subscription?",
+      "expected_doc_id": "ADOBE_2021_10K",
+      "expected_pages": [
+        43
+      ],
+      "retrieved": [
+        {
+          "doc_id": "ADOBE_2021_10K",
+          "page": 43,
+          "chunk_id": "ADOBE_2021_10K:p43:text:0:766d81d86f81",
+          "score": 30.84202759144572
+        },
+        {
+          "doc_id": "ADOBE_2022_10K",
+          "page": 43,
+          "chunk_id": "ADOBE_2022_10K:p43:text:0:86f189bdf803",
+          "score": 29.49191339119238
+        },
+        {
+          "doc_id": "ADOBE_2021_10K",
+          "page": 45,
+          "chunk_id": "ADOBE_2021_10K:p45:text:0:e3121c738de3",
+          "score": 28.64863716688996
+        },
+        {
+          "doc_id": "ADOBE_2022_10K",
+          "page": 40,
+          "chunk_id": "ADOBE_2022_10K:p40:text:0:e14c2d98ac69",
+          "score": 27.937241545307987
+        },
+        {
+          "doc_id": "ADOBE_2022_10K",
+          "page": 41,
+          "chunk_id": "ADOBE_2022_10K:p41:text:0:4fe86079de6a",
+          "score": 27.26914121560891
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "gks_006",
+      "role": "tech_telecom",
+      "question": "Which acquisition does AMD's FY2022 annual report describe as the largest acquisition in semiconductor history?",
+      "expected_doc_id": "AMD_2022_annualreport",
+      "expected_pages": [
+        2
+      ],
+      "retrieved": [
+        {
+          "doc_id": "AMD_2022_annualreport",
+          "page": 2,
+          "chunk_id": "AMD_2022_annualreport:p2:text:0:6f721ddf3408",
+          "score": 28.800231744769356
+        },
+        {
+          "doc_id": "AMD_2022_annualreport",
+          "page": 6,
+          "chunk_id": "AMD_2022_annualreport:p6:text:0:08b5ed54728b",
+          "score": 19.143635194369562
+        },
+        {
+          "doc_id": "AMD_2022_annualreport",
+          "page": 21,
+          "chunk_id": "AMD_2022_annualreport:p21:text:0:e190eb0cb98f",
+          "score": 18.726763374203962
+        },
+        {
+          "doc_id": "AMD_2022_10K",
+          "page": 14,
+          "chunk_id": "AMD_2022_10K:p14:text:0:1d0eb4bc30a1",
+          "score": 17.207497662946327
+        },
+        {
+          "doc_id": "AMD_2021_10K",
+          "page": 14,
+          "chunk_id": "AMD_2021_10K:p14:text:0:25f22ddbf348",
+          "score": 16.12368222873608
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 1,
+      "document_mrr": 1.0,
+      "page_mrr": 1.0
+    },
+    {
+      "id": "gks_007",
+      "role": "tech_telecom",
+      "question": "By what percentage did Verizon's Board of Directors increase the quarterly dividend during FY2021, and how many consecutive years of dividend increases did that mark?",
+      "expected_doc_id": "VERIZON_2021_10K",
+      "expected_pages": [
+        35
+      ],
+      "retrieved": [
+        {
+          "doc_id": "CORNING_2020_10K",
+          "page": 117,
+          "chunk_id": "CORNING_2020_10K:p117:text:0:6b55ffea560b",
+          "score": 38.60738167370952
+        },
+        {
+          "doc_id": "VERIZON_2021_10K",
+          "page": 38,
+          "chunk_id": "VERIZON_2021_10K:p38:text:0:06257859abed",
+          "score": 37.386292150590506
+        },
+        {
+          "doc_id": "VERIZON_2022_10K",
+          "page": 40,
+          "chunk_id": "VERIZON_2022_10K:p40:text:0:f16c29f4a054",
+          "score": 36.46514599026651
+        },
+        {
+          "doc_id": "CORNING_2016_10K",
+          "page": 48,
+          "chunk_id": "CORNING_2016_10K:p48:text:0:b99ec4fa9142",
+          "score": 34.843433405495794
+        },
+        {
+          "doc_id": "CORNING_2018_10K",
+          "page": 124,
+          "chunk_id": "CORNING_2018_10K:p124:text:0:d365a46f83d9",
+          "score": 34.7357290335521
+        }
+      ],
+      "document_hit": true,
+      "page_hit": false,
+      "document_rank": 2,
+      "page_rank": null,
+      "document_mrr": 0.5,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "gks_008",
+      "role": "tech_telecom",
+      "question": "On Corning's FY2023 consolidated statement of income, what were net sales for the three months ended June 30, 2023?",
+      "expected_doc_id": "CORNING_2023Q2_10Q",
+      "expected_pages": [
+        3,
+        8,
+        21,
+        23
+      ],
+      "retrieved": [
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 9,
+          "chunk_id": "CORNING_2023Q2_10Q:p9:text:0:329a696513e1",
+          "score": 39.32154254497957
+        },
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 24,
+          "chunk_id": "CORNING_2023Q2_10Q:p24:text:0:ad77c3425d7b",
+          "score": 38.689354808168666
+        },
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 21,
+          "chunk_id": "CORNING_2023Q2_10Q:p21:text:0:d5479c2c2af9",
+          "score": 38.688772788554715
+        },
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 25,
+          "chunk_id": "CORNING_2023Q2_10Q:p25:text:0:b79b61843dc1",
+          "score": 38.0862694637334
+        },
+        {
+          "doc_id": "CORNING_2023Q2_10Q",
+          "page": 15,
+          "chunk_id": "CORNING_2023Q2_10Q:p15:text:0:45dd2476fa3d",
+          "score": 37.16580076634335
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 3,
+      "document_mrr": 1.0,
+      "page_mrr": 0.3333333333333333
+    },
+    {
+      "id": "gks_009",
+      "role": "consumer",
+      "question": "In FY2023, Best Buy entered into a new five-year senior unsecured revolving credit facility on April 12, 2023. What is the facility's commitment size, and when does it terminate?",
+      "expected_doc_id": "BESTBUY_2023_8K_dated-2023-04-12",
+      "expected_pages": [
+        2
+      ],
+      "retrieved": [
+        {
+          "doc_id": "BESTBUY_2015_10K",
+          "page": 82,
+          "chunk_id": "BESTBUY_2015_10K:p82:text:0:5c22355377e6",
+          "score": 50.54281390663255
+        },
+        {
+          "doc_id": "BESTBUY_2022_10K",
+          "page": 57,
+          "chunk_id": "BESTBUY_2022_10K:p57:text:0:619acb86756f",
+          "score": 47.922705738977214
+        },
+        {
+          "doc_id": "BESTBUY_2019_10K",
+          "page": 73,
+          "chunk_id": "BESTBUY_2019_10K:p73:text:0:3d7285339294",
+          "score": 47.88887474990031
+        },
+        {
+          "doc_id": "BESTBUY_2024Q2_10Q",
+          "page": 21,
+          "chunk_id": "BESTBUY_2024Q2_10Q:p21:text:0:5228601c3632",
+          "score": 47.77661880230024
+        },
+        {
+          "doc_id": "BESTBUY_2024Q2_10Q",
+          "page": 11,
+          "chunk_id": "BESTBUY_2024Q2_10Q:p11:text:0:2432c5a29848",
+          "score": 47.29026220331191
+        }
+      ],
+      "document_hit": false,
+      "page_hit": false,
+      "document_rank": null,
+      "page_rank": null,
+      "document_mrr": 0.0,
+      "page_mrr": 0.0
+    },
+    {
+      "id": "gks_010",
+      "role": "consumer",
+      "question": "How many products and beauty brands does Ulta Beauty say it offers in its FY2023 Form 10-K?",
+      "expected_doc_id": "ULTABEAUTY_2023_10K",
+      "expected_pages": [
+        5,
+        9
+      ],
+      "retrieved": [
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 10,
+          "chunk_id": "ULTABEAUTY_2023_10K:p10:text:0:aa76d0e83523",
+          "score": 38.312457200719415
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 9,
+          "chunk_id": "ULTABEAUTY_2023_10K:p9:text:0:f14b2fefa665",
+          "score": 37.52414092569725
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 5,
+          "chunk_id": "ULTABEAUTY_2023_10K:p5:text:0:05211b41aa5e",
+          "score": 32.99803808104213
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 34,
+          "chunk_id": "ULTABEAUTY_2023_10K:p34:text:0:b79c1f493354",
+          "score": 32.83388627290493
+        },
+        {
+          "doc_id": "ULTABEAUTY_2023_10K",
+          "page": 6,
+          "chunk_id": "ULTABEAUTY_2023_10K:p6:text:0:8c4d3b98cf18",
+          "score": 31.410668579787302
+        }
+      ],
+      "document_hit": true,
+      "page_hit": true,
+      "document_rank": 1,
+      "page_rank": 2,
+      "document_mrr": 1.0,
+      "page_mrr": 0.5
+    }
+  ]
+}

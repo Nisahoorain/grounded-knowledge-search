@@ -1,334 +1,47 @@
 # Grounded Knowledge Search
 
-A document-based Retrieval-Augmented Generation (RAG) system designed to search financial information from company filings and answer questions using relevant document content and source references.
+Analysts ask questions about 119 US filings (10-K, 10-Q, 8-K, earnings). The system retrieves chunks from the companies on that analyst's desk and answers only from those chunks, with document and page citations. If the retrieved pages do not contain the answer, it refuses.
 
-The project focuses on extracting, processing, indexing, and retrieving information from financial documents, especially annual reports (10-K), quarterly reports (10-Q), current reports (8-K), and earnings documents.
+## Run
 
-## Project Overview
-
-The system uses a corpus of 119 financial PDFs and a dataset of 20 questions.
-
-Its primary goal is to make financial information easier to search while preserving document context, including company, reporting period, document type, and physical page number.
-
-Special attention is given to financial tables because important values such as revenue, total assets, accounts payable, and cash flows often cannot be reliably retrieved from ordinary PDF text extraction alone.
-
-### Key Objectives
-
-- Extract text and financial tables from PDF documents.
-- Preserve document metadata and physical page numbers.
-- Convert extracted content into manageable, searchable chunks.
-- Generate vector embeddings using a local embedding model.
-- Store chunks and embeddings in ChromaDB.
-- Retrieve relevant information based on user questions.
-- Support grounded answers with document and page references.
-
-## Technology Stack
-
-| Component | Technology |
-|---|---|
-| Programming Language | Python |
-| PDF Text Extraction | PyMuPDF |
-| Table Extraction | pdfplumber |
-| Text Chunking | Custom Python implementation |
-| Embedding Model | sentence-transformers/all-MiniLM-L6-v2 |
-| Vector Database | ChromaDB |
-| Embedding Dimension | 384 |
-| Configuration | Environment settings / project defaults |
-
-## System Architecture
-
-```text
-                 Financial PDF Corpus
-                         |
-                         v
-                  PDF Ingestion
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-         Text Extraction      Table Extraction
-           (PyMuPDF)           (pdfplumber)
-              |                     |
-              +----------+----------+
-                         |
-                         v
-                Extracted JSON Files
-                   data/extracted
-                         |
-                         v
-                  Content Chunking
-                  (Page-Aware)
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-          Text Chunks           Table Chunks
-              |                     |
-              +----------+----------+
-                         |
-                         v
-                  Embedding Model
-                all-MiniLM-L6-v2
-                         |
-                         v
-                    Embeddings
-                         |
-                         v
-                    ChromaDB
-                   gks_chunks
-                         |
-                         v
-                Retrieval / Search
-                   (Next Phase)
-                         |
-                         v
-                Grounded Answers
-                   (Future Work)
+```powershell
+python -m venv venv
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+copy .env.example .env
 ```
 
-## Project Structure
+Ollama must be running locally with the model named in `.env` (`llama3.2` by default). Embeddings are `all-MiniLM-L6-v2` and do not need a key. `LLM_PROVIDER` is the only switch for the answer model.
 
-```text
-grounded-knowledge-search/
-│
-├── src/
-│   ├── ingestion/
-│   │   ├── table_extractor.py
-│   │   ├── chunker.py
-│   │   └── ingest.py
-│   │
-│   ├── retrieval/
-│   │   ├── embeddings.py
-│   │   └── vector_store.py
-│   │
-│   ├── analysis/
-│   │
-│   └── config.py
-│
-├── data/
-│   ├── extracted/
-│   └── chroma_db/
-│       └── index_hashes.json
-│
-├── pdfs/
-├── manifest.csv
-├── pdf_inventory.csv
-├── CORPUS_ANALYSIS.md
-├── DECISIONS.md
-├── EXPERIMENTS.md
-├── AI_NOTES.md
-└── README.md
+```powershell
+.\venv\Scripts\python.exe main.py ingest pdfs
+.\venv\Scripts\python.exe main.py search --role consumer --k 5 "What is the FY2021 capital expenditure amount for PepsiCo?"
+.\venv\Scripts\python.exe main.py ask --role consumer "What is the FY2021 capital expenditure amount for PepsiCo?"
+.\venv\Scripts\python.exe eval\run_eval.py
 ```
 
-## Dataset
+`ingest` reads `manifest.csv`, extracts text and tables from `<corpus_dir>`, embeds new or changed filings into Chroma, and rebuilds the BM25 index only when chunks change. A second run skips unchanged PDFs. Replacing a filing deletes that document's old chunks before inserting the new ones.
 
-The project currently contains:
+`search` prints a JSON list, best first: `doc_id`, `page` (from 1), `chunk_id`, `score`, `text`.
 
-| Metric | Count |
-|---|---:|
-| Financial PDFs | 119 |
-| Manifest Records | 119 |
-| Evaluation Questions | 20 |
-| Total Physical Pages | 18,371 |
-| Detected Tables | 8,007 |
+`ask` prints one JSON object: `status` is `answered` or `refused`, plus `answer` and `citations` (`doc_id`, `page`, `chunk_id`).
 
-### Document Types
+Roles are `consumer`, `health_industrials`, `tech_telecom`, and `lead`.
 
-The corpus includes:
+## Architecture
 
-- 10-K annual reports
-- 10-Q quarterly reports
-- 8-K current reports
-- Earnings documents
-- Annual report documents
+PyMuPDF extracts page text. pdfplumber extracts table rows. Each chunk keeps company, desk, period, page, and content type. Semantic search (Chroma, cosine) and BM25 are fused with reciprocal rank fusion. The desk filter is inside both queries. A named company and a named reporting year narrow both lists. A named financial statement adds a third list of pages that contain that statement heading. The local LLM sees only the fused chunks. A single-year figure that is printed on a statement row is copied from that row, and a unit change shows the printed input.
 
-Original manifest document types are preserved during processing.
+## Numbers
 
-## Completed Work
+Eval set: 30 questions in `eval/questions.jsonl` (the 20 dev questions plus 10). `k = 5`. Primary retrieval metric is page hit: at least one labeled evidence page in the top 5. Document hit is reported because the same line item repeats across years.
 
-### 1. Dataset Inspection and Analysis
+| Run | Document hit@5 | Page hit@5 | Page MRR |
+|---|---:|---:|---:|
+| BM25 only | 25/30 (83.3%) | 16/30 (53.3%) | 0.324 |
+| Hybrid (semantic + BM25) | 29/30 (96.7%) | 16/30 (53.3%) | 0.441 |
 
-- Verified all 119 PDFs against the manifest.
-- Confirmed matching document IDs and filenames.
-- Checked for missing and duplicate documents.
-- Analyzed document types, companies, sectors, and reporting periods.
-- Inspected representative PDFs and their financial statements.
+Hybrid did not raise page hit. It did raise document hit and page MRR, so the right filing shows up earlier even when the exact page is still outside the top 5. Answer quality is `eval/run_answers.py`: an answer counts only when `status` is `answered` and a citation page is in the labeled set. Anything else is a refusal or a wrong citation.
 
-### 2. PDF Ingestion and Extraction
+## Limitations
 
-- Processed all 119 PDFs.
-- Extracted document content page by page.
-- Used PyMuPDF for text extraction.
-- Used pdfplumber for financial table extraction.
-- Saved extracted content as JSON files in `data/extracted`.
-- Generated `pdf_inventory.csv`.
-
-**Ingestion result:**
-
-- Saved: 119
-- Skipped: 0
-- Failed: 0
-
-### 3. Financial Table Extraction
-
-Developed a custom table extraction and cleanup pipeline.
-
-Work includes:
-
-- Layout-first row merging.
-- Financial amount detection.
-- Label and value preservation.
-- Handling negative financial values.
-- Removing irrelevant footer content.
-- Preserving financial statement row order.
-
-Representative PDF checks include:
-
-| Document | Physical Page | Extracted Rows |
-|---|---:|---:|
-| 3M 2015 10-K | 50 | 19 |
-| 3M 2015 10-K | 52 | 41 |
-| 3M 2015 10-K | 54 | 36 |
-| Adobe 2015 10-K | 34 | 16 |
-
-Detailed extraction decisions and experiments are documented in `DECISIONS.md` and `EXPERIMENTS.md`.
-
-### 4. Chunking and Embedding — Complete
-
-Implemented page-aware chunking with separate handling for text and tables.
-
-Key features:
-
-- Fixed-size text chunking with overlap.
-- Table-aware row chunking.
-- Preservation of physical page numbers.
-- Preservation of document metadata.
-- Deterministic chunk IDs.
-- Local embedding generation.
-- Batch embedding to reduce memory usage.
-
-**Embedding configuration:**
-
-- Model: `all-MiniLM-L6-v2`
-- Embedding dimension: 384
-- Embedding batch size: 64
-
-**Results:**
-
-| Metric | Result |
-|---|---:|
-| PDFs processed | 119 |
-| Total chunks | 26,799 |
-| Embedding dimension | 384 |
-| ChromaDB records | 26,799 |
-
-### 5. ChromaDB Indexing and Idempotent Ingestion — Complete
-
-Implemented persistent vector storage using ChromaDB.
-
-Collection:
-
-```text
-gks_chunks
-```
-
-Database location:
-
-```text
-data/chroma_db
-```
-
-Stored information includes:
-
-- Chunk ID
-- Chunk text
-- Embedding vector
-- Document ID
-- Company
-- Sector
-- Desk
-- Document type
-- Reporting period
-- Physical page number
-- Content type
-
-Idempotent indexing is implemented using SHA-256 hashes.
-
-Hash records are maintained in:
-
-```text
-data/chroma_db/index_hashes.json
-```
-
-The indexing process:
-
-1. Calculates the hash of each extracted JSON file.
-2. Skips files whose hashes have not changed.
-3. Deletes old chunks belonging to a changed document.
-4. Embeds and inserts the replacement chunks.
-
-**Verification:**
-
-| Test | Result |
-|---|---|
-| Initial indexed records | 26,799 |
-| Unchanged files on rerun | 119 skipped |
-| ChromaDB count after rerun | 26,799 |
-| Changed filing replacement | Successful |
-| Third run on same filing | Skipped |
-
-## Current Project Status
-
-| Component | Status |
-|---|---|
-| Dataset inspection | Complete |
-| PDF ingestion | Complete |
-| Text extraction | Complete |
-| Financial table extraction | Implemented; representative pages verified |
-| Page-aware chunking | Complete |
-| Embedding generation | Complete |
-| ChromaDB indexing | Complete |
-| Idempotent ingestion | Complete |
-| Semantic search | Pending |
-| Retrieval evaluation | Pending |
-| LLM-based answer generation | Pending |
-| Source-grounded responses | Pending |
-
-## Next Phase — Retrieval and Search
-
-The next development phase focuses on retrieving relevant chunks from ChromaDB.
-
-Planned workflow:
-
-```text
-User Question
-      |
-      v
-Query Embedding
-      |
-      v
-ChromaDB Similarity Search
-      |
-      v
-Top-K Relevant Chunks
-      |
-      v
-Document and Page References
-```
-
-The first priority is to implement and evaluate semantic search before introducing LLM-based answer generation.
-
-## Documentation
-
-Additional project documentation:
-
-- `CORPUS_ANALYSIS.md` — Dataset and PDF analysis.
-- `DECISIONS.md` — Production table extraction decisions.
-- `EXPERIMENTS.md` — Verified, failed, and unresolved extraction experiments.
-- `AI_NOTES.md` — Technical implementation notes.
-
----
-
-**Project:** Grounded Knowledge Search  
-**Current Milestone:** Phase 4 — Chunking and Embedding Complete  
-**Next Milestone:** Phase 5 — Retrieval and Search
+Page hit is 16/30. Narrative disclosures, forecasts, and computed ratios still lose to boilerplate and to statement rows whose label does not match the question's wording. A first answer can exceed 5 seconds because the embedding model and the BM25 index load on the first call; later calls are the search plus one local generation. Calculated answers show the printed inputs they scaled. They do not recompute a ratio from several pages when those pages were not retrieved together.

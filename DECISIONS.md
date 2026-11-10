@@ -1,39 +1,49 @@
-Rules in `src/ingestion/table_extractor.py`. Each one is in the production functions named below.
+# Decisions
 
-## Layout-first merge
+## 1. Keep the physical page on every chunk
 
-`process_page` reads layout rows first, then `lines/lines` and `lines/text`.
+Options were a page number, a sliding window with no page, or a section id. The eval and the citation contract both use the PDF page counted from 1. Each chunk stores that page. What would change this: a corpus where the printed page and the PDF page disagree and the questions used the printed number. They do not.
 
-`merge_layout_first` keeps that layout order. A line-based row replaces a layout row only when `row_key` is the same and `row_quality` is higher. A line-based row whose key is not in the layout is not added.
+## 2. Extract tables separately from body text
 
-If layout returns no rows, `process_page` uses `merge_unique` on the line-based rows.
+PyMuPDF text drops or scrambles statement rows. pdfplumber reads the same page as rows. Body text and table rows are stored as different chunks. The merge is layout-first: a line-based row replaces a layout row only when it is the same row and higher quality. `(154)` and `154` are different amounts. A lone `(1)` or `(26)` is a footnote, not an amount, unless the row has several such cells. Year columns are the trailing amounts; words stay on the label. What would change this: a filing family whose statements are images. These PDFs have a text layer.
 
-`row_key` stores `\([\d,.]+\)` before a plain number. `(154)` and `154` are different keys.
+## 3. Chunk tables by row, text by words
 
-## Amount detection
+A fixed word window splits a statement line across chunks, so the label and the year values separate. Table chunks keep rows together. Text chunks are word windows with overlap, and a short page stays whole. What would change this: page hit rising after a section-sized chunk experiment. It did not, on the pages we checked, because the wrong page was retrieved, not a cut-off sentence.
 
-`is_amount` rejects `\(\d{1,2}\)`. `(26)` and `(1)` both come back false. There is no digit-count rule that accepts one and rejects the other.
+## 4. Local MiniLM and Chroma, cosine
 
-`real_amounts` adds parenthesis cells only when the same row has at least two cells matching `\(\d{1,3}\)`. Interest income `(26) | (33) | (41)` counts. One `(1)` does not.
+`all-MiniLM-L6-v2` (384 dimensions) runs locally with no key. Chroma persists under `data/chroma_db`. Score for semantic hits is `1 - cosine distance`, so a higher score is closer. What would change this: a free embedding model that beat this one on page hit@5 by a margin larger than the noise on 30 questions. We did not swap models. The assignment forbids fine-tuning.
 
-`is_amount` accepts `$—`. `real_amounts` does not count a bare `$`, `—`, `–`, or `-`. `$ —` is a value. A dash by itself is not.
+## 5. Idempotent indexing by file hash
 
-`_column_spans` skips a `\(\d{1,2}\)` match when the character before it is a letter. `Working capital(2)` keeps `(2)` on the label.
+Re-ingesting a changed filing must not duplicate chunks. Extracted JSON is hashed with the chunking version. Unchanged files are skipped. A changed file deletes that `doc_id` and inserts the replacement. PDF bytes are hashed too, so a changed PDF is extracted again and then follows the same path. What would change this: a need to edit a single page without rewriting the JSON. We do not have that.
 
-## Label and year columns
+## 6. Enforce the desk inside the query
 
-`_split_label_columns` takes the trailing amounts whose gaps have no letters. Those are the year columns. A letter in a gap stops the run, so `of $91 and $94` stays on the label. If that run also has a comma-thousands figure, leading `$91`-style cells are pulled back into the label while more than two columns remain.
+Roles map to desks: consumer, health_industrials, tech_telecom, and lead (all three). The Chroma `where` and the BM25 filter both require the desk before ranking. Filtering after retrieval would still spend the top-k slots on other desks. Cost: a question that needs two desks only works for `lead`, and a company that sits on the wrong desk is invisible. What would change this: a question set where analysts routinely need another desk's filing. The brief says they do not.
 
-A bare em dash is not a column span, so `Total interest expense — net` and `— basic` stay on the label. `fold_label_dash` does the same when the dash and the following word are already separate cells.
+## 7. Hybrid search, then keep it for document rank, not page hit
 
-`DECIMAL_RE` treats `625.6` as a column. It does not treat the `7.72` inside `$ 7.72` as a separate number. One trailing amount after a word is still split. A cell that is only `$ 7.72` stays one cell.
+Baseline keyword search (BM25 only) was 25/30 document hit and 16/30 page hit. Adding semantic search and reciprocal rank fusion moved document hit to 29/30 and page MRR from 0.324 to 0.441. Page hit stayed 16/30. We kept the fusion because the right document arrives earlier, which is what the answer step reads. What would change this: a later run where fusion lowers page MRR. It has not.
 
-`split_bare_integers` splits a letter label with a tail of two or more 1–3 digit integers, as in `8 42 62`.
+## 8. Lock the reporting year, except forecasts
 
-`split_glued_dollar` turns a cell matching `$ … $` plus a following amount into `$ 9 | $ 9`.
+The same line item appears in many years. If the question names FY2021 and is not a forecast, both lists keep only that period. "Forecast", "outlook", "guidance", and "anticipat..." turn the lock off, because the evidence lives in an earlier filing. What would change this: forecast questions whose gold page is still missing after the lock is off. Boeing's FY2023 production-rate question is that case, and the lock is not the fix. See `EXPERIMENTS.md`.
 
-## Footer and prose
+## 9. A third vote for a named statement
 
-`keep_row` drops a row with no `real_amounts` hit. `Assets` and `Cash Flows from Operating Activities` are not emitted as rows.
+Questions that say "balance sheet" or "statement of cash flows" were landing on the narrative that mentions the statement. Pages whose text contains that heading get their own candidate list and a fusion vote. What would change this: the heading list matching the table of contents more often than the statement. Contents pages are dropped before fusion.
 
-`heading_fragment` may carry a label onto the next row. It allows at most 90 characters and 16 words, and it rejects a period or `the`, `our`, `this`, `that`, `following`, or `agreement`. `attach_pending` uses that text only when the next row starts with a number or a lowercase word. That is how `… benefit` joins `plans | 635 | 968 | 1,609`. A capitalized next label does not receive it.
+## 10. The model may not answer from outside the chunks
+
+`ask` sends only the retrieved chunks. `status` is `answered` only when the model marks the reply grounded and cites one of those chunks. Otherwise `status` is `refused` and `citations` is empty. A single-year amount that is printed on a retrieved statement row is copied from that row, including a unit conversion that names the printed figure. What would change this: a hidden set where the right behavior is to compute a ratio from pages that retrieval did not return. We would rather refuse.
+
+## 11. Page hit@5 is the retrieval metric
+
+Document hit is easy on this corpus once the company and year are known, and it hides the failure mode we care about: the right filing, the wrong page. Page hit@5 matches the contract, because the citation is a page. MRR is the tie-break when hit rate does not move. Answer quality is separate and requires the cited page to be a labeled evidence page.
+
+## 12. One environment variable for the answer model
+
+Answers use Ollama at `OLLAMA_HOST`, model `LLM_MODEL`, provider `LLM_PROVIDER`. Embeddings stay local either way. What would change this: a provider we cannot reach from a clean machine. Only Ollama is implemented. A paid model would be a new provider behind the same variable, which we did not add.

@@ -16,7 +16,19 @@ from src.retrieval.embeddings import embed_chunks
 COLLECTION_NAME = "gks_chunks"
 HASH_NAME = "index_hashes.json"
 BATCH = 200
-META_KEYS = ("doc_id", "company", "sector", "desk", "doc_type", "period", "page", "content_type")
+META_KEYS = (
+    "doc_id",
+    "company",
+    "sector",
+    "desk",
+    "doc_type",
+    "period",
+    "page",
+    "content_type",
+    "statement",
+    "section",
+    "columns",
+)
 
 _client = None
 
