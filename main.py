@@ -1,4 +1,3 @@
-
 import sys
 import json
 import argparse
@@ -11,6 +10,7 @@ if str(PROJECT_DIR) not in sys.path:
 from src.ingestion.ingest import ingest_all
 from src.retrieval.vector_store import index_all_extracted
 from src.retrieval.hybrid import search_hybrid
+from src.retrieval.pipeline import retrieve_for_ask, to_contract
 from src.answering.generator import generate_answer
 
 def cmd_ingest(corpus_dir):
@@ -73,10 +73,31 @@ def cmd_search(role, k, question, rerank=False):
 
 def cmd_ask(role, question, rerank=False):
     try:
-        results = search_hybrid(question, role, k=5, rerank=rerank)
+        results = retrieve_for_ask(question, role, k=5, rerank=rerank)
         response = generate_answer(question, results)
 
-        print(json.dumps(response, indent=2, ensure_ascii=False))
+        if response.get("status") == "answered_unverified":
+            print(
+                "Warning: some claims could not be verified against cited evidence",
+                file=sys.stderr,
+            )
+            print(
+                json.dumps(
+                    response.get("unsupported_claims"),
+                    indent=2,
+                    ensure_ascii=False,
+                ),
+                file=sys.stderr,
+            )
+            calculation = response.get("calculation")
+            if calculation and not calculation.get("verified"):
+                print(
+                    json.dumps(calculation, indent=2, ensure_ascii=False),
+                    file=sys.stderr,
+                )
+
+        # Contract: status is only "answered" or "refused".
+        print(json.dumps(to_contract(response), indent=2, ensure_ascii=False))
         return 0
 
     except Exception as exc:
