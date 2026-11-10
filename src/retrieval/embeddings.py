@@ -1,5 +1,9 @@
 import sys
 from pathlib import Path
+import time
+import torch
+
+torch.set_num_threads(4)
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 if str(PROJECT_DIR) not in sys.path:
@@ -15,24 +19,38 @@ ENCODE_BATCH = 64
 def get_model(name=None):
     global _model
     model_name = name or EMBEDDING_MODEL
+
     if _model is None or getattr(_model, "_gks_name", None) != model_name:
         from sentence_transformers import SentenceTransformer
-
         _model = SentenceTransformer(model_name)
         _model._gks_name = model_name
+
     return _model
 
 
 def embed_texts(texts, model_name=None):
+    t0 = time.perf_counter()
+
     model = get_model(model_name)
+
+    t1 = time.perf_counter()
+
     vectors = model.encode(
         list(texts),
         batch_size=ENCODE_BATCH,
         convert_to_numpy=True,
         show_progress_bar=len(texts) > ENCODE_BATCH,
     )
-    return [vec.tolist() for vec in vectors]
 
+    t2 = time.perf_counter()
+
+    print(
+        f"Model loading: {t1-t0:.2f}s | "
+        f"Encoding: {t2-t1:.2f}s",
+        file=sys.stderr,
+    )
+
+    return [vec.tolist() for vec in vectors]
 
 def embed_chunks(chunks, model_name=None):
     if not chunks:
