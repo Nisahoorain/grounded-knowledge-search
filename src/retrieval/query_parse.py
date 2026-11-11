@@ -25,6 +25,11 @@ ALIASES = {
 # never fires: both are word characters.
 YEAR_RE = re.compile(r"\b(?:fy\s?)?((?:19|20)\d{2})\b", re.I)
 FY2_RE = re.compile(r"\bfy\s?(\d{2})\b", re.I)
+Q_RE = re.compile(
+    r"\bq([1-4])\b|\b(first|second|third|fourth)\s+quarter\b",
+    re.I,
+)
+_QW = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 
 TYPE_PATTERNS = {
     "10k": r"\b10-?k\b",
@@ -96,6 +101,21 @@ def parse_query(question):
                     by_year = [d for d in earlier if d["year"] == latest]
             docs = by_year or docs
 
+    # Filter 10-Q filings to the named quarter before type filtering, so
+    # "Q2 of 2023" does not compete with near-identical Q1/Q3 cover pages.
+    quarters = {
+        int(a) if a else _QW[b.lower()]
+        for a, b in Q_RE.findall(q)
+    }
+    if quarters and docs:
+        year_set = years or {d["year"] for d in docs}
+        tags = {f"{y}Q{n}" for y in year_set for n in quarters}
+        quartered = [
+            d for d in docs
+            if any(t in d["doc_id"].upper() for t in tags)
+        ]
+        docs = quartered or docs
+
     types = {t for t, pat in TYPE_PATTERNS.items() if re.search(pat, q)}
     if types and docs:
         typed = [d for d in docs if d["type"] in types]
@@ -104,6 +124,7 @@ def parse_query(question):
     return {
         "companies": prefixes,
         "years": years,
+        "quarters": quarters,
         "types": types,
         "docs": docs,   # list of {doc_id, desk, type, ...}
         "clean_question": " ".join(clean.split()),

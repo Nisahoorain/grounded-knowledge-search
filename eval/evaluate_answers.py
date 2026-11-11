@@ -23,7 +23,7 @@ Structured scoring (preferred):
 
 Usage:
   python eval/evaluate_answers.py [--rerank] [--limit N] [--delay SECONDS]
-                                  [--tag TAG]
+                                  [--tag TAG] [--ids id1,id2,...]
   python eval/evaluate_answers.py --rescore eval/answer_results_gemini_delay8_dev.jsonl
 """
 import argparse
@@ -161,12 +161,24 @@ def run(questions, rerank, delay_s):
         error, chunks, response = None, [], {"status": "error", "citations": []}
         try:
             chunks = retrieve_for_ask(q["question"], q["role"], k=5, rerank=rerank)
-            response = to_contract(generate_answer(q["question"], chunks))
+            raw = generate_answer(q["question"], chunks)
+            # Keep provider_unavailable distinct from evidence refused.
+            if raw.get("status") == "provider_unavailable":
+                response = {
+                    "status": "provider_unavailable",
+                    "answer": None,
+                    "citations": [],
+                    "verified": None,
+                    "llm": raw.get("llm"),
+                }
+                error = raw.get("error") or (raw.get("llm") or {}).get("error")
+            else:
+                response = to_contract(raw)
         except Exception as exc:
-            # Keep API / provider failures distinct from grounded refusals.
+            # True crash only — not an evidence refusal.
             error = str(exc)
             response = {
-                "status": "error",
+                "status": "provider_unavailable",
                 "answer": None,
                 "citations": [],
                 "verified": None,
@@ -223,7 +235,14 @@ def summarize(rows, label):
     print("ask-path retrieval hit :", pct(sum(r.get("ask_retrieval_hit") for r in ans), len(ans)))
     print("cited gold doc+page    :", pct(sum(r.get("cited_gold") for r in ans), len(ans)))
     print("answered (not refused) :", pct(sum(r["status"] == "answered" for r in ans), len(ans)))
-    print("api/provider errors    :", pct(sum(r["status"] == "error" for r in rows), len(rows)))
+    print(
+        "api/provider errors    :",
+        pct(
+            sum(r["status"] in {"error", "provider_unavailable"} for r in rows),
+            len(rows),
+        ),
+    )
+    print("refused (no evidence)  :", pct(sum(r["status"] == "refused" for r in ans), len(ans)))
     print("correct (auto-scored)  :", pct(sum(bool(r.get("correct")) for r in scored), len(scored)),
           f"| {len(ans) - len(scored)} need manual review")
     print("answered but unverified:", sum(r["status"] == "answered" and r.get("verified") is False
@@ -237,10 +256,13 @@ def summarize(rows, label):
         over = sum(t > BUDGET_S for t in times)
         print(f"latency                : median {statistics.median(times):.1f}s | "
               f"p90 {p90:.1f}s | max {times[-1]:.1f}s | over {BUDGET_S:.0f}s budget: {over}/{len(times)}")
-    errors = [r for r in rows if r["error"] or r["status"] == "error"]
+    errors = [
+        r for r in rows
+        if r["error"] or r["status"] in {"error", "provider_unavailable"}
+    ]
     if errors:
-        first = errors[0].get("error") or "status=error"
-        print("errors                 :", len(errors), "(first:", first[:100], ")")
+        first = errors[0].get("error") or errors[0].get("status")
+        print("errors                 :", len(errors), "(first:", str(first)[:100], ")")
 
 
 def dataset_by_id():
@@ -295,6 +317,11 @@ def main():
         "--rescore",
         default="",
         help="Offline re-score an existing answer_results*.jsonl (no API calls)",
+    )
+    ap.add_argument(
+        "--ids",
+        default="",
+        help="Comma-separated question IDs to run only (e.g. fb_00603,gks_001)",
     )
     args = ap.parse_args()
 
@@ -356,6 +383,16 @@ def main():
     hold = [dict(q, _set="holdout") for q in load(HOLDOUT)
             if str(q["id"]).startswith("gks_")]
     questions = dev + hold
+    id_filter = {x.strip() for x in args.ids.split(",") if x.strip()}
+    if id_filter:
+        questions = [q for q in questions if str(q["id"]) in id_filter]
+        missing = sorted(id_filter - {str(q["id"]) for q in questions})
+        print(f"ids filter={len(id_filter)} matched={len(questions)}", flush=True)
+        if missing:
+            print(f"ids not found: {', '.join(missing)}", flush=True)
+        if not questions:
+            print("no questions matched --ids", flush=True)
+            return
     if args.limit:
         questions = questions[:args.limit]
 

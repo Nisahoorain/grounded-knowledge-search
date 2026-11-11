@@ -96,12 +96,36 @@ def cmd_ask(role, question, rerank=False):
                     file=sys.stderr,
                 )
 
-        # Contract: status is only "answered" or "refused".
-        print(json.dumps(to_contract(response), indent=2, ensure_ascii=False))
+        contracted = to_contract(response, public=True)
+        # refused = no grounded answer. provider_unavailable = backends down
+        # (Gemini→Groq→Ollama already tried) — do not fake a refusal.
+        if (
+            response.get("status") == "provider_unavailable"
+            or contracted.get("status") == "provider_unavailable"
+        ):
+            llm = response.get("llm") if isinstance(response.get("llm"), dict) else {}
+            detail = response.get("error") or llm.get("error")
+            print(
+                json.dumps(
+                    {
+                        "error": "answer backends unavailable after Gemini→Groq→Ollama",
+                        "detail": detail,
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                ),
+                file=sys.stderr,
+            )
+            return 2
+
+        print(json.dumps(contracted, indent=2, ensure_ascii=False))
         return 0
 
     except Exception as exc:
-        print(json.dumps({"error": str(exc)}), file=sys.stderr)
+        print(
+            json.dumps({"error": str(exc)}, indent=2, ensure_ascii=False),
+            file=sys.stderr,
+        )
         return 1
 
 def main():

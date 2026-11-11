@@ -1,17 +1,21 @@
-"""Free-tier answer backends.
+"""Answer backends with a no-crash fallback chain.
 
-Preferred architecture:
-  Primary  = ANSWER_PROVIDER (default: gemini)
-  Fallback = the other free provider on temporary 429 / RESOURCE_EXHAUSTED
+Preferred architecture for final / submission runs:
+  1. ANSWER_PROVIDER primary (default: gemini)
+  2. The other free hosted provider (groq ↔ gemini)
+  3. Local Ollama last resort
 
-Active providers: gemini | groq
-Ollama helpers stay for the latency experiment write-up only.
+Failures (quota, 503, missing key, Ollama down) fall through the chain.
+If every provider fails, return text=None instead of raising — callers refuse
+with the assignment contract (status answered|refused), not a hard error.
 """
+import hashlib
 import json
 import re
 import time
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 from src.config import (
     ANSWER_PROVIDER,
@@ -24,8 +28,41 @@ from src.config import (
     OLLAMA_URL,
 )
 
-ACTIVE_PROVIDERS = ("gemini", "groq")
+ACTIVE_PROVIDERS = ("gemini", "groq", "ollama")
 _RETRY_SECONDS = re.compile(r"[Rr]etry in\s+([0-9]+(?:\.[0-9]+)?)s")
+_CACHE_PATH = Path(__file__).resolve().parents[2] / "data" / "llm_cache.json"
+_cache = None
+
+
+def _provider_chain(primary):
+    """Gemini → Groq → Ollama (or Groq → Gemini → Ollama)."""
+    name = (primary or "gemini").strip().lower()
+    if name == "groq":
+        return ["groq", "gemini", "ollama"]
+    if name == "ollama":
+        return ["ollama", "gemini", "groq"]
+    return ["gemini", "groq", "ollama"]
+
+
+def _load_cache():
+    if not _CACHE_PATH.exists():
+        return {}
+    try:
+        return json.loads(_CACHE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _get_cache():
+    global _cache
+    if _cache is None:
+        _cache = _load_cache()
+    return _cache
+
+
+def _save_cache():
+    _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _CACHE_PATH.write_text(json.dumps(_get_cache()), encoding="utf-8")
 
 
 def _post_json(url, payload, headers, timeout=60):
@@ -53,6 +90,20 @@ def _is_rate_limited(exc):
     )
 
 
+def _is_temporary(exc):
+    """Retryable provider pressure: RPM 429, 503 high-demand, brief unavailability."""
+    msg = str(exc)
+    low = msg.lower()
+    return (
+        _is_rate_limited(exc)
+        or "HTTP 503" in msg
+        or "UNAVAILABLE" in msg
+        or "high demand" in low
+        or "temporarily" in low
+        or "try again later" in low
+    )
+
+
 def _is_daily_quota(exc):
     """Daily free-tier exhaustion should fall back immediately, not sleep/retry."""
     msg = str(exc).lower()
@@ -60,6 +111,7 @@ def _is_daily_quota(exc):
         "per day" in msg
         or "requests per day" in msg
         or "free_tier_requests" in msg
+        or "quota" in msg and ("per day" in msg or "daily" in msg)
         or "retry in" in msg and ("h" in msg or "hour" in msg)
     )
 
@@ -143,11 +195,13 @@ def _call_provider(provider, prompt):
         return _chat_groq(prompt)
     if provider == "gemini":
         return _chat_gemini(prompt)
-    raise RuntimeError(f"Unknown provider={provider!r}. Use gemini or groq.")
+    if provider == "ollama":
+        return _chat_ollama(prompt)
+    raise RuntimeError(f"Unknown provider={provider!r}. Use gemini, groq, or ollama.")
 
 
 def _call_with_backoff(provider, prompt, max_retries=None):
-    """Same prompt/evidence; retry only on temporary rate limits."""
+    """Same prompt/evidence; retry temporary 429/503; fail over on daily quota."""
     retries = LLM_MAX_RETRIES if max_retries is None else max_retries
     last_exc = None
     for attempt in range(retries + 1):
@@ -161,8 +215,8 @@ def _call_with_backoff(provider, prompt, max_retries=None):
             }
         except Exception as exc:
             last_exc = exc
-            # Daily quota will not clear with short sleeps — fail over now.
-            if _is_daily_quota(exc) or not _is_rate_limited(exc) or attempt >= retries:
+            # Daily quota / hard errors: stop this provider and let the chain continue.
+            if _is_daily_quota(exc) or not _is_temporary(exc) or attempt >= retries:
                 return {
                     "provider": provider,
                     "text": None,
@@ -171,7 +225,7 @@ def _call_with_backoff(provider, prompt, max_retries=None):
                 }
             wait = _retry_after_seconds(exc, attempt)
             print(
-                f"{provider} rate-limited; backoff {wait:.1f}s "
+                f"{provider} temporary failure; backoff {wait:.1f}s "
                 f"(attempt {attempt + 1}/{retries + 1})",
                 flush=True,
             )
@@ -184,52 +238,71 @@ def _call_with_backoff(provider, prompt, max_retries=None):
     }
 
 
-def chat_complete_with_meta(prompt):
-    """Return answer text plus per-provider logs. Same prompt for primary and fallback."""
-    provider = (ANSWER_PROVIDER or "gemini").strip().lower()
-    if provider == "ollama":
-        raise RuntimeError(
-            "ANSWER_PROVIDER=ollama is disabled. "
-            "Use gemini or groq. Ollama remains in code for the latency experiment only."
-        )
-    if provider not in ACTIVE_PROVIDERS:
-        raise RuntimeError(
-            f"Unknown ANSWER_PROVIDER={provider!r}. Use gemini or groq."
-        )
+def _chat_complete_with_meta_uncached(prompt):
+    """Try Gemini → Groq → Ollama (last resort).
 
-    fallback = "groq" if provider == "gemini" else "gemini"
+    Hosted API failure must not look like an evidence refusal — we always
+    continue to the next provider, ending on Ollama. Only if every backend
+    fails do we return text=None (caller marks provider_unavailable).
+    """
+    primary = (ANSWER_PROVIDER or "gemini").strip().lower()
+    if primary not in ACTIVE_PROVIDERS:
+        primary = "gemini"
+
+    chain = _provider_chain(primary)
+    # Guarantee Ollama is last even if ANSWER_PROVIDER was odd.
+    chain = [p for p in chain if p != "ollama"] + ["ollama"]
     attempts = []
+    errors = []
 
-    primary = _call_with_backoff(provider, prompt)
-    attempts.append(primary)
-    if primary["text"] is not None:
-        return {
-            "text": primary["text"],
-            "provider_used": provider,
-            "fallback_used": False,
-            "attempts": attempts,
+    for i, name in enumerate(chain):
+        if i > 0:
+            print(
+                f"{attempts[-1]['provider']} failed; falling back to {name}",
+                flush=True,
+            )
+        # Give local Ollama more chances — it is the last option, not a refuse.
+        retries = LLM_MAX_RETRIES + 2 if name == "ollama" else None
+        result = _call_with_backoff(name, prompt, max_retries=retries)
+        attempts.append(result)
+        if result["text"] is not None:
+            return {
+                "text": result["text"],
+                "provider_used": name,
+                "fallback_used": i > 0,
+                "attempts": attempts,
+            }
+        errors.append(f"{name}: {result.get('error')}")
+
+    return {
+        "text": None,
+        "provider_used": None,
+        "fallback_used": True,
+        "attempts": attempts,
+        "error": " | ".join(errors),
+        "provider_unavailable": True,
+    }
+
+
+def chat_complete_with_meta(prompt):
+    """Disk-cached wrapper. Temperature is 0, so identical prompts reuse answers."""
+    key = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    cache = _get_cache()
+    hit = cache.get(key)
+    if hit and hit.get("text"):
+        return {**hit, "cached": True}
+
+    out = _chat_complete_with_meta_uncached(prompt)
+    # Cache only successful generations (never errors / empty).
+    if out.get("text"):
+        cache[key] = {
+            "text": out["text"],
+            "provider_used": out.get("provider_used"),
+            "fallback_used": out.get("fallback_used"),
+            "attempts": out.get("attempts"),
         }
-
-    if not _is_rate_limited(RuntimeError(primary["error"] or "")):
-        raise RuntimeError(
-            f"{provider} answer generation failed: {primary['error']}"
-        )
-
-    print(f"{provider} exhausted/temporary failure; falling back to {fallback}", flush=True)
-    secondary = _call_with_backoff(fallback, prompt)
-    attempts.append(secondary)
-    if secondary["text"] is not None:
-        return {
-            "text": secondary["text"],
-            "provider_used": fallback,
-            "fallback_used": True,
-            "attempts": attempts,
-        }
-
-    raise RuntimeError(
-        f"{provider} failed ({primary['error']}); "
-        f"{fallback} fallback also failed: {secondary['error']}"
-    )
+        _save_cache()
+    return out
 
 
 def chat_complete(prompt):
