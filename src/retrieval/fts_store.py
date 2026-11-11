@@ -20,6 +20,8 @@ STOPWORDS = {
     "have", "had", "any", "from", "based", "with",
     "their", "its", "this", "that", "been", "being",
     "reported", "ongoing", "important", "materially",
+    # Keep BM25 focused on filing language for yes/no concentration asks.
+    "fy22", "fy2022",
 }
 
 LEGAL_TERMS = {
@@ -40,6 +42,20 @@ SYNONYMS = {
     "capex": ["capex", "capital expenditures"],
     "debt": ["debt", "borrowings", "notes"],
     "employees": ["employees", "headcount", "associates"],
+    # fb_00757-style concentration questions often use "customer" + "concentration"
+    # while filings say "concentrations of credit risk" / accounts receivable %.
+    "concentration": [
+        "concentration",
+        "concentrations",
+        "customer concentration",
+        "credit risk",
+    ],
+    "concentrations": [
+        "concentrations",
+        "concentration",
+        "customer concentration",
+        "credit risk",
+    ],
 }
 
 

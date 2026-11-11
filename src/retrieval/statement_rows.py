@@ -57,7 +57,39 @@ _METRICS = (
             ("net sales", ("net sales", "revenue"), "income", ("net sales", "net revenue", "total revenues", "total revenue", "revenue")),
         ),
     ),
+    (
+        r"free cash\s*flow|cash\s*flow conversion",
+        (
+            (
+                "net cash provided by operating activities",
+                ("operating activities",),
+                "cash_flow",
+                (
+                    "net cash provided by operating activities",
+                    "cash provided by operating activities",
+                ),
+            ),
+            (
+                "capital expenditures",
+                ("capital expenditure", "purchases of property"),
+                "cash_flow",
+                (
+                    "purchases of property",
+                    "capital expenditure",
+                    "payments for property",
+                ),
+            ),
+            (
+                "net income",
+                ("net income", "net earnings", "net loss"),
+                "income",
+                ("net income", "net earnings", "net loss"),
+            ),
+        ),
+    ),
 )
+
+_AMOUNT_Q = re.compile(r"\b(what (?:is|was|were)|how much)\b")
 
 _STATEMENT_RES = (
     ("balance_sheet", re.compile(r"balance sheets?\b")),
@@ -127,7 +159,11 @@ def line_items_in(question):
 
     named = statements_in_question(question)
     metric = any(re.search(pattern, low) for pattern, _extras in _METRICS)
-    if len(items) >= 2 or named or metric:
+    # Single plain line item (e.g. "What were Pfizer's total revenues for FY2022?")
+    # used to return [] and skip statement-row attach / deterministic path.
+    one_year = len(set(re.findall(r"(?:19|20)\d{2}", low))) == 1
+    amount_q = bool(_AMOUNT_Q.search(low)) and one_year
+    if len(items) >= 2 or named or metric or (len(items) == 1 and amount_q):
         return items
     return []
 

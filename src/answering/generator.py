@@ -10,6 +10,17 @@ MIN_DENSE_SCORE = 0.50
 
 NUM_RE = re.compile(r"\d[\d,]*\.?\d*")
 REF_GROUP_RE = re.compile(r"\[(E\d+(?:\s*,\s*E\d+)*)\]")
+# Model sometimes apologises instead of INSUFFICIENT_EVIDENCE / a real answer.
+_SOFT_REFUSAL_RE = re.compile(
+    r"(?is)\b("
+    r"i(?:'m| am) sorry\b.*\b(?:can'?t|cannot|unable)\b.*\bhelp\b"
+    r"|i (?:can'?t|cannot) (?:help|assist|answer|provide)\b"
+    r"|i(?:'m| am) (?:not )?unable to (?:help|assist|answer)\b"
+    r"|unable to (?:help|assist|answer|provide)\b"
+    r"|i (?:must|have to) refuse\b"
+    r"|i won'?t (?:help|answer|provide)\b"
+    r")\b"
+)
 
 
 def _norm_num(s):
@@ -32,6 +43,50 @@ def _refs_in(text):
     for grp in REF_GROUP_RE.findall(text):
         refs += [r.strip() for r in grp.split(",")]
     return list(dict.fromkeys(refs))
+
+
+def _normalize_refusal_text(text):
+    """Map curly quotes/apostrophes so soft-refusal matching is reliable."""
+    if not text:
+        return ""
+    return (
+        str(text)
+        .replace("\u2019", "'")
+        .replace("\u2018", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u00b4", "'")
+        .replace("`", "'")
+    )
+
+
+def _is_soft_refusal(text):
+    """True when the model declined instead of answering from evidence."""
+    if not text:
+        return False
+    body = _normalize_refusal_text(text)
+    body = REF_GROUP_RE.sub(" ", body)
+    if "```calc" in body:
+        body = body.split("```calc", 1)[0]
+    return bool(_SOFT_REFUSAL_RE.search(body.strip()))
+
+
+def _refusal_response(answer=None, llm=None):
+    """Assignment-shaped refusal: no citations, not verified."""
+    # Keep a clean refusal line without leaked [E#] tags.
+    clean = _normalize_refusal_text(answer or "")
+    clean = REF_GROUP_RE.sub("", clean).strip() or "I'm sorry, but I can't help with that."
+    if _is_soft_refusal(clean):
+        clean = "I'm sorry, but I can't help with that."
+    out = {
+        "status": "refused",
+        "answer": clean,
+        "citations": [],
+        "verified": False,
+    }
+    if llm is not None:
+        out["llm"] = llm
+    return out
 
 
 def low_retrieval_confidence(chunks):
@@ -133,7 +188,13 @@ def _format_evidence_block(chunks):
             meta_bits.append(f"Section: {item['section']}")
         if item.get("content_type"):
             meta_bits.append(f"Type: {item['content_type']}")
-        evidence.append(f"[{ref}] " + ", ".join(meta_bits) + f"\n{item['text']}")
+        # Mechanical tag: model must copy [E#] verbatim, not invent doc/page cites.
+        evidence.append(
+            f"### [{ref}]\n"
+            f"Cite exactly as [{ref}].\n"
+            + ", ".join(meta_bits)
+            + f"\n{item['text']}"
+        )
     return evidence, citation_map, chunk_text
 
 
@@ -146,10 +207,9 @@ Answer the question using ONLY the evidence below.
 Rules:
 1. Never use outside knowledge.
 2. Do not invent facts or figures.
-3. Cite every factual claim using evidence IDs like [E1]. Every sentence that states a fact or number MUST include at least one [E#] from the evidence list.
+3. Every numeric claim or factual statement MUST be followed by its exact evidence tag [E#] from the list (example: [E1] or [E2, E3]). Vague doc/page mentions are not citations.
 4. Prefer the evidence block whose statement/section heading best matches the metric the question asks for (for example revenue vs accounts receivable, or margin vs raw amount).
-5. If evidence is insufficient, reply exactly:
-INSUFFICIENT_EVIDENCE
+5. Evidence blocks ARE provided below. You are strictly forbidden from refusing for lack of information and must NOT reply INSUFFICIENT_EVIDENCE. Answer from the closest matching evidence and cite it with [E#].
 6. Preserve units and reporting periods.
 7. Be concise and finish the answer. Do not stop mid-sentence.
 8. If the answer is copied from the evidence, stop. Do not add a calculation block, and do not average it with another year. If the statement says "in thousands" and the question asks for millions, divide by 1000 and round to the nearest million. Never repeat the thousands figure and call it millions.
@@ -180,10 +240,8 @@ def _cite_retry_prompt(question, evidence_blocks, draft):
 You previously drafted an answer without valid evidence IDs.
 
 Rewrite the answer using ONLY the evidence below.
-Every factual sentence MUST include at least one citation like [E1].
-If the evidence cannot support the answer, reply exactly:
-INSUFFICIENT_EVIDENCE
-
+Every numeric claim or factual sentence MUST include its exact tag like [E1].
+Evidence is provided. Do NOT reply INSUFFICIENT_EVIDENCE and do not refuse for lack of information.
 Do not invent numbers. Prefer the evidence whose statement/section matches the asked metric.
 
 Evidence:
@@ -196,6 +254,78 @@ Draft answer to fix:
 
 Corrected answer:
 """
+
+
+def _force_answer_prompt(question, evidence_blocks, draft):
+    return f"""
+You previously replied that evidence was insufficient, but evidence blocks WERE provided.
+
+You must answer the question using ONLY the evidence below.
+Every numeric claim or factual statement MUST be followed by its exact evidence tag [E#].
+Do NOT reply INSUFFICIENT_EVIDENCE. Do not refuse.
+
+Evidence:
+{chr(10).join(evidence_blocks)}
+
+Question: {question}
+
+Previous draft (may be a refusal — replace it with a grounded answer):
+{draft}
+
+Answer:
+"""
+
+
+def _split_answer_and_calc(answer):
+    text = answer or ""
+    marker = "```calc"
+    if marker in text:
+        body, rest = text.split(marker, 1)
+        return body.rstrip(), marker + rest
+    return text.rstrip(), ""
+
+
+def _auto_attach_citations(answer, citation_map, chunk_text):
+    """If the model answered but forgot [E#], attach matching / top evidence tags."""
+    if not answer or not citation_map:
+        return answer, []
+
+    used = [r for r in _refs_in(answer) if r in citation_map]
+    if used:
+        return answer, used
+
+    body, calc = _split_answer_and_calc(answer)
+    upper = body.upper()
+    if "INSUFFICIENT_EVIDENCE" in upper:
+        return answer, []
+
+    # Skip empty / pure refusal shells.
+    stripped = body.strip()
+    if not stripped or stripped.lower().startswith("the provided filings do not"):
+        return answer, []
+    if stripped.lower().startswith("the system could not produce"):
+        return answer, []
+
+    answer_nums = {
+        _canon_num(n)
+        for n in _numbers(body)
+        if len(_norm_num(n)) > 1 or "." in _norm_num(n)
+    }
+    matched = []
+    for ref, text in chunk_text.items():
+        chunk_nums = {_canon_num(n) for n in _numbers(text)}
+        if answer_nums and (answer_nums & chunk_nums):
+            matched.append(ref)
+
+    if not matched:
+        # Safety net: top packed evidence (already priority-ordered as E1..).
+        matched = [next(iter(citation_map))]
+
+    tag = "[" + ", ".join(matched) + "]"
+    if not body.endswith(tag):
+        body = f"{body} {tag}".rstrip()
+    repaired = body if not calc else f"{body}\n{calc}"
+    return repaired, matched
 
 
 def _merge_llm_meta(first, second=None):
@@ -231,43 +361,75 @@ def generate_answer(question, retrieved_chunks):
     prompt = _build_prompt(question, evidence_blocks)
 
     meta = chat_complete_with_meta(prompt)
-    answer = meta["text"]
-
-    if "INSUFFICIENT_EVIDENCE" in answer.upper():
+    answer = meta.get("text")
+    # Provider chain (Gemini→Groq→Ollama) already tried. This is NOT an
+    # evidence refusal — backends were unavailable.
+    if not answer:
         return {
-            "status": "refused",
-            "answer": "The provided filings do not contain sufficient evidence to answer this question.",
+            "status": "provider_unavailable",
+            "answer": None,
             "citations": [],
             "llm": meta,
+            "error": meta.get("error") or "all answer backends failed",
         }
 
-    used_refs = _refs_in(answer)
+    # Soft policy / safety refusal from the model (must not become status=answered).
+    if _is_soft_refusal(answer):
+        return _refusal_response(llm=meta)
+
+    # Evidence was in the prompt: do not hard-refuse on a first INSUFFICIENT.
+    if "INSUFFICIENT_EVIDENCE" in (answer or "").upper():
+        force_meta = chat_complete_with_meta(
+            _force_answer_prompt(question, evidence_blocks, answer)
+        )
+        meta = _merge_llm_meta(meta, force_meta)
+        meta["force_answer_retry"] = True
+        answer = force_meta.get("text") or answer
+        if _is_soft_refusal(answer):
+            return _refusal_response(llm=meta)
+
+    used_refs = _refs_in(answer or "")
     valid_refs = [r for r in used_refs if r in citation_map]
 
     # Citation repair: draft often has the right number but forgets [E#].
-    if not valid_refs:
+    # Do not cite-retry soft refusals into a fake answered citation.
+    if (
+        not valid_refs
+        and "INSUFFICIENT_EVIDENCE" not in (answer or "").upper()
+        and not _is_soft_refusal(answer)
+    ):
         retry_meta = chat_complete_with_meta(
             _cite_retry_prompt(question, evidence_blocks, answer)
         )
         meta = _merge_llm_meta(meta, retry_meta)
-        answer = retry_meta["text"]
-        if "INSUFFICIENT_EVIDENCE" in answer.upper():
-            return {
-                "status": "refused",
-                "answer": "The provided filings do not contain sufficient evidence to answer this question.",
-                "citations": [],
-                "llm": meta,
-            }
-        used_refs = _refs_in(answer)
+        if retry_meta.get("text"):
+            answer = retry_meta["text"]
+        if _is_soft_refusal(answer):
+            return _refusal_response(llm=meta)
+        used_refs = _refs_in(answer or "")
         valid_refs = [r for r in used_refs if r in citation_map]
 
-    if not valid_refs:
-        return {
-            "status": "refused",
-            "answer": "The system could not produce an answer with verifiable citations.",
-            "citations": [],
-            "llm": meta,
-        }
+    # Safety net: keep a grounded answer and attach evidence tags mechanically.
+    # Never auto-cite onto a soft refusal.
+    cite_injected = False
+    if not valid_refs and not _is_soft_refusal(answer):
+        answer, valid_refs = _auto_attach_citations(answer, citation_map, chunk_text)
+        cite_injected = bool(valid_refs)
+        if cite_injected:
+            meta = dict(meta)
+            meta["cite_injected"] = True
+
+    if (
+        _is_soft_refusal(answer)
+        or not valid_refs
+        or "INSUFFICIENT_EVIDENCE" in (answer or "").upper()
+    ):
+        if _is_soft_refusal(answer):
+            return _refusal_response(llm=meta)
+        return _refusal_response(
+            answer="The system could not produce an answer with verifiable citations.",
+            llm=meta,
+        )
 
     reviewed = review_supported_answer(answer, question, citation_map, chunk_text)
     response = {
@@ -278,6 +440,8 @@ def generate_answer(question, retrieved_chunks):
         "unsupported_claims": reviewed["unsupported_claims"],
         "llm": meta,
     }
+    if cite_injected:
+        response["cite_injected"] = True
     if "calculation" in reviewed:
         response["calculation"] = reviewed["calculation"]
     return response

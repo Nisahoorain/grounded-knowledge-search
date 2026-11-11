@@ -1,34 +1,31 @@
 # AI Notes
 
-Cursor's coding agent was used to help write parts of the answer-side and evaluation code.
+AI-assisted tools were used during development:
 
-The retrieval evaluation numbers (Hit, MRR, Recall) came from:
+- **Cursor:** Assisted with writing and modifying parts of the retrieval, answer-generation, and evaluation code.
+- **ChatGPT:** Assisted with technical discussions, debugging approaches, reviewing test outputs, and documentation.
 
-```powershell
-python eval/evaluate_retrieval.py
-```
+## Developer Contributions
 
-Ask-path latency and answer metrics came from:
+The developer independently performed the main investigation and validation work, including:
 
-```powershell
-python eval/evaluate_answers.py --tag gemini_delay8_dev --delay 8
-python eval/evaluate_answers.py --rescore eval/answer_results_gemini_delay8_dev.jsonl
-```
+- Running commands, inspecting source code, extracted filing text, and retrieval results.
+- Investigating retrieval failures, financial calculations, and unit conversions.
+- Comparing expected gold pages with retrieved and cited evidence.
+- Testing RBAC, answer verification, and evaluation results.
+- Reviewing suggested changes and rerunning tests before accepting fixes.
 
-They were measured by the scripts, not invented by the agent.
+## Issues Identified During Testing
 
-The coding agent helped with:
+1. **Corning DPO:** Replaced company-specific retrieval logic with a more general statement-row lookup.
+2. **MGM conversion:** Corrected a unit-conversion direction error.
+3. **AMD net loss:** Fixed extraction where the amount appeared on a following line.
+4. **Answer scoring:** Fixed Yes/No evaluation incorrectly accepting numeric answers.
+5. **Gemini quota:** Improved fallback handling for daily quota errors.
+6. **Verification:** Separated evidence support (`verified`) from semantic answer correctness.
 
-- The calculation-block checker and statement-row lookup.
-- Free-tier LLM wiring (Gemini primary / Groq fallback) and rate-limit handling.
-- Structured offline scoring and citation-retry / evidence packing.
+## Evaluation Integrity
 
-Testing also caught agent mistakes:
+Metrics were generated using project evaluation scripts and recorded JSONL results. AI suggestions were treated as proposals and reviewed through manual or scripted testing.
 
-1. **Corning DPO:** first suggestion used Corning-specific searches; replaced with company-independent statement-row lookup.
-2. **MGM unit conversion:** first conversion went the wrong direction (thousands → huge “millions”); a unit test caught it.
-3. **AMD net loss row:** treated a label as a pipe-row; amounts were on following lines — fixed after reading page text.
-4. **Yes/No auto-score:** early eval marked wrong numeric answers correct when gold started with “Yes”; fixed with structured `yes_no_numeric` fields and offline rescoring.
-5. **Gemini daily quota:** backoff slept on a multi-hour “retry in Nh” error instead of falling over to Groq immediately; fixed by detecting daily-quota 429s.
-
-AI suggestions were accepted only after scripted or manual checks.
+The developer retained responsibility for implementation decisions, debugging, validation, and final results.

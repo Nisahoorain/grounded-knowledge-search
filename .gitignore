@@ -1,20 +1,28 @@
-venv/
-.venv/
-__pycache__/
-*.pyc
-
-pdfs/
+# Secrets and local config
 .env
+.env.local
+*.pem
 
-pdf_inspection_output/
-data/extracted/
-data/chroma_db/
-data/bm25_index.pkl
-data/bm25_index.pkl.tmp
+# LLM response cache (regenerable; may contain prompt text)
+data/llm_cache.json
 
-Grounded Knowledge Search.pdf
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
 
-AI Engineer Assignment Grounded Knowledge Search.pdf
+# Local ask / debug dumps
+ask_*.txt
+ask_stdout*.txt
+ask_stderr*.txt
+ask_timing_err.txt
 
-
-data/*.sqlite3*
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
