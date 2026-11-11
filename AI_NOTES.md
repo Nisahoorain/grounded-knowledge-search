@@ -1,27 +1,34 @@
 # AI Notes
 
-Cursor's coding agent was used to help write parts of the answer-side code.
+Cursor's coding agent was used to help write parts of the answer-side and evaluation code.
 
-The retrieval evaluation results, including Hit and MRR, came from running:
+The retrieval evaluation numbers (Hit, MRR, Recall) came from:
 
 ```powershell
 python eval/evaluate_retrieval.py
 ```
 
-They were measured by the evaluation script, not produced by the coding agent.
+Ask-path latency and answer metrics came from:
+
+```powershell
+python eval/evaluate_answers.py --tag gemini_delay8_dev --delay 8
+python eval/evaluate_answers.py --rescore eval/answer_results_gemini_delay8_dev.jsonl
+```
+
+They were measured by the scripts, not invented by the agent.
 
 The coding agent helped with:
 
-- The calculation-block checker.
-- Retrieving financial statement rows during `ask`.
-- Reading year-column values to calculate formulas without relying on the language model.
+- The calculation-block checker and statement-row lookup.
+- Free-tier LLM wiring (Gemini primary / Groq fallback) and rate-limit handling.
+- Structured offline scoring and citation-retry / evidence packing.
 
-Testing also caught three mistakes in the agent's suggestions:
+Testing also caught agent mistakes:
 
-1. **Corning DPO:** The first suggested solution used three searches written specifically for Corning. This would not work as a general solution for other companies. It was replaced with a company-independent statement-row lookup.
+1. **Corning DPO:** first suggestion used Corning-specific searches; replaced with company-independent statement-row lookup.
+2. **MGM unit conversion:** first conversion went the wrong direction (thousands → huge “millions”); a unit test caught it.
+3. **AMD net loss row:** treated a label as a pipe-row; amounts were on following lines — fixed after reading page text.
+4. **Yes/No auto-score:** early eval marked wrong numeric answers correct when gold started with “Yes”; fixed with structured `yes_no_numeric` fields and offline rescoring.
+5. **Gemini daily quota:** backoff slept on a multi-hour “retry in Nh” error instead of falling over to Groq immediately; fixed by detecting daily-quota 429s.
 
-2. **MGM unit conversion:** The first conversion was in the wrong direction. It changed 302,578 thousand into 302,578,000 million. A unit test exposed the error, and the conversion was corrected.
-
-3. **AMD net loss row:** The agent treated AMD's operations statement's "Net loss" as a table row in the index. However, the amounts appear on the lines below the label in the page text. The lookup initially selected a different summary on page 34. Reading the actual page text helped identify the correct evidence.
-
-These examples show why AI-generated code was tested before its results were accepted.
+AI suggestions were accepted only after scripted or manual checks.

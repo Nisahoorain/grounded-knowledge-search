@@ -178,3 +178,41 @@ For example, when a filing reports amounts in thousands and the question asks fo
 The system does not average another year's value when the question asks for only one year.
 
 Questions involving margins, working capital, capital intensity, quarters, or multiple years are not treated as simple single-line lookups.
+
+## 8. Answer Backend: Gemini Primary, Groq Fallback
+
+Local Ollama on CPU was too slow for the 5-second budget (often 100s+ per answer on this laptop). Free hosted APIs are allowed by the brief.
+
+**Options considered:** Ollama only; Groq only; Gemini only; Gemini primary with Groq fallback.
+
+**Evidence:** Ollama-era answer eval median ~134s. Earlier Gemini Delay-8 dev median ~7.3s with 0 provider errors. After switching to `GEMINI_MODEL=gemini-3.5-flash`, a Delay-8 user-test run (`answer_results_gemini35_usertest.jsonl`) kept retrieval/citation in the same band (dev hit 70% / cited 35%; holdout hit 90% / cited 40%) but saw mid-run **503** high-demand and **429** quota errors (dev median 9.3s; 5/30 provider errors overall). Groq still rescued several holdout asks. Free-tier RPD/RPM limits remain binding.
+
+**Decision:** `ANSWER_PROVIDER=gemini` by default with `GEMINI_MODEL=gemini-3.5-flash`. On HTTP 429 / daily quota / temporary failure, fall back to Groq with the same prompt and evidence. Ollama code remains for the latency experiment write-up but is not an active provider. Daily-quota errors skip local retries and fall over immediately.
+
+**What would change this:** a stable free tier with higher RPD, or a GPU for local embedding/rerank (and local LLM if used again).
+
+**Hardware framing:** the project was built and timed on CPU-only hardware. The 5s budget improved by moving generation off local Ollama to free hosted APIs. Residual over-5s latency is largely local embedding/search on CPU — those stages would improve on GPU. Hosted Gemini/Groq remain network/API-bound, so a local GPU is not claimed as an automatic fix for every ask under 5s.
+
+## 9. Access Control Is Enforced in Retrieval
+
+Desk filtering uses chunk metadata `desk` in both Chroma (`where`) and BM25 SQL. Role → desk lists come from `ROLE_DESKS` / `DESK_*` env vars in `src/config.py`. The lead role lists every desk. Prompt-only filtering was rejected because citations could still leak other desks' chunks.
+
+**Cost:** non-lead roles search a smaller candidate set (faster, less recall across desks by design). Lead searches all desks (larger candidate pool). Company/year filters further narrow `doc_id`s when the query names them.
+
+## 10. Runtime Verification vs Offline Scoring Stay Separate
+
+Structured fields (`answer_type`, `expected_number`, `expected_polarity`, `expected_metric_keywords`) are benchmark annotations only. `ask` never reads gold answers.
+
+| Metric | Meaning |
+|---|---|
+| `ask_retrieval_hit` | Gold page was among retrieved chunks |
+| `verified` | Citations/calc checks against cited evidence |
+| `correct` | Offline score vs gold (structured or manual) |
+
+**Decision:** improve runtime grounding (citations, calc blocks, evidence packing) for unseen questions; use structured scoring only on labeled eval sets. Missing `answer_type` → `correct=None` (manual review), not a blind Yes/No match.
+
+## 11. Citation Repair Before Hard Refuse
+
+Several hit questions were refused only because the model omitted `[E#]` even when it had copied a filing number (`fb_04980`, `fb_00603`, `fb_02608`).
+
+**Decision:** pack statement/table evidence first, require `[E#]` in the prompt, and run one cite-retry rewrite before returning “no verifiable citations.” Soften dense-only refusal when BM25 or statement-row evidence is present.

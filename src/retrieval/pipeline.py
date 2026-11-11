@@ -22,10 +22,11 @@ def retrieve_for_ask(question, role, k=5, rerank=False):
 
 
 def to_contract(response):
-    """Map internal statuses to the two the brief allows.
+    """Map internal statuses to the two the brief allows for `ask`.
 
     answered_unverified -> status "answered" + verified False.
-    Extra fields (verification, calculation, unsupported_claims) stay.
+    Extra fields (verification, calculation, unsupported_claims, llm) stay.
+    status=error is eval-only and is left unchanged if present.
     """
     out = dict(response)
     status = out.get("status")
@@ -34,7 +35,9 @@ def to_contract(response):
         out["verified"] = False
     elif status == "answered":
         out.setdefault("verified", True)
-    elif status != "refused":
+    elif status in {"refused", "error"}:
+        pass
+    else:
         # Unknown internal status: safest public value is a refusal.
         out["status"] = "refused"
     return out

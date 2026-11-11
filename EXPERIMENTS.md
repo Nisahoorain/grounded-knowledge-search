@@ -202,3 +202,83 @@ The net-income search sometimes returned a different row from page 34. The requi
 - Normal retrieval evaluation does not measure the additional statement rows retrieved by `ask`.
 
 All answer-side improvements were made without rebuilding the existing Chroma or BM25 indexes.
+
+## 5. Answer Backend and Latency
+
+| Experiment | What changed | Result | Kept? |
+|---|---|---|---|
+| Ollama CPU (`llama3.2`) | Local generation on i5 laptop | Answer-eval median ~134s; many timeouts; 5s budget missed on almost every LLM call | No as default; code kept for write-up |
+| Gemini free tier | `ANSWER_PROVIDER=gemini` | Delay-8 dev median **7.3s**; 0 API errors on that 20-Q run; daily RPD ~20 then HTTP 429 for hours | Yes as primary |
+| Groq free tier | `openai/gpt-oss-20b` | Often ~1–3s per generation; RPM 429 if eval has no delay | Yes as 429 fallback |
+| Eval request delay 8s | Space between questions | Stable Gemini dev run; delay does **not** raise daily quotas | Yes for eval |
+| Gemini model → `gemini-3.5-flash` | New API key + model in `.env` | User-test run (below); same primary/fallback design | Yes as current default |
+
+**Lesson:** on this machine the bottleneck was local LLM + embedding load, not retrieval logic alone. Free-tier APIs fix latency but introduce quota management.
+
+### Hardware note (CPU vs GPU)
+
+Development ran on an **i5 laptop with no CUDA GPU** (Intel UHD only). Local stages — embedding load/encode (`all-MiniLM`), Chroma search, and previously Ollama — are **CPU-bound**. That is a main reason end-to-end ask often still exceeds the ~5s budget even after switching generation to Gemini/Groq (Delay-8 median **7.3s**, **15/20** over 5s).
+
+| Stage | Bound by | GPU impact |
+|---|---|---|
+| Embedding / optional rerank | Local CPU | Would clearly speed up |
+| Chroma / BM25 retrieval | Local CPU | Modest benefit |
+| Answer generation (Gemini/Groq) | Network + free-tier API | Not fixed by local GPU |
+| Ollama (retired as default) | Local CPU | Would have helped a lot |
+
+**Claim we make:** the 5s budget **improved** vs the Ollama-CPU baseline (~134s median → ~7.3s). Remaining over-budget time is largely local embedding/search on CPU; moving those stages to a GPU would reduce local latency. We do **not** claim a local GPU alone guarantees every ask under 5s, because hosted generation remains network/API-bound.
+
+## 6. Answer-Quality Eval (Ask Path)
+
+Settings: `retrieve_for_ask` + `generate_answer`, k=5, Delay-8 Gemini primary.
+
+| Metric (dev 20) | Prior Gemini Delay-8 | User test `gemini-3.5-flash` |
+|---|---:|---:|
+| Ask-path retrieval hit | 14/20 (70%) | 14/20 (70%) |
+| Cited gold doc+page | 7/20 (35%) | 7/20 (35%) |
+| Answered | 11/20 (55%) | 10/20 (50%) |
+| API errors | 0/20 | 3/20 (15%) |
+| Median latency | 7.3s | 9.3s |
+| Over 5s budget | 15/20 | 17/20 |
+
+### User testing after API/model change (`gemini-3.5-flash`)
+
+Run tag: `eval/answer_results_gemini35_usertest.jsonl` (Delay-8, 20 dev + 10 holdout). Treated as end-user style ask-path testing after switching the Gemini model/key.
+
+| Set | Hit | Gold cited | Answered | API errors | Median latency | Over 5s |
+|---|---:|---:|---:|---:|---:|---:|
+| Dev (20) | 70% | 35% | 50% | 15% | 9.3s | 17/20 |
+| Holdout (10) | 90% | 40% | 60% | 20% | 8.9s | 9/10 |
+| All (30) | 77% | 37% | 53% | 17% | 8.9s | 26/30 |
+
+**What worked in the session (examples):**
+- Direct calc / statement paths without LLM: MGM FY2018 accounts payable → **303 million**; Boeing FY2018 net PP&E → **12,645 million**.
+- Gemini answers with gold citation: PepsiCo FY2021 capex (~$4,625M); MGM FY2022 dividends (yes, $0.01/share).
+- After Gemini quota/pressure, Groq fallback still answered holdout items (e.g. Boeing production models; Ulta “25,000+ products / 600+ brands”).
+
+**What failed honestly:** mid-run Gemini **HTTP 503** (model high demand) and later **HTTP 429** (quota). Groq fallback absorbed several questions but also hit RPM backoff, leaving **5/30** as `status=error`. Retrieval quality stayed in line with the prior Delay-8 snapshot; provider availability, not search, drove the extra errors and slightly higher median latency.
+
+### Evaluator honesty experiment
+
+Yes/No-only auto-scoring marked `fb_00757` and `fb_00005` correct despite wrong figures (16% revenue vs 18% AR; $831 vs $2,278 WC).
+
+| Change | Result |
+|---|---|
+| Structured fields on those two IDs + polarity∧number∧metric keywords | Both false positives → `correct=False` |
+| Missing `answer_type` → `correct=None` | Remaining answered rows go to manual review instead of blind Yes/No |
+| Offline `--rescore` | Recomputed Delay-8 JSONL with **0** new API calls |
+
+### Citation / evidence packing experiment
+
+| Change | Smoke result |
+|---|---|
+| Prefer statement/table chunks; stronger cite rules; one cite-retry | `fb_04980` (PepsiCo FY2021 capex) flipped from no-cite refuse → answered with gold page 63 |
+
+## 7. Open Issues (Honest)
+
+1. **Gold citation rate** still far below retrieval hit — main quality gap.
+2. **Semantic wrong-metric answers** still pass `verified` if the number appears in the cited chunk.
+3. **True retrieval misses** (~6/20 on Delay-8) need query/statement coverage work.
+4. **Holdout** re-run after the `gemini-3.5-flash` switch: ask-path hit **9/10 (90%)**, gold cited **4/10 (40%)** — citation gap remains.
+5. **Free-tier quotas / demand** (Gemini RPD, 503 high-demand, Groq RPM) still interrupt long user-test evals; delay helps RPM only.
+6. **Git history** for submission is handled separately by the author when pushing.
