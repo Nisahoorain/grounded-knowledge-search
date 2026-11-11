@@ -32,6 +32,22 @@ CHROMA_DIR = Path(os.getenv("CHROMA_DIR", PROJECT_DIR / "data" / "chroma_db"))
 
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
+# Answer backend: gemini (primary default) or groq. One env change switches.
+# On HTTP 429 the other free provider is tried with the same prompt.
+# Ollama is not an active option; its helpers stay in llm.py for experiments.
+ANSWER_PROVIDER = os.getenv("ANSWER_PROVIDER", "gemini").strip().lower()
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+
+# Rate-limit controls for free-tier eval / ask.
+LLM_REQUEST_DELAY_S = float(os.getenv("LLM_REQUEST_DELAY_S", "8"))
+LLM_MAX_RETRIES = _int("LLM_MAX_RETRIES", 3)
+
+# Kept for the Ollama latency experiment only (not selected by ANSWER_PROVIDER).
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:latest")
 

@@ -12,7 +12,7 @@ This project answers questions using information from company financial filings.
 ### Requirements
 
 - Python and the packages listed in `requirements.txt`
-- Ollama with the `llama3.2:latest` model for questions that need an LLM
+- A free answer backend for questions that need an LLM (default: **Gemini**, Groq fallback)
 - The existing dense and BM25 indexes
 
 ### Install dependencies
@@ -21,15 +21,18 @@ From the project folder (`D:\ass`), run:
 
 ```powershell
 pip install -r requirements.txt
+copy .env.example .env
 ```
 
-Make sure Ollama is installed and the model is available:
+Set `GROQ_API_KEY` and/or `GEMINI_API_KEY` in `.env`. Default architecture: **Gemini primary**, **Groq fallback** on HTTP 429 (same evidence/prompt). `LLM_REQUEST_DELAY_S` spaces eval calls; delay does not raise daily quotas.
 
 ```powershell
-ollama pull llama3.2:latest
+ANSWER_PROVIDER=gemini
+# or
+ANSWER_PROVIDER=groq
 ```
 
-Ollama must be running at `http://localhost:11434` when an answer needs the model.
+Ollama is not an active option. Its code path stays so the local-CPU latency experiment can be described in `EXPERIMENTS.md`.
 
 ### Available roles
 
@@ -84,7 +87,7 @@ The `ask` command also looks for financial statement rows named in the question.
 
 For supported financial formulas, the system extracts the required values, performs the calculation, and checks the result.
 
-For other questions, it uses Ollama with the `llama3.2:latest` model.
+For other questions, it calls the configured free answer backend (`ANSWER_PROVIDER`, default Groq).
 
 Every answer must include citations. Numbers must be supported by cited evidence or by a verified calculation using cited inputs.
 
@@ -103,7 +106,7 @@ flowchart TD
     H --> I[Find Required Statement Rows]
     I --> J{Supported Formula or Single Line?}
     J -->|Yes| K[Calculate or Extract]
-    J -->|No| L[Ollama]
+    J -->|No| L[Groq or Gemini]
     K --> M[Verify Answer]
     L --> M
 ```
@@ -184,7 +187,57 @@ The following questions were tested manually after the answer-side changes.
 
 The numeric verification check confirms whether numbers appear in the cited evidence. It is not a complete semantic fact-checker for every possible statement.
 
-## 5. Known Limitations
+## 5. Progress, Achievements, and Open Issues
+
+### Achievements
+
+- Hybrid retrieval (dense + BM25 + RRF) with desk-level access control in the index, not only the prompt.
+- Measurable retrieval baseline and improvements logged in `EXPERIMENTS.md` / `DECISIONS.md`.
+- Direct formula and single-line extraction for selected financial questions, with calculation verification.
+- Free-tier answering: **Gemini `gemini-3.5-flash` primary**, Groq fallback; Ollama kept only as a latency experiment artifact.
+- Ask-path evaluation separate from retrieval-only eval; `verified`, `correct`, and `ask_retrieval_hit` reported independently.
+- Structured offline scoring pilot fixed Yes/No false positives (`fb_00757`, `fb_00005`) without new API calls (`--rescore`).
+- Citation repair path (evidence packing + cite-retry) for answers that omit `[E#]`.
+- User testing after the API/model change logged in `EXPERIMENTS.md` §6 (`answer_results_gemini35_usertest.jsonl`).
+
+### Answer backend comparison (dev, 20 questions)
+
+The chart compares **Ollama CPU**, the **prior Gemini Delay-8** run, and the **current `gemini-3.5-flash` user test** on the same development ask-path metrics.
+
+![Grouped charts of ask-path accuracy and median latency for Ollama CPU, prior Gemini Delay-8, and gemini-3.5-flash. Answered rates 20%, 55%, 50%. Gold cited 15%, 35%, 35%. Median latency 132s, 7.3s, 9.3s.](docs/figures/ask-backend-accuracy-performance.svg)
+
+| Backend | Answered | Gold cited | Median latency | Ask-path hit |
+|---|---:|---:|---:|---:|
+| Ollama CPU | 4/20 (20%) | 3/20 (15%) | 132s | 70% |
+| Prior Gemini Delay-8 | 11/20 (55%) | 7/20 (35%) | 7.3s | 70% |
+| Now `gemini-3.5-flash` | 10/20 (50%) | 7/20 (35%) | 9.3s | 70% |
+
+Latency improved about **18×** vs Ollama. Citation rate rose from **15% → 35%**; answered rate from **20% → ~50–55%**. Retrieval hit stayed **70%** (same index/path). The latest model run matches the prior Gemini accuracy band; median latency is a bit higher because of mid-run **503** / **429** pressure (Groq still covered several later questions).
+
+### Latest ask-path snapshot (user test: `gemini-3.5-flash`, Delay-8)
+
+| Metric | Dev (20) | Holdout (10) |
+|---|---:|---:|
+| Retrieval hit | 14/20 (70%) | 9/10 (90%) |
+| Gold page cited | 7/20 (35%) | 4/10 (40%) |
+| Answered | 10/20 (50%) | 6/10 (60%) |
+| Provider errors | 3/20 (15%) | 2/10 (20%) |
+| Median latency | 9.3s | 8.9s |
+
+Example user-test answers: MGM FY2018 AP **303M** and Boeing FY2018 net PP&E **12,645M** via direct calc; PepsiCo FY2021 capex and MGM dividends via Gemini with gold pages; holdout Ulta product-count and Boeing production models via Groq after Gemini quota.
+
+Retrieval-only charts above remain the search baseline (Hit/MRR). Answer quality is measured with `eval/evaluate_answers.py`.
+
+### Open issues
+
+- Citation rate lags retrieval hit — highest remaining quality gap.
+- Number-in-chunk verification is not full semantic correctness (wrong metric can still look “verified”).
+- Some questions still miss gold pages in top results.
+- Fresh holdout ask-path hit is strong (90%) but gold citation is still only 40%.
+- Free-tier daily/RPM limits and occasional Gemini 503 can interrupt long user-test evals; delay helps RPM only.
+- End-to-end latency improved vs local Ollama on CPU (~134s median → ~7–9s on Gemini Delay-8 user tests) but often still exceeds the 5s budget. The laptop has no CUDA GPU; embedding load/search stay CPU-bound. A GPU would speed those local stages; Gemini/Groq generation is network/API-bound and would not “auto-fix” from local GPU alone.
+
+## 6. Known Limitations
 
 - Normal `search` keeps only one result per page. A question that needs multiple rows from the same page may need the additional retrieval performed by `ask`.
 - The retrieval evaluation measures normal search results. It does not measure the extra statement rows added by `ask`.
@@ -192,11 +245,12 @@ The numeric verification check confirms whether numbers appear in the cited evid
 - Other calculations, such as some margin and working capital questions, may still need the language model.
 - The statement-line lookup uses a fixed list of known financial terms. A line outside this list depends on normal hybrid retrieval.
 - Some capital expenditure questions do not match the direct single-line lookup path.
-- A calculated answer without a valid calculation block may be returned as `answered_unverified`.
+- A calculated answer without a valid calculation block may be returned as `answered_unverified` (CLI maps this to `answered` with `verified=false`).
 - Numeric verification checks whether numbers are present in cited evidence. It does not prove that every number has the correct financial meaning.
-- The current refusal check uses a dense retrieval score threshold of 0.50. A question that is not answered in a filing may still retrieve relevant-looking pages, so refusal is not guaranteed in every case.
+- Refusal uses dense score plus BM25/statement presence; unsupported questions can still retrieve plausible pages.
+- Structured `expected_*` fields are for offline scoring only; unseen user questions are not auto-scored against gold.
 
-## 6. Project Data
+## 7. Project Data
 
 Main project folders and files:
 
@@ -205,11 +259,13 @@ Main project folders and files:
 | `pdfs/` | Source PDF filings |
 | `data/` | Extracted data and search indexes |
 | `src/` | Project source code |
-| `eval/` | Retrieval evaluation script |
+| `eval/` | Retrieval + answer evaluation scripts and result JSONL files |
 | `tests/` | Test files |
 | `manifest.csv` | Filing and company information |
-| `questions.jsonl` | Evaluation questions |
+| `questions.jsonl` | Evaluation questions (holdout `gks_*` plus shared items) |
 | `dev_questions.jsonl` | Development questions |
 | `DECISIONS.md` | Technical decisions |
 | `EXPERIMENTS.md` | Experiments and their results |
+| `AI_NOTES.md` | How AI tools were used |
+| `.env.example` | Free-tier provider and desk configuration template |
 | `requirements.txt` | Python dependencies |
