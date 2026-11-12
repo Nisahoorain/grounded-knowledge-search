@@ -15,7 +15,7 @@ Evaluation settings:
 - Top results: 10
 - Company and year filtering: enabled
 
-The current retrieval list merges the raw dense top 15 pages, the raw BM25 top 30 pages, and the chunk-level RRF top 30, then keeps up to three chunks per page. The earlier method, chunk-level RRF with one result per page (`chunk+dedupe1`), is the baseline in section 1.
+The production search method is chunk-level RRF followed by keeping one result per page (`chunk+dedupe1`).
 
 ## 1. Retrieval Experiments
 
@@ -207,24 +207,13 @@ All answer-side improvements were made without rebuilding the existing Chroma or
 
 | Experiment | What changed | Result | Kept? |
 |---|---|---|---|
-| Ollama CPU (`llama3.2`), earlier | Local generation on i5 laptop | Answer-eval median ~134s; 4/20 answered; many timeouts; 5s budget missed on almost every LLM call | No as default; code kept for write-up |
-| Ollama CPU (`llama3.2`), latest | Separate 20-question development answer evaluation, not the 15-question hard-set retrieval run | 13/20 answered, 11/20 gold cited, 16/20 ask-path hit, median 156s, zero provider errors | Yes as a tagged local run (`--tag llama`); still too slow to be the default |
+| Ollama CPU (`llama3.2`) | Local generation on i5 laptop | Answer-eval median ~134s; many timeouts; 5s budget missed on almost every LLM call | No as default; code kept for write-up |
 | Gemini free tier | `ANSWER_PROVIDER=gemini` | Delay-8 dev median **7.3s**; 0 API errors on that 20-Q run; daily RPD ~20 then HTTP 429 for hours | Yes as primary |
 | Groq free tier | `openai/gpt-oss-20b` | Often ~1–3s per generation; RPM 429 if eval has no delay | Yes as 429 fallback |
 | Eval request delay 8s | Space between questions | Stable Gemini dev run; delay does **not** raise daily quotas | Yes for eval |
 | Gemini model → `gemini-3.5-flash` | New API key + model in `.env` | User-test run (below); same primary/fallback design | Yes as current default |
 
-Measured answer-evaluation latency. These runs use different configurations, so the table is not a direct accuracy comparison.
-
-| Backend / experiment | Answered | Gold cited | Median latency |
-|---|---:|---:|---:|
-| Ollama CPU — earlier run | 4/20 | 3/20 | ~134 sec |
-| Ollama CPU — latest run | 13/20 | 11/20 | 156 sec |
-| Gemini — earlier Delay-8 run | 11/20 | 7/20 | 7.3 sec |
-
-The 156-second figure is CPU-only local inference on the latest 20-question Ollama run. It is not the latency of hosted Gemini or Groq, and it is not the 15-question hard-set retrieval experiment.
-
-**Lesson:** on this machine the bottleneck for Ollama was local CPU generation, not the retrieval pipeline. Hosted Gemini and Groq are the practical answer backends. Free-tier APIs reduce that latency but introduce quota management.
+**Lesson:** on this machine the bottleneck was local LLM + embedding load, not retrieval logic alone. Free-tier APIs fix latency but introduce quota management.
 
 ### Hardware note (CPU vs GPU)
 
@@ -322,33 +311,10 @@ After splitting `cited_gold` misses into `eval/questions_failed_uncited.jsonl`, 
 
 No `doc_in_filter=False` on this miss set. Concrete code fixes applied for quarter parse, single-line amount `line_items_in`, free-cash-flow `_METRICS`, and temporary 503 fallback in `llm.py`.
 
-## 8. Hard-set retrieval widening
+## 8. Open Issues (Honest)
 
-The 15 questions in `eval/questions_failed_uncited.jsonl` were the pages the earlier ask path missed. At ask@5 that set hit 6/15.
-
-The misses had a repeated shape. Dense search often never returned the gold page, while BM25 did, or the reverse. Chunk-level RRF then let the longer dense list outrank a BM25-only hit. A cap of one chunk per page dropped the other rows on that page. A candidate pool of 50 was too small for the gold page to survive.
-
-Changes that stayed:
-
-| Knob | Before | After |
-|---|---|---|
-| Candidate pool | 50 | 300 |
-| HNSW `search_ef` | 50 | 384 |
-| Page cap | 1 | 3 |
-| Ask results | 5 | 10 |
-| Retrieval-eval results | 10 | 30 |
-| List assembly | RRF, then one chunk per page | Raw dense top 15 pages, raw BM25 top 30 pages, RRF top 30, then the page cap |
-
-A fixed BM25 weight of 2.5 and a forced insert of the BM25 top 3 were tried and dropped. The weight recovered some BM25-led pages and lost dense-led ones. The forced insert did not add hits and lowered MRR. Cross-encoder reranking stayed off.
-
-On the previously difficult 15-question set, gold-page retrieval improved from 6/15 to 12/15 at evaluation k=30. Three pages on that set remain outside the top 30: `fb_00499`, `fb_00757`, and `fb_01484`. This measurement uses the existing MiniLM index.
-
-The latest Ollama numbers are a separate answer-evaluation run on the 20 development questions. They are not part of this hard-set retrieval experiment. See section 5.
-
-## 9. Open Issues (Honest)
-
-1. **Gold citation still lags retrieval hit, but the two published pairs are different runs.** The ~77% hit vs ~50% cited figure is the earlier Gemini 30-question baseline after the repair overlay. The latest 20-question Ollama answer evaluation is 16/20 (80%) ask-path hit and 11/20 (55%) gold cited. Those runs are not directly comparable.
+1. **Gold citation rate** still lags ask-path hit (~77% hit vs ~50% cited after repair overlay) — main quality gap.
 2. **`verified` is not correctness** — wrong-metric answers can still look supported if the number is in the cited chunk.
-3. **Three hard-set pages stay outside eval k=30** (`fb_00499`, `fb_00757`, `fb_01484`) on the MiniLM index. A larger pool and the raw-list union did not bring them into the top 30.
+3. **Deep retrieval misses** remain (e.g. `fb_00757` pool ~54); pool ranks 6–20 may need larger `k` / optional rerank.
 4. **Definition mismatches vs gold** (operating WC on `fb_00005`; capital-intensity metrics on `fb_00499`) are documented, not patched with company-specific hacks.
 5. **Free-tier quotas / 503** still interrupt long API evals; use `--ids` + `offline_eval.py` + LLM disk cache to spend carefully.
