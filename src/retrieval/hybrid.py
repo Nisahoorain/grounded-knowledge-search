@@ -34,7 +34,7 @@ def dedupe_pages(ranked, max_per_page=1):
     return out
 
 
-def get_candidates(question, role, candidate_k=50, use_filter=True):
+def get_candidates(question, role, candidate_k=300, use_filter=True):
     """Returns (dense, bm25, blocked). blocked=True => company role ko allowed nahi."""
     dense_q, bm25_q, doc_ids = question, question, None
 
@@ -43,8 +43,10 @@ def get_candidates(question, role, candidate_k=50, use_filter=True):
         if p["companies"]:
             allowed = set(ROLE_DESKS[role])
             doc_ids = [d["doc_id"] for d in p["docs"] if d["desk"] in allowed]
+            # Empty after parse/desk filter: do not hard-block; role desk
+            # filter in dense/BM25 still applies. Avoids zero hits on bad parse.
             if not doc_ids:
-                return [], [], True
+                doc_ids = None
         if p["clean_question"]:
             bm25_q = p["clean_question"]
 
@@ -121,16 +123,41 @@ def doc_quota(ranked, k, per_doc=2, max_docs=4):
     return (reserved + rest)[:k]
 
 
-def search_hybrid(question, role, k=5, candidate_k=50, rrf_constant=60,
-                  bm25_weight=1.0, page_dedupe=1, use_filter=True, rerank=False):
+def raw_union(dense, bm25, rrf_constant=60, max_per_page=3):
+    """Keep raw dense and BM25 hits that RRF buries, then the fused list.
+
+    Dense top 15 saves pages like fb_00591. BM25 top 30 saves fb_00757.
+    RRF weight 1.0 fills the rest. One chunk per page while merging.
+    """
+    fused = rrf_fuse(
+        dense, bm25, rrf_constant=rrf_constant,
+        dense_weight=1.0, bm25_weight=1.0, by_page=False,
+    )
+    seen = set()
+    union = []
+    for batch in (dense[:15], bm25[:30], fused[:30]):
+        for item in batch:
+            key = (item.get("doc_id"), item.get("page"))
+            if key in seen:
+                continue
+            seen.add(key)
+            union.append(item)
+    if max_per_page:
+        union = dedupe_pages(union, max_per_page)
+    return union
+
+
+def search_hybrid(question, role, k=10, candidate_k=300, rrf_constant=60,
+                  bm25_weight=1.0, page_dedupe=3, use_filter=True, rerank=False):
     dense, bm25, blocked = get_candidates(question, role, candidate_k, use_filter)
     if blocked:
         return []
-    ranked = rrf_fuse(
-        dense, bm25, rrf_constant, bm25_weight=bm25_weight, by_page=False
-    )
     if page_dedupe:
-        ranked = dedupe_pages(ranked, page_dedupe)
+        ranked = raw_union(dense, bm25, rrf_constant, max_per_page=page_dedupe)
+    else:
+        ranked = rrf_fuse(
+            dense, bm25, rrf_constant, bm25_weight=bm25_weight, by_page=False,
+        )
     if rerank:
         ranked = rerank_blend(question, ranked, top_n=20)
     return ranked[:k]

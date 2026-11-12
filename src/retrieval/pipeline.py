@@ -13,11 +13,18 @@ from src.retrieval.statement_rows import attach_statement_rows
 ALLOWED_STATUS = {"answered", "refused"}
 
 
-def retrieve_for_ask(question, role, k=5, rerank=False):
+def retrieve_for_ask(question, role, k=10, rerank=False):
     return attach_statement_rows(
         question,
         role,
-        search_hybrid(question, role, k=k, rerank=rerank),
+        search_hybrid(
+            question,
+            role,
+            k=k,
+            candidate_k=300,
+            page_dedupe=3,
+            rerank=rerank,
+        ),
     )
 
 

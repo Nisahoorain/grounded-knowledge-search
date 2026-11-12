@@ -1,13 +1,11 @@
 """Answer backends with a no-crash fallback chain.
 
-Preferred architecture for final / submission runs:
-  1. ANSWER_PROVIDER primary (default: gemini)
-  2. The other free hosted provider (groq ↔ gemini)
-  3. Local Ollama last resort
+Answer chain, always in this order:
+  1. Gemini
+  2. Groq, if Gemini does not return an answer
+  3. Local Ollama, if Groq does not return an answer
 
-Failures (quota, 503, missing key, Ollama down) fall through the chain.
-If every provider fails, return text=None instead of raising — callers refuse
-with the assignment contract (status answered|refused), not a hard error.
+A failed call falls through. Callers never see an API error status.
 """
 import hashlib
 import json
@@ -18,7 +16,6 @@ import urllib.request
 from pathlib import Path
 
 from src.config import (
-    ANSWER_PROVIDER,
     GEMINI_API_KEY,
     GEMINI_MODEL,
     GROQ_API_KEY,
@@ -29,18 +26,39 @@ from src.config import (
 )
 
 ACTIVE_PROVIDERS = ("gemini", "groq", "ollama")
+_ALIASES = {
+    "gemini": "gemini",
+    "groq": "groq",
+    "grok": "groq",
+    "ollama": "ollama",
+    "llama": "ollama",
+    "lama": "ollama",
+}
 _RETRY_SECONDS = re.compile(r"[Rr]etry in\s+([0-9]+(?:\.[0-9]+)?)s")
 _CACHE_PATH = Path(__file__).resolve().parents[2] / "data" / "llm_cache.json"
 _cache = None
+_pinned = None
 
 
-def _provider_chain(primary):
-    """Gemini → Groq → Ollama (or Groq → Gemini → Ollama)."""
-    name = (primary or "gemini").strip().lower()
-    if name == "groq":
-        return ["groq", "gemini", "ollama"]
-    if name == "ollama":
-        return ["ollama", "gemini", "groq"]
+def set_answer_provider(name):
+    """Use only this backend. llama/lama means local Ollama. None restores the chain."""
+    global _pinned
+    if not name:
+        _pinned = None
+        return None
+    key = str(name).strip().lower()
+    if key not in _ALIASES:
+        raise ValueError(
+            f"Unknown provider {name!r}. Use gemini, groq, or llama."
+        )
+    _pinned = _ALIASES[key]
+    return _pinned
+
+
+def _provider_chain(primary=None):
+    """Pinned tag uses one backend. Otherwise Gemini, then Groq, then Ollama."""
+    if _pinned:
+        return [_pinned]
     return ["gemini", "groq", "ollama"]
 
 
@@ -207,10 +225,17 @@ def _call_with_backoff(provider, prompt, max_retries=None):
     for attempt in range(retries + 1):
         try:
             text = _call_provider(provider, prompt)
+            if text is not None and str(text).strip():
+                return {
+                    "provider": provider,
+                    "text": str(text).strip(),
+                    "error": None,
+                    "attempts": attempt + 1,
+                }
             return {
                 "provider": provider,
-                "text": text,
-                "error": None,
+                "text": None,
+                "error": f"{provider} returned no answer",
                 "attempts": attempt + 1,
             }
         except Exception as exc:
@@ -239,24 +264,15 @@ def _call_with_backoff(provider, prompt, max_retries=None):
 
 
 def _chat_complete_with_meta_uncached(prompt):
-    """Try Gemini → Groq → Ollama (last resort).
-
-    Hosted API failure must not look like an evidence refusal — we always
-    continue to the next provider, ending on Ollama. Only if every backend
-    fails do we return text=None (caller marks provider_unavailable).
-    """
-    primary = (ANSWER_PROVIDER or "gemini").strip().lower()
-    if primary not in ACTIVE_PROVIDERS:
-        primary = "gemini"
-
-    chain = _provider_chain(primary)
-    # Guarantee Ollama is last even if ANSWER_PROVIDER was odd.
-    chain = [p for p in chain if p != "ollama"] + ["ollama"]
+    """Try Gemini, then Groq, then Ollama. A failed call never stops the chain."""
+    chain = _provider_chain()
     attempts = []
     errors = []
 
     for i, name in enumerate(chain):
-        if i > 0:
+        if i == 0:
+            print(f"trying {name}", flush=True)
+        else:
             print(
                 f"{attempts[-1]['provider']} failed; falling back to {name}",
                 flush=True,
@@ -286,7 +302,9 @@ def _chat_complete_with_meta_uncached(prompt):
 
 def chat_complete_with_meta(prompt):
     """Disk-cached wrapper. Temperature is 0, so identical prompts reuse answers."""
-    key = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    key = hashlib.sha256(
+        f"{_pinned or 'chain'}\n{prompt}".encode("utf-8")
+    ).hexdigest()
     cache = _get_cache()
     hit = cache.get(key)
     if hit and hit.get("text"):

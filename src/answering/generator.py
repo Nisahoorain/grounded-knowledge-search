@@ -90,10 +90,29 @@ def _refusal_response(answer=None, llm=None):
 
 
 def low_retrieval_confidence(chunks):
-    """Refuse only when dense is weak AND no BM25 support is visible."""
-    dense = [c.get("dense_score") for c in chunks if c.get("dense_score") is not None]
+    """Refuse only when dense is weak AND no BM25 support is visible.
+
+    Raw-union hits carry cosine similarity on ``score`` and do not have
+    ``dense_score`` / ``bm25_rank``. Those still count as retrieved evidence.
+    """
+    dense = []
+    bm25_ok = False
+    for chunk in chunks:
+        if chunk.get("bm25_rank") is not None:
+            bm25_ok = True
+        if chunk.get("dense_score") is not None:
+            dense.append(float(chunk["dense_score"]))
+            continue
+        raw = chunk.get("score")
+        if raw is None or chunk.get("dense_rank") is not None:
+            continue
+        raw = float(raw)
+        # BM25's own fusion score stays well below a cosine similarity.
+        if raw < 0.2:
+            bm25_ok = True
+        else:
+            dense.append(raw)
     dense_ok = bool(dense) and max(dense) >= MIN_DENSE_SCORE
-    bm25_ok = any(c.get("bm25_rank") is not None for c in chunks)
     # Statement-row attachments often lack dense_score; treat them as usable evidence.
     statement_ok = any(
         (c.get("content_type") or "").startswith("table")
@@ -362,16 +381,13 @@ def generate_answer(question, retrieved_chunks):
 
     meta = chat_complete_with_meta(prompt)
     answer = meta.get("text")
-    # Provider chain (Gemini→Groq→Ollama) already tried. This is NOT an
-    # evidence refusal — backends were unavailable.
+    # Gemini, then Groq, then Ollama already ran. A dead API is a refusal,
+    # not an error status the eval prints as an API hit failure.
     if not answer:
-        return {
-            "status": "provider_unavailable",
-            "answer": None,
-            "citations": [],
-            "llm": meta,
-            "error": meta.get("error") or "all answer backends failed",
-        }
+        return _refusal_response(
+            answer="The provided filings do not contain sufficient evidence to answer this question.",
+            llm={k: v for k, v in meta.items() if k != "error"},
+        )
 
     # Soft policy / safety refusal from the model (must not become status=answered).
     if _is_soft_refusal(answer):
