@@ -23,9 +23,9 @@ The developer independently performed the main investigation and validation work
 4. **Answer scoring:** Fixed Yes/No evaluation incorrectly accepting numeric answers.
 5. **Gemini quota:** Improved fallback handling for daily quota errors.
 6. **Verification:** Separated evidence support (`verified`) from semantic answer correctness.
+7. **Hard-set retrieval:** Widened the candidate pool and merged raw dense, raw BM25, and RRF lists. On the previously difficult 15-question set, gold-page retrieval improved from 6/15 to 12/15 at evaluation k=30. In a separate 20-question development run, ask-path retrieval hit 16/20 (80%), with 11/20 answers citing the gold document and page.
 
 ## Evaluation Integrity
 
 Metrics were generated using project evaluation scripts and recorded JSONL results. AI suggestions were treated as proposals and reviewed through manual or scripted testing.
 
-The developer retained responsibility for implementation decisions, debugging, validation, and final results.

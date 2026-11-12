@@ -14,7 +14,7 @@ It combines deterministic financial data processing with language-model-based re
 - **Evidence-based answers:** Returns answers with document, page, and evidence citations.
 - **Numeric verification:** Checks numeric claims against cited evidence or verified calculations.
 - **Role-based access control:** Enforces desk-level data access restrictions during retrieval.
-- **LLM integration:** Uses Gemini as the primary answer provider with Groq fallback.
+- **LLM integration:** Runs Gemini, Groq, or local Llama. A command tag selects one provider.
 - **Retrieval evaluation:** Measures Recall, Hit, and MRR on development and holdout questions.
 - **Answer evaluation:** Separately measures retrieval coverage, citation coverage, answer completion, and verification.
 - **Performance and reliability:** Includes response caching, provider fallback, latency experiments, and zero-API diagnostics.
@@ -27,7 +27,7 @@ It combines deterministic financial data processing with language-model-based re
 | RAG architecture | PDF ingestion, extraction, chunking, embeddings, and retrieval |
 | Information retrieval | Dense search, BM25, RRF, and optional cross-encoder reranking |
 | Database engineering | ChromaDB vector storage and SQLite FTS |
-| LLM integration | Gemini, Groq fallback, prompt design, and response caching |
+| LLM integration | Gemini, Groq, or local Llama via `--tag`, plus response caching |
 | Financial data processing | Statement-line extraction, year matching, and unit conversion |
 | Calculation verification | Deterministic formula execution and numeric checks |
 | Backend engineering | CLI workflows, configuration, structured JSON responses |
@@ -76,8 +76,11 @@ flowchart TD
     S --> T2[BM25 Search<br/>SQLite FTS]
     T1 --> U[Reciprocal Rank Fusion]
     T2 --> U
-    U --> V[One Chunk Per Page]
-    V --> W[Ask: Attach Statement Rows]
+    T1 --> V[Raw union<br/>dense 15 + BM25 30 + RRF 30]
+    T2 --> V
+    U --> V
+    V --> V2[Up to 3 chunks per page]
+    V2 --> W[Ask: Attach Statement Rows]
     W --> X[Evidence Context for Answer]
 ```
 
@@ -104,12 +107,17 @@ Combines the ranked results from dense retrieval and BM25 without requiring both
 | RRF constant | `60` |
 | BM25 weight | `1` |
 | Fusion level | Chunk |
-| Final normal search results | One chunk per page |
+| Candidate pool | 300 dense and 300 BM25 |
+| Result assembly | Raw dense top 15 pages, raw BM25 top 30 pages, then RRF top 30 |
+| Page cap | 3 chunks per page |
+| Ask results | 10 |
+| Retrieval-eval results | 30 |
 | Company/year filtering | Applied before retrieval when identified |
+| Indexed embedding | `all-MiniLM-L6-v2` |
 
 ### Financial statement retrieval
 
-Normal search keeps one result per page to improve result diversity.
+The earlier default kept one result per page. That hid a second useful chunk from the same filing page. Search now keeps up to three chunks per page and also reserves raw dense and raw BM25 hits that fusion would otherwise bury.
 
 The `ask` command can perform additional financial statement row retrieval when a question requires multiple values from the same page.
 
@@ -257,9 +265,15 @@ GEMINI_MODEL=gemini-3.5-flash
 
 The default provider configuration is:
 
-- **Gemini:** Primary answer provider.
-- **Groq:** Fallback for supported Gemini quota, rate-limit, or temporary provider failures.
-- **Ollama:** Retained as an experimental code path, not an active default provider.
+Answer evaluation uses only the provider named in `--tag`:
+
+```powershell
+python eval/evaluate_answers.py --limit 20 --tag gemini
+python eval/evaluate_answers.py --limit 20 --tag groq
+python eval/evaluate_answers.py --limit 20 --tag llama
+```
+
+`llama` calls local Ollama (`llama3.2` at `http://localhost:11434`). When no tag is set, `ask` still tries Gemini, then Groq, then Ollama.
 
 `LLM_REQUEST_DELAY_S` can be configured to space evaluation requests. Delays do not increase provider rate limits or daily quotas.
 
@@ -352,7 +366,7 @@ python eval/evaluate_retrieval.py
 - 20 development questions from `dev_questions.jsonl`
 - 10 holdout questions from `questions.jsonl`, with IDs beginning with `gks_`
 
-The evaluation uses a top-10 result limit and company/year filtering.
+The earlier table below used a top-10 result limit. The later hard-set run uses 30. Company and year filtering stays on.
 
 ### Evaluation metrics
 
@@ -366,7 +380,7 @@ The retrieval evaluation measures normal search results. It does not evaluate ge
 
 ### Latest recorded retrieval results
 
-The default retrieval method is chunk-level RRF followed by keeping one result per page (`chunk+dedupe1`).
+An earlier default, chunk-level RRF with one result per page (`chunk+dedupe1`), recorded:
 
 | Dataset | Questions | Recall | Hit | MRR |
 |---|---:|---:|---:|---:|
@@ -375,7 +389,21 @@ The default retrieval method is chunk-level RRF followed by keeping one result p
 
 ### Retrieval hit rate
 
-Hit rate represents the percentage of questions for which at least one expected page appeared in the top 10 results.
+### Three separate retrieval measurements
+
+These are not one before-and-after on the same set.
+
+| Run | Set | Setting | Result |
+|---|---|---|---|
+| Original baseline | 20 development + 10 holdout | Top 10, one chunk per page, MiniLM index | Development Hit 0.60. Holdout Hit 1.00. Table above. |
+| Hard-set experiment | 15 previously missed questions | Eval k=30, pool 300, up to 3 chunks per page, MiniLM index | Gold-page retrieval moved from 6/15 to 12/15. |
+| Latest Ollama ask-path | 20 development questions | Ask k=10 on the same widened retrieval | 16/20 (80%) ask-path hits. Citation counts are in section 6. |
+
+The hard-set list and a 50-candidate pool missed gold pages that BM25 or dense had already found. Reciprocal Rank Fusion then buried a page that only one of the two lists ranked highly. The widened search keeps a 300-candidate pool, merges the raw dense top 15 pages with the raw BM25 top 30 pages and the RRF top 30, and allows three chunks from the same page.
+
+`BAAI/bge-base-en-v1.5` is not the active index. These results use the existing MiniLM vectors. Do not treat a BGE re-index as done.
+
+Hit rate represents the percentage of questions for which at least one expected page appeared in the retrieved results.
 
 ![Retrieval hit rate: development 0.60 and holdout 1.00.](docs/figures/retrieval-hit-rate.svg)
 
@@ -406,17 +434,36 @@ This is separate from normal retrieval evaluation.
 
 ### Backend comparison
 
-The development comparison includes local CPU Ollama, an earlier Gemini Delay-8 run, and a Gemini 3.5 Flash user test.
+The development comparison includes an earlier local CPU Ollama run, the latest Ollama run, an earlier Gemini Delay-8 run, and a Gemini 3.5 Flash user test.
 
 | Backend | Answered | Gold cited | Median latency | Ask-path hit |
 |---|---:|---:|---:|---:|
-| Ollama CPU | 4/20 (20%) | 3/20 (15%) | 132s | 70% |
+| Ollama CPU (earlier) | 4/20 (20%) | 3/20 (15%) | 132s | 70% |
+| Ollama CPU (latest) | 13/20 (65%) | 11/20 (55%) | 156s | 80% |
 | Prior Gemini Delay-8 | 11/20 (55%) | 7/20 (35%) | 7.3s | 70% |
 | Gemini 3.5 Flash user test | 10/20 (50%) | 7/20 (35%) | 9.3s | 70% |
+
+The latest Ollama run used the 20-question development set. It recorded 16/20 ask-path retrieval hits and 11/20 gold-page citations. The run had zero provider errors. Local CPU inference remained slow, with a median latency of 156 seconds.
+
+These results are separate from the 15-question hard-set retrieval experiment and should not be treated as a direct comparison.
 
 ![Answer backend comparison: answered rate, gold-cited rate, and median latency.](docs/figures/ask-backend-accuracy-performance.svg)
 
 Hosted Gemini substantially reduced latency compared with local CPU Ollama. However, the recorded hosted API runs still exceeded the approximate five-second target on average.
+
+### Backend alternatives and latency
+
+Local Ollama was evaluated using CPU inference and showed high latency (approximately 156 seconds median in the latest 20-question run). This is a limitation of the local CPU inference setup, not of the overall retrieval pipeline.
+
+The project also supports hosted LLM providers:
+
+- **Gemini:** Primary answer-generation provider.
+- **Groq:** Fallback provider for supported API failures and quota issues.
+- **Ollama:** Local inference option for offline experimentation, subject to hardware limitations.
+
+Hosted providers offer substantially faster generation than the tested CPU-only Ollama setup. Gemini's earlier evaluation runs showed approximately 7–9 seconds median latency, although API quotas, network conditions, and provider availability can affect response times.
+
+The approximate five-second target was not consistently achieved, even with hosted generation.
 
 ### Latest 30-question ask-path snapshot
 
@@ -490,7 +537,7 @@ Successful LLM responses are cached in `data/llm_cache.json`, which is gitignore
 
 The project was developed and evaluated on CPU-only hardware.
 
-Local Ollama CPU inference was too slow for the approximate five-second target, with an observed median of around 132–134 seconds in the recorded experiments.
+Local Ollama CPU inference was too slow for the approximate five-second target. The earlier run had a median around 132–134 seconds. The latest 20-question development run had a median of 156 seconds.
 
 Moving answer generation to hosted Gemini and Groq reduced latency substantially.
 
@@ -522,7 +569,8 @@ Consistently achieving the target would require profiling and optimizing each st
 
 ### Retrieval
 
-- Normal `search` keeps one result per page. Questions requiring multiple rows from the same page may need additional retrieval through `ask`.
+- Normal retrieval can return up to three chunks per page.
+- Questions requiring additional financial statement rows may trigger further retrieval through `ask`.
 - Retrieval evaluation does not measure additional statement rows retrieved by `ask`.
 - Some expected gold pages remain outside the top results or appear deep in the candidate pool.
 - The statement-line lookup uses a fixed list of known financial terms. Other line items depend on normal hybrid retrieval.

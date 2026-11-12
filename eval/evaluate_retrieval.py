@@ -8,29 +8,30 @@ sys.path.insert(0, str(PROJECT_DIR))
 from src.retrieval.hybrid import (
     blend_times,
     dedupe_pages,
-    doc_quota,
     get_candidates,
-    rerank_blend,
     rrf_fuse,
+    raw_union,
 )
 from src.retrieval.query_parse import parse_query
 
 DATASET = PROJECT_DIR / "dev_questions.jsonl"
 HOLDOUT = PROJECT_DIR / "questions.jsonl"
+FAILED = PROJECT_DIR / "eval" / "questions_failed_uncited.jsonl"
+
+def _fuse(d, b, weight):
+    return rrf_fuse(d, b, by_page=False, bm25_weight=weight)
+
 
 MODES = {
-    "dense":         lambda d, b, q, k: d,
-    "bm25":          lambda d, b, q, k: b,
-    "hybrid-chunk":  lambda d, b, q, k: rrf_fuse(d, b, by_page=False),
-    "chunk+dedupe1": lambda d, b, q, k: dedupe_pages(rrf_fuse(d, b, by_page=False), 1),
-    "doc-quota":     lambda d, b, q, k: doc_quota(rrf_fuse(d, b, by_page=False), k),
-    "dedupe+blend":  lambda d, b, q, k: rerank_blend(
-        q, dedupe_pages(rrf_fuse(d, b, by_page=False), 1), top_n=20
-    ),
+    "dense":          lambda d, b, q, k: d,
+    "bm25":           lambda d, b, q, k: b,
+    "dedupe3-w1":     lambda d, b, q, k: dedupe_pages(_fuse(d, b, 1.0), 3),
+    "dedupe3-w2.5":   lambda d, b, q, k: dedupe_pages(_fuse(d, b, 2.5), 3),
+    "raw-union":      lambda d, b, q, k: raw_union(d, b, max_per_page=3),
 }
 
-# Production search_hybrid is chunk fusion, then dedupe. Misses follow that mode.
-WATCH = "chunk+dedupe1"
+# Eval watches the full raw union. Ask slices the same list at k=10.
+WATCH = "raw-union"
 
 
 def gold_ranks(results, gold_doc, gold_pages, k):
@@ -47,7 +48,7 @@ def load_questions(path):
         return [json.loads(l) for l in f if l.strip()]
 
 
-def evaluate(k=10, candidate_k=50, use_filter=True, questions=None, label="dev"):
+def evaluate(k=30, candidate_k=300, use_filter=True, questions=None, label="dev"):
     if questions is None:
         questions = load_questions(DATASET)
     blend_times.clear()
@@ -100,7 +101,7 @@ def evaluate(k=10, candidate_k=50, use_filter=True, questions=None, label="dev")
                 full = gold_ranks(res, gold_doc, gold_pages, candidate_k)
                 print(f"{name} expected rank (top {candidate_k}):", full or "NOT FOUND")
             print("Top", WATCH, [(x["doc_id"], x["page"]) for x in lists[WATCH][:5]])
-            for extra in ("doc-quota", "dedupe+blend"):
+            for extra in ("dedupe3-w1", "dedupe3-w2.5"):
                 if extra in lists:
                     print(
                         "Top", extra,
@@ -110,7 +111,7 @@ def evaluate(k=10, candidate_k=50, use_filter=True, questions=None, label="dev")
 
     n = len(questions)
     width = max(len(m) for m in MODES)
-    print(f"\n===== {label} (n={n}, k={k}, filter={use_filter}) =====")
+    print(f"\n===== {label} (n={n}, k={k}, candidate_k={candidate_k}, filter={use_filter}) =====")
     print(f"{'mode':<{width}}{'Recall':>8}{'MRR':>8}{'Hit':>8}{'Fail':>6}")
     for name, s in stats.items():
         print(f"{name:<{width}}{sum(s['recall'])/n:>8.4f}{sum(s['rr'])/n:>8.4f}"
@@ -131,6 +132,18 @@ def evaluate(k=10, candidate_k=50, use_filter=True, questions=None, label="dev")
 
 
 if __name__ == "__main__":
-    evaluate(k=10, use_filter=True, label="dev dev_questions")
-    holdout = [q for q in load_questions(HOLDOUT) if str(q["id"]).startswith("gks_")]
-    evaluate(k=10, use_filter=True, questions=holdout, label="holdout gks_")
+    # Default: only the known miss/uncited set (no LLM; saves answer-API hits).
+    # Full suites: python eval/evaluate_retrieval.py --all
+    if "--all" in sys.argv:
+        evaluate(k=30, candidate_k=300, use_filter=True, label="dev dev_questions")
+        holdout = [q for q in load_questions(HOLDOUT) if str(q["id"]).startswith("gks_")]
+        evaluate(k=30, candidate_k=300, use_filter=True, questions=holdout, label="holdout gks_")
+    else:
+        failed = load_questions(FAILED)
+        evaluate(
+            k=30,
+            candidate_k=300,
+            use_filter=True,
+            questions=failed,
+            label="failed_uncited (miss set)",
+        )

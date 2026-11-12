@@ -30,11 +30,10 @@ MANIFEST_PATH = PROJECT_DIR / "manifest.csv"
 EXTRACTED_DIR = PROJECT_DIR / "data" / "extracted"
 CHROMA_DIR = Path(os.getenv("CHROMA_DIR", PROJECT_DIR / "data" / "chroma_db"))
 
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-base-en-v1.5")
 
-# Answer backend: gemini (primary default) or groq. One env change switches.
-# On HTTP 429 the other free provider is tried with the same prompt.
-# Ollama is not an active option; its helpers stay in llm.py for experiments.
+# Answer chain is fixed in llm.py: Gemini, then Groq, then Ollama.
+# ANSWER_PROVIDER is kept for logs; it does not skip a provider.
 ANSWER_PROVIDER = os.getenv("ANSWER_PROVIDER", "gemini").strip().lower()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
@@ -47,7 +46,7 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 LLM_REQUEST_DELAY_S = float(os.getenv("LLM_REQUEST_DELAY_S", "8"))
 LLM_MAX_RETRIES = _int("LLM_MAX_RETRIES", 3)
 
-# Kept for the Ollama latency experiment only (not selected by ANSWER_PROVIDER).
+# Last step of the answer chain when Gemini and Groq both fail.
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:latest")
 

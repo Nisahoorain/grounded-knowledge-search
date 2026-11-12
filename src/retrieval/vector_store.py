@@ -62,9 +62,14 @@ def get_collection():
                 "hnsw:space": "cosine",
                 "hnsw:construction_ef": 100,
                 "hnsw:M": 16,
-                "hnsw:search_ef": 50,
+                # Must be >= candidate_k (300) or dense recall collapses.
+                "hnsw:search_ef": 384,
             },
         )
+        try:
+            _collection.modify(metadata={"hnsw:search_ef": 384})
+        except Exception:
+            pass
 
     return _collection
 

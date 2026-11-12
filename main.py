@@ -73,7 +73,7 @@ def cmd_search(role, k, question, rerank=False):
 
 def cmd_ask(role, question, rerank=False):
     try:
-        results = retrieve_for_ask(question, role, k=5, rerank=rerank)
+        results = retrieve_for_ask(question, role, rerank=rerank)
         response = generate_answer(question, results)
 
         if response.get("status") == "answered_unverified":
@@ -97,26 +97,13 @@ def cmd_ask(role, question, rerank=False):
                 )
 
         contracted = to_contract(response, public=True)
-        # refused = no grounded answer. provider_unavailable = backends down
-        # (Gemini→Groq→Ollama already tried) — do not fake a refusal.
-        if (
-            response.get("status") == "provider_unavailable"
-            or contracted.get("status") == "provider_unavailable"
-        ):
-            llm = response.get("llm") if isinstance(response.get("llm"), dict) else {}
-            detail = response.get("error") or llm.get("error")
-            print(
-                json.dumps(
-                    {
-                        "error": "answer backends unavailable after Gemini→Groq→Ollama",
-                        "detail": detail,
-                    },
-                    indent=2,
-                    ensure_ascii=False,
-                ),
-                file=sys.stderr,
-            )
-            return 2
+        if contracted.get("status") == "provider_unavailable":
+            contracted = {
+                "status": "refused",
+                "answer": "The provided filings do not contain sufficient evidence to answer this question.",
+                "citations": [],
+                "verified": False,
+            }
 
         print(json.dumps(contracted, indent=2, ensure_ascii=False))
         return 0

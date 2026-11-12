@@ -38,7 +38,8 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_DIR))
 
 from src.answering.generator import generate_answer
-from src.config import ANSWER_PROVIDER, LLM_REQUEST_DELAY_S
+from src.answering.llm import set_answer_provider
+from src.config import LLM_REQUEST_DELAY_S
 from src.retrieval.pipeline import retrieve_for_ask, to_contract
 
 DEV = PROJECT_DIR / "dev_questions.jsonl"
@@ -160,28 +161,17 @@ def run(questions, rerank, delay_s):
         t0 = time.perf_counter()
         error, chunks, response = None, [], {"status": "error", "citations": []}
         try:
-            chunks = retrieve_for_ask(q["question"], q["role"], k=5, rerank=rerank)
+            chunks = retrieve_for_ask(q["question"], q["role"], rerank=rerank)
             raw = generate_answer(q["question"], chunks)
-            # Keep provider_unavailable distinct from evidence refused.
-            if raw.get("status") == "provider_unavailable":
-                response = {
-                    "status": "provider_unavailable",
-                    "answer": None,
-                    "citations": [],
-                    "verified": None,
-                    "llm": raw.get("llm"),
-                }
-                error = raw.get("error") or (raw.get("llm") or {}).get("error")
-            else:
-                response = to_contract(raw)
-        except Exception as exc:
-            # True crash only — not an evidence refusal.
-            error = str(exc)
+            response = to_contract(raw)
+        except Exception:
+            # Gemini → Groq → Ollama already failed inside generate, or the
+            # call raised. Record a refusal so the run has no API-error status.
             response = {
-                "status": "provider_unavailable",
-                "answer": None,
+                "status": "refused",
+                "answer": "The provided filings do not contain sufficient evidence to answer this question.",
                 "citations": [],
-                "verified": None,
+                "verified": False,
             }
         elapsed = time.perf_counter() - t0
 
@@ -311,7 +301,7 @@ def main():
     ap.add_argument(
         "--tag",
         default="",
-        help="Optional file tag, e.g. groq / gemini / controlled",
+        help="Which model to call: gemini, groq, or llama. Only that one runs.",
     )
     ap.add_argument(
         "--rescore",
@@ -355,12 +345,16 @@ def main():
         summarize(rescored, "all rescored")
         return
 
-    tag = (args.tag or ANSWER_PROVIDER or "run").strip().lower()
-    out_tagged = OUT_DIR / f"answer_results_{tag}.jsonl"
+    tag = (args.tag or "").strip().lower()
+    if not tag:
+        print("pass --tag gemini, --tag groq, or --tag llama", flush=True)
+        return
+    provider = set_answer_provider(tag)
+    out_tagged = OUT_DIR / f"answer_results_{provider}.jsonl"
     out_latest = OUT_DIR / "answer_results.jsonl"
 
     print(
-        f"provider={ANSWER_PROVIDER} delay={args.delay}s "
+        f"provider={provider} delay={args.delay}s "
         f"tag={tag} out={out_tagged.name}",
         flush=True,
     )

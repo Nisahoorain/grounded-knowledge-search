@@ -8,7 +8,9 @@ The goal is to make the system's architecture understandable and explain why cer
 
 **Decision:** Use dense vector search and BM25 together, combining their rankings with Reciprocal Rank Fusion (RRF).
 
-### Configuration
+### Original baseline
+
+This was the earlier default. It is not the current page cap.
 
 | Setting | Value |
 |---|---:|
@@ -20,8 +22,6 @@ The goal is to make the system's architecture understandable and explain why cer
 | Final result limit | One chunk per page |
 | Company/year filtering | Before retrieval |
 
-Both `search` and `ask` use this retrieval method as their starting point.
-
 ### Why hybrid retrieval?
 
 Dense search helps retrieve semantically related passages, even when the question uses different wording from the filing.
@@ -32,19 +32,40 @@ Combining both methods provides a more balanced retrieval approach than relying 
 
 RRF combines the ranked results without requiring dense similarity scores and BM25 scores to share the same scale.
 
-### Why one result per page?
+### Earlier choice: one result per page
 
 Multiple chunks from the same page can occupy the top results and reduce the diversity of the evidence shown to the user.
 
-Keeping one chunk per page gives the final result set better page coverage.
+Keeping one chunk per page gave that earlier result set better page coverage.
 
-**Trade-off:** This improves result diversity but can hide another useful chunk from the same page. The `ask` command handles some financial questions separately by retrieving additional statement rows.
+**Trade-off:** Page coverage improved, and a second useful chunk from the same page could disappear. That cap is no longer the current default.
+
+### Current configuration: page cap 3 and a raw-list union
+
+On the 15 questions that ask@5 missed, one chunk per page and a 50-candidate fusion left the gold page out of the list even when BM25 or dense had already found it.
+
+**Current retrieval list, used by both `search` and `ask`:**
+
+| Setting | Value |
+|---|---:|
+| Candidate pool | 300 |
+| HNSW `search_ef` | 384 |
+| Raw dense pages kept | 15 |
+| Raw BM25 pages kept | 30 |
+| RRF pages kept | 30 |
+| Page cap | 3 |
+| Ask `k` | 10 |
+| Retrieval-eval `k` | 30 |
+
+RRF still runs at BM25 weight 1. The raw heads are merged first so a page that only one method ranks highly is not dropped before the cutoff. Reranking stays off. The indexed embeddings for these measurements are `all-MiniLM-L6-v2`.
+
+On the previously difficult 15-question set, gold-page retrieval improved from 6/15 to 12/15 at evaluation k=30. That is a retrieval-only measurement. The later 20-question Ollama answer evaluation is a different experiment and is recorded in section 8.
 
 ## 2. Reranking Is Optional
 
 **Decision:** Keep cross-encoder reranking disabled by default. Users can enable it with `--rerank`.
 
-The reranking path first keeps one result per page and then applies a cross-encoder to reorder the candidate results.
+The recorded reranking path below first kept one result per page and then applied a cross-encoder. That table is the earlier one-per-page configuration, not the current page cap of 3.
 
 ### Configuration
 
@@ -67,6 +88,8 @@ The reranking path first keeps one result per page and then applies a cross-enco
 Reranking improved the ranking position of some relevant results, particularly in the holdout MRR score. However, it also lost one correct holdout hit and added approximately 1.4–1.5 seconds of processing time.
 
 An earlier cross-encoder-only approach was slower and performed worse.
+
+A later check used the same cross-encoder on the 15-question hard set. Reranking removed a relevant hit that the unreranked list had kept (`gks_007`) and lowered that set's hit rate. That run is the same model, not the same candidate list as the table above. It is another reason reranking stays off by default.
 
 **Reason for keeping it optional:**
 - The default method retrieved all expected holdout pages in this evaluation.
@@ -113,19 +136,24 @@ These represent approximately the same amount, but their textual numeric represe
 
 ## 4. Search and Ask Have Different Responsibilities
 
-The normal `search` command and retrieval evaluation use:
+`search` and `ask` now start from the same current list:
 
-1. Dense and BM25 retrieval.
-2. Chunk-level RRF.
-3. One result per page.
+1. Dense and BM25 retrieval, 300 candidates each.
+2. A merge of the raw dense top 15 pages, the raw BM25 top 30 pages, and the RRF top 30.
+3. A cap of three chunks per page.
 
-The `ask` command starts with the same retrieval method but can perform additional financial statement row retrieval.
+They differ after that shared list:
 
-This distinction matters because financial calculations may require multiple rows from the same page. A one-result-per-page search result is not always sufficient for those calculations.
+- `search` returns the merged list. The CLI default is 5 results.
+- `ask` keeps 10 results from that list, then can attach extra financial-statement rows for the question.
+
+Retrieval evaluation of this widened list uses 30 results and does not include the extra statement rows that only `ask` attaches.
+
+Financial calculations may need several rows from the same page. The page cap of 3 keeps more of those rows than the old one-per-page list. `ask` can still fetch a named statement row that did not survive the cap.
 
 ### Evaluation boundary
 
-Normal retrieval evaluation measures the standard search results. It does not measure the additional statement rows retrieved by `ask`.
+Retrieval evaluation measures the widened search list. It does not measure the additional statement rows retrieved only by `ask`.
 
 **Decision:** Keep retrieval evaluation separate from answer-side retrieval and calculation behavior.
 
@@ -251,7 +279,8 @@ Local Ollama was tested, but CPU inference was too slow for the assignment's app
 
 | Backend / experiment | Observed result |
 |---|---|
-| Ollama on CPU | Median approximately 134 seconds |
+| Ollama on CPU, earlier | Median approximately 134 seconds; 4/20 answered |
+| Ollama on CPU, latest | Separate 20-question development answer evaluation: 13/20 answered, 11/20 gold citations, 16/20 ask-path hits, median 156 seconds, 0 provider errors |
 | Earlier Gemini Delay-8 dev run | Median approximately 7.3 seconds; no provider errors |
 | Gemini 3.5 Flash user test | Median approximately 8.9 seconds across 30 questions |
 | Gemini 3.5 Flash user test | 5 provider errors across 30 questions |
@@ -276,7 +305,9 @@ On HTTP 429, daily quota errors, or temporary provider failures, the system can 
 
 Daily-quota errors skip repeated local retries and move to fallback sooner.
 
-Ollama code remains as an experiment artifact, not the active default provider.
+Ollama remains available with `--tag llama`. It is not the default provider. The latest run had no provider errors, and its median of 156 seconds is still far above the five-second budget. That run is not the 15-question hard-set retrieval experiment.
+
+The observed Ollama latency reflects CPU-only local inference. It should not be interpreted as the latency of the complete system or its hosted Gemini/Groq configurations. Gemini remains the primary provider and Groq the fallback because those hosted options were much faster in the recorded runs, about 7–9 seconds median, while still missing a consistent five-second budget.
 
 ### Latency trade-offs
 
@@ -397,7 +428,7 @@ The offline evaluation is useful for separating retrieval problems from answer-g
 | Area | Decision | Main reason |
 |---|---|---|
 | Retrieval | Dense + BM25 with RRF | Combines semantic and exact-term matching |
-| Result diversity | One chunk per page | Prevents one page dominating results |
+| Result diversity | Up to three chunks per page | Balances page coverage with multiple relevant chunks from the same page |
 | Reranking | Optional | Quality improvements are inconsistent and add latency |
 | Refusal | Retrieval and evidence checks | Similarity score alone is insufficient |
 | Financial calculations | Deterministic calculation and verification | Reduces arithmetic errors |
